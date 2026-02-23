@@ -1,0 +1,719 @@
+<!doctype html><html lang="pt-br"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Serralheria do Gil</title><meta name="theme-color" content="#0b0f0c">
+<style>
+:root{--bg:#050806;--card:rgba(12,18,15,.78);--b:#1f2a23;--t:#e9f2ea;--m:#97a89b;--g:#52ff8a;--r:#ff5a6b;--y:#ffd166;--w:#fff;--sh:0 18px 70px rgba(0,0,0,.62)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{height:100%}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--t);overflow-x:hidden}
+#fx{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.92;filter:saturate(1.1)}
+.wrap{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:16px 14px 92px}
+.card{position:relative;overflow:hidden;background:
+radial-gradient(160% 130% at 16% 10%,rgba(82,255,138,.14),transparent 52%),
+radial-gradient(150% 120% at 84% 30%,rgba(255,90,107,.12),transparent 55%),
+radial-gradient(160% 120% at 55% 115%,rgba(255,209,102,.10),transparent 55%),
+linear-gradient(180deg,rgba(16,22,18,.88),rgba(6,10,7,.72));
+border:1px solid var(--b);border-radius:18px;padding:14px;box-shadow:var(--sh);backdrop-filter:blur(10px)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:stretch}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:640px){.grid2{grid-template-columns:1fr}}
+.in{width:100%;padding:12px;border-radius:14px;border:1px solid var(--b);background:#0b120eaa;color:var(--t);outline:none}
+.in::placeholder{color:#6f8173}
+.btn{border:0;border-radius:14px;padding:12px 14px;font-weight:1000;background:var(--w);color:#0b0f0c;cursor:pointer;transition:.12s}
+.btn:active{transform:scale(.98)}
+.ghost{background:transparent;color:var(--t);border:1px solid var(--b)}
+.good{background:linear-gradient(180deg,#ffffff,#eafff1)}
+.danger{background:linear-gradient(180deg,#351015,#240a0d);color:#ffd6dc;border:1px solid #4b1a21}
+.mini{padding:8px 10px;border-radius:12px;font-size:12px}
+.h1{font-size:26px;font-weight:1000;margin:0;letter-spacing:.2px}
+.sub{color:var(--m);font-size:13px;margin-top:4px;line-height:1.3}
+.small{color:var(--m);font-size:12px;line-height:1.35}
+.sep{height:1px;background:#1b241e;margin:10px 0}
+.pill{display:inline-flex;gap:8px;align-items:center;padding:7px 10px;border-radius:999px;border:1px solid var(--b);background:#0b120eaa;color:var(--m);font-size:12px;white-space:nowrap}
+.tag{display:inline-flex;gap:6px;align-items:center;font-size:12px;padding:4px 8px;border-radius:999px;border:1px solid var(--b);background:#0b120eaa;color:#cfe2d4}
+.pos{color:var(--g);font-weight:1000}.neg{color:var(--r);font-weight:1000}.warn{color:var(--y);font-weight:1000}
+.list .it{display:flex;gap:10px;align-items:flex-start;justify-content:space-between;padding:10px 0;border-bottom:1px solid #162018}
+.it .l{min-width:0;flex:1}.it .r{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.tab{display:none}.tab.on{display:block}
+.tab.on .pop{animation:pop .32s cubic-bezier(.2,.95,.2,1) both}
+.pop{opacity:0;transform:translateY(12px)}.d1{animation-delay:.03s}.d2{animation-delay:.06s}.d3{animation-delay:.09s}.d4{animation-delay:.12s}
+@keyframes pop{to{opacity:1;transform:none}}
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:3;padding:10px 12px;background:linear-gradient(180deg,transparent,rgba(0,0,0,.45) 18%,rgba(0,0,0,.88));backdrop-filter:blur(10px)}
+.bar{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.nb{padding:10px 8px;border-radius:16px;border:1px solid var(--b);background:#0b120eaa;color:#b8c7bb;font-weight:1000;display:flex;gap:8px;align-items:center;justify-content:center;user-select:none;transition:.18s}
+.nb:active{transform:scale(.98)}.nb i{font-style:normal}.nb.on{background:#fff;color:#0b0f0c;border-color:#fff;box-shadow:0 10px 30px rgba(255,255,255,.10)}
+canvas.chart{width:100%;height:240px;border-radius:18px;background:linear-gradient(180deg,#0a100c,#050806);border:1px solid var(--b)}
+/* Home */
+.hero{min-height:calc(100vh - 110px);display:grid;place-items:center}
+.heroBox{max-width:720px;width:100%;text-align:center;padding:22px}
+.heroTitle{font-size:34px;font-weight:1000;letter-spacing:.3px}
+.heroHint{color:#b8c7bb;margin-top:12px;font-size:14px;line-height:1.35}
+.heroBtn{margin-top:16px;padding:14px 18px;border-radius:16px;font-size:16px}
+</style></head><body><canvas id="fx"></canvas><div class="wrap">
+  <!-- HOME (tela inicial) -->
+<section id="tHome" class="tab on">
+  <div class="hero">
+    <div class="card heroBox pop d1">
+      <div class="heroTitle">Serralheria do Gil</div>
+      <div class="heroHint">...........:"Gostaria de Fazer um dinheiro? Clique no botão logo abaixo:"</div>
+      <button class="btn good heroBtn" data-act="start">Iniciar</button>
+      <div class="sep"></div>
+      <div class="small">Dica: o app fica offline e salva tudo no celular. Use Backup no menu “Config”.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PIN -->
+<section id="tPin" class="tab">
+  <div class="hero">
+    <div class="card heroBox pop d1">
+      <div class="heroTitle" id="pinTitle">Digite o PIN</div>
+      <div class="small" id="pinSub">Protege seus dados aqui.</div>
+      <div class="row" style="justify-content:center;margin-top:10px">
+        <input class="in" id="pinInput" inputmode="numeric" maxlength="6" placeholder="PIN (4 a 6 dígitos)" style="max-width:260px;text-align:center;font-weight:1000;letter-spacing:.35em">
+      </div>
+      <div class="row" style="justify-content:center;margin-top:10px">
+        <button class="btn good" data-act="pinOk">Entrar</button>
+        <button class="btn ghost" data-act="pinCancel">Voltar</button>
+      </div>
+      <div class="small" style="margin-top:10px;color:#9fb2a5">Se for a primeira vez, você vai criar o PIN.</div>
+    </div>
+  </div>
+</section>
+
+<!-- APP -->
+<section id="tApp" class="tab">
+  <div class="row" style="align-items:center;justify-content:space-between;margin:6px 0 14px">
+    <div class="card pop d1" style="flex:1">
+      <div class="h1">Serralheria do Gil</div>
+      <div class="sub">Controle • Agenda • Orçamentos • Clientes • Materiais</div>
+    </div>
+    <button class="btn ghost pop d2" data-act="fech">Fechamento</button>
+  </div>
+
+  <section id="tab0" class="tab on">
+    <div class="row">
+      <div class="card pop d1" style="flex:1;min-width:240px">
+        <div class="small">Saldo hoje <span class="pill" id="labHoje" style="float:right">----</span></div>
+        <div class="h1" id="kHoje" style="margin-top:6px">R$ 0,00</div>
+        <div class="small" id="kHoje2">GN: R$ 0,00 • SD: R$ 0,00</div>
+      </div>
+      <div class="card pop d2" style="flex:1;min-width:240px">
+        <div class="small">Saldo do mês <span class="pill" id="labMes" style="float:right">----</span></div>
+        <div class="h1" id="kMes" style="margin-top:6px">R$ 0,00</div>
+        <div class="small" id="kMes2">GN: R$ 0,00 • SD: R$ 0,00 • Materiais: R$ 0,00</div>
+      </div>
+    </div>
+
+    <div class="card pop d3" style="margin-top:10px">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <div><div style="font-weight:1000">Gráfico (GN vs SD)</div><div class="small">Toque para ver %</div></div>
+        <div class="pill" id="mesPick">----</div>
+      </div>
+      <div style="margin-top:10px"><canvas class="chart" id="donut" width="900" height="320"></canvas></div>
+      <div class="small" id="donutTip" style="margin-top:8px;min-height:16px"></div>
+    </div>
+
+    <div class="row" style="margin-top:10px">
+      <div class="card pop d4" style="flex:1;min-width:240px">
+        <div class="small">Previsão de faturamento (offline)</div>
+        <div class="h1" id="prev" style="margin-top:6px">R$ 0,00</div>
+        <div class="small">Média móvel + tendência simples.</div>
+      </div>
+      <div class="card pop d4" style="flex:1;min-width:240px">
+        <div class="small">Top clientes (mês)</div>
+        <div style="font-weight:1000;margin-top:10px" id="topCli">Sem dados</div>
+        <div class="small">Preencha Cliente nos lançamentos.</div>
+      </div>
+    </div>
+  </section>
+  <section id="tab1" class="tab">
+    <div class="card pop d1">
+      <div class="grid2">
+        <div>
+          <div class="small">Tipo</div>
+          <div class="row">
+            <button class="btn ghost" id="bGN" data-act="tipo" data-val="GN">GN (Ganhos)</button>
+            <button class="btn ghost" id="bSD" data-act="tipo" data-val="SD">SD (Saídas)</button>
+          </div>
+        </div>
+        <div><div class="small">Data</div><input class="in" id="mData" type="date"></div>
+      </div>
+      <div class="grid2" style="margin-top:10px">
+        <div><div class="small">Valor (R$)</div><input class="in" id="mVal" type="number" step="0.01" placeholder="Ex: 250"></div>
+        <div><div class="small">Cliente</div><input class="in" id="mCli" placeholder="Ex: João / Construtora X"></div>
+      </div>
+      <div class="grid2" style="margin-top:10px">
+        <div><div class="small">Categoria</div><input class="in" id="mCat" placeholder="Ex: Portão / Solda / Combustível"></div>
+        <div><div class="small">Obs</div><input class="in" id="mObs" placeholder="Ex: sinal, restante..."></div>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn good" data-act="saveMov">Salvar</button>
+        <button class="btn ghost" data-act="clrMov">Limpar</button>
+        <button class="btn ghost mini" data-act="copyMes">Copiar mês</button>
+      </div>
+    </div>
+
+    <div class="card pop d2" style="margin-top:10px">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <div><div style="font-weight:1000">Histórico (mês)</div><div class="small">Use ◀ ▶ pra trocar</div></div>
+        <div class="row">
+          <button class="btn ghost mini" data-act="mPrev">◀</button>
+          <div class="pill" id="hisMes">----</div>
+          <button class="btn ghost mini" data-act="mNext">▶</button>
+        </div>
+      </div>
+      <div class="list" id="movList"></div>
+    </div>
+  </section>
+
+  <section id="tab2" class="tab">
+    <div class="card pop d1">
+      <div class="grid2">
+        <div><div class="small">Cliente</div><input class="in" id="aCli" placeholder="Nome do cliente"></div>
+        <div><div class="small">Telefone</div><input class="in" id="aTel" inputmode="tel" placeholder="(41) 9...."></div>
+      </div>
+      <div class="grid2" style="margin-top:10px">
+        <div><div class="small">Data</div><input class="in" id="aData" type="date"></div>
+        <div><div class="small">Hora</div><input class="in" id="aHora" type="time"></div>
+      </div>
+      <div style="margin-top:10px"><div class="small">Descrição</div><input class="in" id="aDesc" placeholder="Ex: Instalar portão, ajuste, solda..."></div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn good" data-act="saveAg">Salvar serviço</button>
+        <button class="btn ghost" data-act="clrAg">Limpar</button>
+        <button class="btn ghost mini" data-act="noti">Notificação</button>
+      </div>
+      <div class="small" style="margin-top:8px">Lembrete 1h antes: <span class="warn">só com a página aberta</span>.</div>
+    </div>
+
+    <div class="card pop d2" style="margin-top:10px">
+      <div style="font-weight:1000">Próximos serviços</div>
+      <div class="list" id="agList"></div>
+    </div>
+  </section>
+  <section id="tab3" class="tab">
+    <div class="card pop d1">
+      <div class="grid2">
+        <div><div class="small">Nome</div><input class="in" id="cNome" placeholder="Cliente"></div>
+        <div><div class="small">Telefone</div><input class="in" id="cTel" inputmode="tel" placeholder="(41) 9...."></div>
+      </div>
+      <div style="margin-top:10px"><div class="small">Endereço</div><input class="in" id="cEnd" placeholder="Rua, bairro..."></div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn good" data-act="saveCli">Salvar</button>
+        <button class="btn ghost" data-act="clrCli">Limpar</button>
+      </div>
+    </div>
+
+    <div class="card pop d2" style="margin-top:10px">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <div><div style="font-weight:1000">Clientes</div><div class="small">Aparece aqui sempre.</div></div>
+        <input class="in" id="cliSearch" placeholder="Buscar cliente..." style="max-width:280px">
+      </div>
+      <div class="list" id="cliList"></div>
+    </div>
+  </section>
+
+  <section id="tab4" class="tab">
+    <div class="card pop d1">
+      <div class="grid2">
+        <div><div class="small">Cliente</div><input class="in" id="oCli" placeholder="Nome do cliente"></div>
+        <div><div class="small">Telefone</div><input class="in" id="oTel" inputmode="tel" placeholder="(41) 9...."></div>
+      </div>
+      <div class="grid2" style="margin-top:10px">
+        <div><div class="small">Preço (R$)</div><input class="in" id="oVal" type="number" step="0.01" placeholder="Ex: 1200"></div>
+        <div><div class="small">Prazo</div><input class="in" id="oPrazo" placeholder="Ex: 3 dias / 1 semana"></div>
+      </div>
+      <div style="margin-top:10px"><div class="small">Descrição</div><input class="in" id="oDesc" placeholder="Ex: Portão basculante + pintura..."></div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn good" data-act="saveOrc">Salvar</button>
+        <button class="btn ghost" data-act="clrOrc">Limpar</button>
+        <button class="btn ghost" data-act="zapOrc">WhatsApp</button>
+      </div>
+      <div class="small" style="margin-top:8px">Abre o WhatsApp com mensagem pronta.</div>
+    </div>
+
+    <div class="card pop d2" style="margin-top:10px">
+      <div style="font-weight:1000">Orçamentos</div>
+      <div class="list" id="orcList"></div>
+    </div>
+  </section>
+  <section id="tab5" class="tab">
+    <div class="card pop d1">
+      <div class="grid2">
+        <div><div class="small">Material</div><input class="in" id="matNome" placeholder="Ex: Tubo 2'', Eletrodo, Tinta"></div>
+        <div><div class="small">Custo (R$)</div><input class="in" id="matVal" type="number" step="0.01" placeholder="Ex: 80"></div>
+      </div>
+      <div class="grid2" style="margin-top:10px">
+        <div><div class="small">Data</div><input class="in" id="matData" type="date"></div>
+        <div><div class="small">Vincular ao cliente</div><input class="in" id="matCli" placeholder="Nome do cliente (opcional)"></div>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn good" data-act="saveMat">Salvar</button>
+        <button class="btn ghost" data-act="clrMat">Limpar</button>
+      </div>
+      <div class="small" style="margin-top:8px">Materiais entram como “uso” no mês.</div>
+    </div>
+
+    <div class="card pop d2" style="margin-top:10px">
+      <div style="font-weight:1000">Materiais (mês atual)</div>
+      <div class="list" id="matList"></div>
+    </div>
+  </section>
+
+  <section id="tab6" class="tab">
+    <div class="card pop d1">
+      <div style="font-weight:1000">Config / Backup</div>
+      <div class="sep"></div>
+      <div class="row">
+        <button class="btn ghost" data-act="backupOpen">Backup</button>
+        <button class="btn ghost" data-act="pinChange">Trocar PIN</button>
+        <button class="btn danger" data-act="wipe">Apagar tudo</button>
+      </div>
+      <div class="small" style="margin-top:10px">Backup exporta tudo em JSON. Import cola de volta e pronto.</div>
+    </div>
+  </section>
+</section><!-- tApp -->
+
+<!-- Modal Backup -->
+<section id="tBk" class="tab">
+  <div class="hero">
+    <div class="card heroBox pop d1">
+      <div class="heroTitle">Backup</div>
+      <div class="small">Exportar/Importar JSON (sem internet).</div>
+      <textarea class="in" id="bkBox" rows="10" placeholder="Aqui aparece o JSON..."></textarea>
+      <div class="row" style="justify-content:center;margin-top:10px">
+        <button class="btn good" data-act="bkExp">Exportar</button>
+        <button class="btn ghost" data-act="bkImp">Importar</button>
+        <button class="btn ghost" data-act="bkClose">Fechar</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- wrap -->
+
+<div class="nav"><div class="bar">
+  <div class="nb on" data-act="tab" data-val="0"><i>📊</i>Dash</div>
+  <div class="nb" data-act="tab" data-val="1"><i>💰</i>Mov</div>
+  <div class="nb" data-act="tab" data-val="2"><i>📅</i>Agenda</div>
+  <div class="nb" data-act="tab" data-val="3"><i>👤</i>Clientes</div>
+  <div class="nb" data-act="tab" data-val="4"><i>🧾</i>Orç</div>
+  <div class="nb" data-act="tab" data-val="5"><i>🧱</i>Mat</div>
+</div></div>
+
+<script>
+  /* ==== CONFIG ==== */
+const DAD_WA="554195008252"; // WhatsApp do pai (só dígitos)
+const KEY="sg_erp_v1", PINKEY="sg_pin_v1";
+
+/* ==== HELPERS ==== */
+const $=id=>document.getElementById(id);
+const jget=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)||"null")??d}catch{return d}};
+const jset=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+const brl=n=>Number(n||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const iso=()=>new Date().toISOString().slice(0,10);
+const ym=d=>(d||new Date()).toISOString().slice(0,7);
+const digits=s=>(s||"").replace(/\D/g,"");
+const money=v=>Math.round((+v||0)*100)/100;
+const fmtDate=d=>{if(!d)return"";const [y,m,da]=d.split("-");return`${da}/${m}/${y}`};
+const vib=()=>navigator.vibrate&&navigator.vibrate(10);
+
+let DB=jget(KEY,{tipo:"GN",mov:[],ag:[],cli:[],orc:[],mat:[]});
+let CURM=ym(); // histórico
+let TAB=0;
+
+function show(id){
+  ["tHome","tPin","tApp","tBk"].forEach(x=>$(x).className="tab"+(x===id?" on":""));
+}
+function showAppTab(i){
+  TAB=i;
+  ["tab0","tab1","tab2","tab3","tab4","tab5","tab6"].forEach((t,idx)=>$(t).className="tab"+(idx===i?" on":""));
+  document.querySelectorAll(".nb").forEach((b,idx)=>b.classList.toggle("on",idx===i));
+  vib(); render();
+}
+function openZap(tel,msg){
+  const t=digits(tel||"");
+  const u=t?`https://wa.me/${t}?text=${encodeURIComponent(msg)}`:`https://wa.me/?text=${encodeURIComponent(msg)}`;
+  open(u,"_blank");
+}
+function byMonth(arr,m){return arr.filter(x=>(x.m||x.data?.slice(0,7))===m)}
+
+/* ==== PIN ==== */
+let pinMode="check", newPin="";
+function needPin(){
+  const has=localStorage.getItem(PINKEY);
+  pinMode = has? "check":"create";
+  $("pinTitle").textContent = has? "Digite o PIN":"Crie seu PIN";
+  $("pinSub").textContent = has? "Acesso protegido":"Escolha 4 a 6 dígitos";
+  $("pinInput").value="";
+  show("tPin");
+  setTimeout(()=>$("pinInput").focus(),120);
+}
+function pinOk(){
+  const p=digits($("pinInput").value||"");
+  if(p.length<4||p.length>6) return alert("PIN deve ter 4 a 6 dígitos.");
+  const stored=localStorage.getItem(PINKEY);
+  if(pinMode==="create"){ localStorage.setItem(PINKEY,p); show("tApp"); showAppTab(0); return; }
+  if(pinMode==="new1"){ newPin=p; pinMode="new2"; $("pinTitle").textContent="Confirme o PIN"; $("pinSub").textContent="Digite de novo"; $("pinInput").value=""; return; }
+  if(pinMode==="new2"){ if(p!==newPin) return alert("PIN não bateu."); localStorage.setItem(PINKEY,p); alert("PIN trocado ✅"); pinMode="check"; show("tApp"); return; }
+  if(!stored || p!==stored) return alert("PIN incorreto.");
+  show("tApp"); showAppTab(0);
+}
+function pinCancel(){ show("tHome"); }
+  /* ==== MOVIMENTOS ==== */
+function setTipo(t){
+  DB.tipo=t;
+  $("bGN").className="btn "+(t==="GN"?"good":"ghost");
+  $("bSD").className="btn "+(t==="SD"?"danger":"ghost");
+  jset(KEY,DB); vib();
+}
+function clrMov(){["mVal","mCli","mCat","mObs"].forEach(x=>$(x).value=""); $("mData").value=iso();}
+function saveMov(){
+  const data=$("mData").value||iso(), val=money($("mVal").value);
+  if(!val||val<=0) return alert("Valor inválido.");
+  DB.mov.push({id:Date.now()+"",tipo:DB.tipo,data,m:data.slice(0,7),val,
+    cli:($("mCli").value||"").trim(),cat:($("mCat").value||"").trim(),obs:($("mObs").value||"").trim()
+  });
+  CURM=data.slice(0,7);
+  jset(KEY,DB); clrMov(); render();
+}
+function delMov(id){ if(!confirm("Remover lançamento?")) return;
+  DB.mov=DB.mov.filter(x=>x.id!==id); jset(KEY,DB); render();
+}
+function copyMes(){
+  const m=CURM;
+  const mv=byMonth(DB.mov,m).sort((a,b)=>a.data.localeCompare(b.data));
+  const lines=mv.map(x=>{
+    const s=x.tipo==="GN"?"+":"-";
+    const parts=[fmtDate(x.data),`${s}${brl(x.val)}`,x.cli&&`Cliente:${x.cli}`,x.cat&&`Cat:${x.cat}`,x.obs&&`Obs:${x.obs}`].filter(Boolean);
+    return parts.join(" • ");
+  });
+  const txt=`*Serralheria do Gil — ${m}*\n`+(lines.length?lines.join("\n"):"(sem lançamentos)");
+  navigator.clipboard?.writeText(txt).then(()=>alert("Copiado ✅")).catch(()=>prompt("Copie:",txt));
+}
+function mes(delta){
+  const [Y,M]=CURM.split("-").map(Number);
+  const d=new Date(Y,M-1+delta,1);
+  CURM=d.toISOString().slice(0,7);
+  render();
+}
+
+/* ==== CLIENTES ==== */
+function clrCli(){["cNome","cTel","cEnd"].forEach(x=>$(x).value="");}
+function saveCli(){
+  const nome=($("cNome").value||"").trim(); if(!nome) return alert("Nome obrigatório.");
+  const tel=digits($("cTel").value), end=($("cEnd").value||"").trim();
+  const ex=DB.cli.find(c=>c.nome.toLowerCase()===nome.toLowerCase());
+  if(ex){ex.tel=tel; ex.end=end}else DB.cli.push({id:Date.now()+"",nome,tel,end});
+  jset(KEY,DB); clrCli(); render();
+}
+function delCli(id){ if(!confirm("Remover cliente?")) return;
+  DB.cli=DB.cli.filter(x=>x.id!==id); jset(KEY,DB); render();
+}
+function cliFiltered(){
+  const q=($("cliSearch")?.value||"").toLowerCase().trim();
+  let arr=DB.cli.slice().sort((a,b)=>a.nome.localeCompare(b.nome));
+  if(q) arr=arr.filter(c=>c.nome.toLowerCase().includes(q)||(c.tel||"").includes(q)||(c.end||"").toLowerCase().includes(q));
+  return arr;
+}
+  /* ==== AGENDA ==== */
+function clrAg(){["aCli","aTel","aDesc"].forEach(x=>$(x).value=""); $("aData").value=iso(); $("aHora").value="08:00";}
+function saveAg(){
+  const cli=($("aCli").value||"").trim(), data=$("aData").value||iso(), hora=$("aHora").value||"08:00", desc=($("aDesc").value||"").trim();
+  if(!cli||!desc) return alert("Cliente e descrição obrigatórios.");
+  DB.ag.push({id:Date.now()+"",cli,tel:digits($("aTel").value),data,hora,desc,done:0});
+  jset(KEY,DB); clrAg(); render();
+}
+function delAg(id){ if(!confirm("Remover serviço?")) return;
+  DB.ag=DB.ag.filter(x=>x.id!==id); jset(KEY,DB); render();
+}
+async function noti(){
+  if(!("Notification" in window)) return alert("Sem suporte a notificação.");
+  const p=await Notification.requestPermission();
+  alert(p==="granted"?"Ativado ✅":"Negado.");
+}
+function checkAg(){
+  if(!("Notification" in window)||Notification.permission!=="granted") return;
+  const now=Date.now();
+  DB.ag.forEach(s=>{
+    if(s.done) return;
+    const dt=new Date(`${s.data}T${s.hora}:00`).getTime();
+    const left=dt-now;
+    if(left<=3600000&&left>0){
+      s.done=1; jset(KEY,DB);
+      new Notification("Serralheria do Gil",{body:`Serviço: ${s.cli}\n${s.desc}\nFalta: ~${Math.ceil(left/60000)} min`});
+    }
+  });
+}
+setInterval(checkAg,30000);
+function zapPaiAg(id){
+  const s=DB.ag.find(x=>x.id===id); if(!s) return;
+  const dt=new Date(`${s.data}T${s.hora}:00`).getTime();
+  const mins=Math.ceil(Math.max(0,dt-Date.now())/60000);
+  const msg=`*Serviço (Serralheria do Gil)*\nCliente: ${s.cli}\nServiço: ${s.desc}\nQuando: ${fmtDate(s.data)} ${s.hora}\nFalta: ${mins} min`;
+  openZap(DAD_WA,msg);
+}
+
+/* ==== ORÇAMENTOS ==== */
+function clrOrc(){["oCli","oTel","oVal","oPrazo","oDesc"].forEach(x=>$(x).value="");}
+function saveOrc(){
+  const cli=($("oCli").value||"").trim(), val=money($("oVal").value), desc=($("oDesc").value||"").trim();
+  if(!cli||!val||val<=0||!desc) return alert("Cliente, preço e descrição obrigatórios.");
+  DB.orc.push({id:Date.now()+"",cli,tel:digits($("oTel").value),val,prazo:($("oPrazo").value||"").trim(),desc,at:Date.now()});
+  jset(KEY,DB); render();
+}
+function delOrc(id){ if(!confirm("Remover orçamento?")) return;
+  DB.orc=DB.orc.filter(x=>x.id!==id); jset(KEY,DB); render();
+}
+function zapOrc(){
+  const cli=($("oCli").value||"").trim(), val=money($("oVal").value), prazo=($("oPrazo").value||"").trim(), desc=($("oDesc").value||"").trim();
+  if(!cli||!val||val<=0||!desc) return alert("Preencha cliente, valor e descrição.");
+  const tel=digits($("oTel").value)||DAD_WA;
+  const msg=`*Orçamento - Serralheria do Gil*\nCliente: ${cli}\nServiço: ${desc}\nValor: ${brl(val)}\nPrazo: ${prazo||"a combinar"}\n\nSe aprovar, me confirma por aqui.`;
+  openZap(tel,msg);
+}
+function zapSavedOrc(id){
+  const o=DB.orc.find(x=>x.id===id); if(!o) return;
+  const msg=`*Orçamento - Serralheria do Gil*\nCliente: ${o.cli}\nServiço: ${o.desc}\nValor: ${brl(o.val)}\nPrazo: ${o.prazo||"a combinar"}`;
+  openZap(o.tel||DAD_WA,msg);
+  }
+  /* ==== MATERIAIS ==== */
+function clrMat(){["matNome","matVal","matCli"].forEach(x=>$(x).value=""); $("matData").value=iso();}
+function saveMat(){
+  const nome=($("matNome").value||"").trim(), val=money($("matVal").value), data=$("matData").value||iso();
+  if(!nome||!val||val<=0) return alert("Material e custo obrigatórios.");
+  DB.mat.push({id:Date.now()+"",nome,val,data,m:data.slice(0,7),cli:($("matCli").value||"").trim()});
+  jset(KEY,DB); clrMat(); render();
+}
+function delMat(id){ if(!confirm("Remover material?")) return;
+  DB.mat=DB.mat.filter(x=>x.id!==id); jset(KEY,DB); render();
+}
+
+/* ==== DASH ==== */
+function calc(m){
+  const mv=byMonth(DB.mov,m), mt=byMonth(DB.mat,m);
+  const gn=mv.filter(x=>x.tipo==="GN").reduce((a,b)=>a+b.val,0);
+  const sd=mv.filter(x=>x.tipo==="SD").reduce((a,b)=>a+b.val,0);
+  const uso=mt.reduce((a,b)=>a+b.val,0);
+  return {gn,sd,uso,res:gn-sd-uso};
+}
+function forecast(){
+  const d=new Date(); d.setDate(1);
+  const months=[]; for(let i=5;i>=0;i--){const x=new Date(d); x.setMonth(d.getMonth()-i); months.push(x.toISOString().slice(0,7));}
+  const s=months.map(m=>calc(m).gn), avg=s.reduce((a,b)=>a+b,0)/Math.max(1,s.length);
+  const trend=(s[s.length-1]-s[0])/Math.max(1,s.length-1);
+  return Math.max(0, avg+trend);
+}
+function topCli(m){
+  const map=new Map();
+  byMonth(DB.mov,m).forEach(x=>{const k=(x.cli||"").trim(); if(!k) return; const v=(x.tipo==="GN")?x.val:-x.val; map.set(k,(map.get(k)||0)+v);});
+  const arr=[...map.entries()].sort((a,b)=>b[1]-a[1]).slice(0,3);
+  return arr.length?arr.map(([k,v])=>`${k}: ${brl(v)}`).join(" • "):"Sem dados";
+}
+function donutDraw(gn,sd){
+  const c=$("donut"),ctx=c.getContext("2d"),W=c.width,H=c.height,cx=W/2,cy=H/2,r=Math.min(W,H)*0.30,th=r*0.45;
+  ctx.clearRect(0,0,W,H);
+  const total=Math.max(gn+sd,1e-6),a0=-Math.PI/2,aGN=a0+(gn/total)*Math.PI*2;
+  const arc=(col,from,to,glow)=>{ctx.save();ctx.lineWidth=th;ctx.lineCap="round";ctx.shadowColor=col;ctx.shadowBlur=glow;ctx.strokeStyle=col;ctx.beginPath();ctx.arc(cx,cy,r,from,to);ctx.stroke();ctx.restore();}
+  arc("rgba(255,255,255,.06)",0,Math.PI*2,0);
+  arc("rgba(82,255,138,.95)",a0,aGN,18);
+  arc("rgba(255,90,107,.92)",aGN,a0+Math.PI*2,16);
+  c.onclick=()=>{const pGN=Math.round((gn/total)*100),pSD=100-pGN; $("donutTip").innerHTML=`<span class="pos">GN ${pGN}%</span> • <span class="neg">SD ${pSD}%</span> • Total: <b>${brl(gn+sd)}</b>`; vib();};
+}
+function fech(){
+  const m=ym(), c=calc(m);
+  const msg=`*Fechamento ${m}*\nGN: ${brl(c.gn)}\nSD: ${brl(c.sd)}\nMateriais: ${brl(c.uso)}\nResultado: ${brl(c.res)}`;
+  confirm(msg+"\n\nCopiar?") && (navigator.clipboard?.writeText(msg).then(()=>alert("Copiado ✅")).catch(()=>prompt("Copie:",msg)));
+}
+  /* ==== BACKUP / CONFIG ==== */
+function backupOpen(){ $("bkBox").value=""; show("tBk"); }
+function bkExp(){ $("bkBox").value=JSON.stringify({at:new Date().toISOString(),DB},null,2); }
+function bkImp(){
+  const s=($("bkBox").value||"").trim(); if(!s) return alert("Cole o JSON.");
+  try{
+    const j=JSON.parse(s);
+    if(!j.DB) return alert("JSON inválido.");
+    DB=j.DB; jset(KEY,DB);
+    alert("Importado ✅");
+    show("tApp"); showAppTab(6); render();
+  }catch{ alert("JSON inválido."); }
+}
+function bkClose(){ show("tApp"); render(); }
+function pinChange(){
+  pinMode="new1"; newPin="";
+  $("pinTitle").textContent="Novo PIN";
+  $("pinSub").textContent="Digite 4 a 6 dígitos";
+  $("pinInput").value="";
+  show("tPin");
+}
+function wipe(){
+  if(!confirm("Apagar TUDO?")) return;
+  DB={tipo:"GN",mov:[],ag:[],cli:[],orc:[],mat:[]};
+  jset(KEY,DB);
+  alert("Apagado.");
+  render();
+}
+
+/* ==== RENDER ==== */
+function render(){
+  $("mData") && ($("mData").value ||= iso());
+  $("aData") && ($("aData").value ||= iso());
+  $("aHora") && ($("aHora").value ||= "08:00");
+  $("matData") && ($("matData").value ||= iso());
+  if($("hisMes")) $("hisMes").textContent=CURM;
+  if($("mesPick")) $("mesPick").textContent=CURM;
+  setTipo(DB.tipo||"GN");
+
+  const today=iso(), m=ym();
+  $("labHoje") && ($("labHoje").textContent=today);
+  $("labMes") && ($("labMes").textContent=m);
+
+  // Hoje
+  const td=DB.mov.filter(x=>x.data===today);
+  const gnH=td.filter(x=>x.tipo==="GN").reduce((a,b)=>a+b.val,0);
+  const sdH=td.filter(x=>x.tipo==="SD").reduce((a,b)=>a+b.val,0);
+  $("kHoje") && ($("kHoje").textContent=brl(gnH-sdH));
+  $("kHoje2") && ($("kHoje2").textContent=`GN: ${brl(gnH)} • SD: ${brl(sdH)}`);
+
+  // Mês atual
+  const c=calc(m);
+  $("kMes") && ($("kMes").textContent=brl(c.res));
+  $("kMes2") && ($("kMes2").textContent=`GN: ${brl(c.gn)} • SD: ${brl(c.sd)} • Materiais: ${brl(c.uso)}`);
+  $("prev") && ($("prev").textContent=brl(forecast()));
+  $("topCli") && ($("topCli").textContent=topCli(m));
+
+  // Donut do mês selecionado
+  const cc=calc(CURM); $("donut") && donutDraw(cc.gn,cc.sd);
+  // Movimentos (CURM)
+  const mv=byMonth(DB.mov,CURM).sort((a,b)=>b.data.localeCompare(a.data));
+  $("movList") && ($("movList").innerHTML = mv.length? mv.map(x=>`
+    <div class="it">
+      <div class="l">
+        <div style="font-weight:1000">${fmtDate(x.data)} • <span class="${x.tipo==="GN"?"pos":"neg"}">${x.tipo} ${brl(x.val)}</span></div>
+        <div class="small">
+          ${x.cli?`<span class="tag">👤 ${x.cli}</span>`:""}
+          ${x.cat?`<span class="tag">🏷️ ${x.cat}</span>`:""}
+          ${x.obs?`<span class="tag">📝 ${x.obs}</span>`:""}
+        </div>
+      </div>
+      <div class="r"><button class="btn danger mini" data-act="delMov" data-id="${x.id}">Remover</button></div>
+    </div>`).join("") : `<div class="small">Sem lançamentos nesse mês.</div>`);
+
+  // Agenda
+  const ag=DB.ag.slice().sort((a,b)=>(a.data+a.hora).localeCompare(b.data+b.hora));
+  $("agList") && ($("agList").innerHTML = ag.length? ag.map(s=>`
+    <div class="it">
+      <div class="l">
+        <div style="font-weight:1000">${fmtDate(s.data)} ${s.hora} • ${s.cli}</div>
+        <div class="small">${s.desc}</div>
+        ${s.tel?`<div class="small"><span class="tag">📞 ${s.tel}</span></div>`:""}
+      </div>
+      <div class="r">
+        <button class="btn ghost mini" data-act="zapPaiAg" data-id="${s.id}">Pai</button>
+        <button class="btn danger mini" data-act="delAg" data-id="${s.id}">Remover</button>
+      </div>
+    </div>`).join("") : `<div class="small">Sem serviços.</div>`);
+
+  // Clientes
+  const cl=cliFiltered();
+  $("cliList") && ($("cliList").innerHTML = cl.length? cl.map(c=>`
+    <div class="it">
+      <div class="l">
+        <div style="font-weight:1000">${c.nome}</div>
+        <div class="small">
+          ${c.tel?`<span class="tag">📞 ${c.tel}</span>`:""}
+          ${c.end?`<span class="tag">📍 ${c.end}</span>`:""}
+        </div>
+      </div>
+      <div class="r">
+        ${c.tel?`<button class="btn ghost mini" data-act="zapCli" data-id="${c.id}">Whats</button>`:""}
+        <button class="btn danger mini" data-act="delCli" data-id="${c.id}">Remover</button>
+      </div>
+    </div>`).join("") : `<div class="small">Nenhum cliente cadastrado.</div>`);
+
+  // Orçamentos
+  const or=DB.orc.slice().sort((a,b)=>b.at-a.at);
+  $("orcList") && ($("orcList").innerHTML = or.length? or.map(o=>`
+    <div class="it">
+      <div class="l">
+        <div style="font-weight:1000">${o.cli}</div>
+        <div class="small">${o.desc}</div>
+        <div class="small"><span class="tag">💲 ${brl(o.val)}</span> ${o.prazo?`<span class="tag">⏱ ${o.prazo}</span>`:""}</div>
+      </div>
+      <div class="r">
+        <button class="btn ghost mini" data-act="zapSavedOrc" data-id="${o.id}">Whats</button>
+        <button class="btn danger mini" data-act="delOrc" data-id="${o.id}">Remover</button>
+      </div>
+    </div>`).join("") : `<div class="small">Sem orçamentos.</div>`);
+  // Materiais (mês atual)
+  const mt=byMonth(DB.mat,m).sort((a,b)=>b.data.localeCompare(a.data));
+  $("matList") && ($("matList").innerHTML = mt.length? mt.map(x=>`
+    <div class="it">
+      <div class="l">
+        <div style="font-weight:1000">${fmtDate(x.data)} • ${x.nome}</div>
+        <div class="small"><span class="warn">Uso</span>: ${brl(x.val)} ${x.cli?`• ${x.cli}`:""}</div>
+      </div>
+      <div class="r"><button class="btn danger mini" data-act="delMat" data-id="${x.id}">Remover</button></div>
+    </div>`).join("") : `<div class="small">Sem materiais neste mês.</div>`);
+}
+
+/* ==== CLICK HANDLER ==== */
+document.addEventListener("click",(e)=>{
+  const b=e.target.closest("[data-act]"); if(!b) return;
+  const a=b.dataset.act, v=b.dataset.val, id=b.dataset.id;
+  if(a==="start") return needPin();
+  if(a==="pinOk") return pinOk();
+  if(a==="pinCancel") return pinCancel();
+  if(a==="tab") return showAppTab(+v);
+  if(a==="tipo") return setTipo(v);
+  if(a==="saveMov") return saveMov();
+  if(a==="clrMov") return clrMov();
+  if(a==="delMov") return delMov(id);
+  if(a==="mPrev") return mes(-1);
+  if(a==="mNext") return mes(1);
+  if(a==="copyMes") return copyMes();
+  if(a==="saveAg") return saveAg();
+  if(a==="clrAg") return clrAg();
+  if(a==="delAg") return delAg(id);
+  if(a==="noti") return noti();
+  if(a==="zapPaiAg") return zapPaiAg(id);
+  if(a==="saveCli") return saveCli();
+  if(a==="clrCli") return clrCli();
+  if(a==="delCli") return delCli(id);
+  if(a==="zapCli"){const c=DB.cli.find(x=>x.id===id); if(!c||!c.tel) return; return openZap(c.tel,`Oi ${c.nome}! *Serralheria do Gil* aqui.`);}
+  if(a==="saveOrc") return saveOrc();
+  if(a==="clrOrc") return clrOrc();
+  if(a==="delOrc") return delOrc(id);
+  if(a==="zapOrc") return zapOrc();
+  if(a==="zapSavedOrc") return zapSavedOrc(id);
+  if(a==="saveMat") return saveMat();
+  if(a==="clrMat") return clrMat();
+  if(a==="delMat") return delMat(id);
+  if(a==="fech") return fech();
+  if(a==="backupOpen") return backupOpen();
+  if(a==="bkExp") return bkExp();
+  if(a==="bkImp") return bkImp();
+  if(a==="bkClose") return bkClose();
+  if(a==="pinChange") return pinChange();
+  if(a==="wipe") return wipe();
+});
+
+$("cliSearch") && $("cliSearch").addEventListener("input",()=>render());
+
+/* ==== FX particles ==== */
+const FX=$("fx"),f=FX.getContext("2d"); let W=0,H=0,P=[];
+function rs(){W=FX.width=innerWidth*devicePixelRatio;H=FX.height=innerHeight*devicePixelRatio}
+addEventListener("resize",rs); rs();
+(function init(){const n=Math.min(90,Math.floor((innerWidth*innerHeight)/19000));
+P=[...Array(n)].map(()=>({x:Math.random()*W,y:Math.random()*H,vy:(.2+Math.random()*.7)*devicePixelRatio,r:(.8+Math.random()*2.2)*devicePixelRatio,t:Math.random()*6.28,s:(Math.random()*.7+.2)*devicePixelRatio,c:Math.random()<.55?1:0}))})();
+(function loop(){
+  f.clearRect(0,0,W,H);
+  const g=f.createRadialGradient(W*.2,H*.1,10,W*.2,H*.1,Math.max(W,H)*.9);
+  g.addColorStop(0,"rgba(82,255,138,.08)"); g.addColorStop(.6,"rgba(255,90,107,.06)"); g.addColorStop(1,"rgba(0,0,0,0)");
+  f.fillStyle=g; f.fillRect(0,0,W,H);
+  for(const p of P){p.t+=0.01;p.y+=p.vy;p.x+=Math.sin(p.t)*p.s;if(p.y>H+10){p.y=-10;p.x=Math.random()*W}
+    const col=p.c?"rgba(82,255,138,.55)":"rgba(120,210,255,.33)";
+    f.beginPath(); f.fillStyle=col; f.shadowColor=col; f.shadowBlur=9*devicePixelRatio; f.arc(p.x,p.y,p.r,0,Math.PI*2); f.fill(); f.shadowBlur=0;}
+  requestAnimationFrame(loop);
+})();
+(function boot(){ show("tHome"); render(); })();
+</script></body></html>
