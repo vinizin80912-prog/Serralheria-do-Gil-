@@ -1,56 +1,220 @@
 <!-- ===================== PARTE 1/20 ===================== -->
-<!doctype html><html lang="pt-br"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Serralheria do Gil • App</title>
-<meta name="theme-color" content="#08110c">
+<!doctype html>
+<html lang="pt-br">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Serralheria do Gil</title>
+
 <style>
-:root{--bg:#050a07;--card:#0b1511cc;--b:#1b2d23;--txt:#eaffef;--mut:#93a79a;--g:#52ff8a;--r:#ff5a6b;--y:#ffd166;--w:#fff;--sh:0 18px 60px rgba(0,0,0,.55)}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{height:100%}
-body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--txt);overflow:hidden}
-a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit}
-#fx{position:fixed;inset:0;z-index:0;pointer-events:none;filter:saturate(1.05) contrast(1.05)}
-.wrap{position:relative;z-index:1;height:100%;overflow:auto;-webkit-overflow-scrolling:touch;padding:18px 14px 92px;max-width:980px;margin:0 auto}
-.top{display:flex;gap:12px;align-items:center;margin:8px 0 14px}
-.badge{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(145deg,#0f1a13,#08100b);border:1px solid var(--b);box-shadow:var(--sh);font-weight:900}
-.h1{font-size:28px;font-weight:950;letter-spacing:.2px;margin:0;line-height:1.1}
-.sub{color:var(--mut);margin-top:3px;font-size:13px}
-.pill{padding:7px 10px;border-radius:999px;border:1px solid var(--b);background:#0a120eaa;color:var(--mut);font-size:12px}
-.row{display:flex;gap:10px;flex-wrap:wrap}
-.card{background:radial-gradient(140% 140% at 20% 10%,#132018cc 0%,#0b100dcc 40%,#070b08cc 100%);
-border:1px solid var(--b);border-radius:18px;padding:14px;box-shadow:var(--sh);backdrop-filter:blur(10px)}
-.kpi{flex:1;min-width:230px;position:relative;overflow:hidden}
-.kpi:before{content:"";position:absolute;inset:-2px;opacity:.45;background:
-radial-gradient(circle at 15% 15%,rgba(82,255,138,.18),transparent 45%),
-radial-gradient(circle at 85% 35%,rgba(255,90,107,.14),transparent 50%);pointer-events:none}
-.kpi .t{color:var(--mut);font-size:13px}.kpi .v{font-size:34px;font-weight:950;margin-top:4px}
-.sep{height:1px;background:#162018;margin:10px 0}
-.small{color:var(--mut);font-size:12px;line-height:1.35}
-.in{width:100%;padding:12px 12px;border-radius:14px;border:1px solid var(--b);background:#0b120eaa;color:var(--txt);outline:none}
-.in::placeholder{color:#6f8173}
-.btn{border:0;border-radius:14px;padding:12px 14px;font-weight:950;background:#fff;color:#08110c;cursor:pointer;transition:.15s;transform:translateZ(0)}
-.btn:active{transform:scale(.98)}.ghost{background:transparent;color:var(--txt);border:1px solid var(--b)}
-.danger{background:linear-gradient(180deg,#351015,#240a0d);color:#ffd6dc;border:1px solid #4b1a21}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:640px){.grid2{grid-template-columns:1fr}}
-.tab{display:none;animation:pop .18s ease both}.tab.on{display:block}@keyframes pop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.nav{position:fixed;left:0;right:0;bottom:0;z-index:10;padding:10px 12px;background:linear-gradient(180deg,transparent,rgba(0,0,0,.45) 18%,rgba(0,0,0,.86))}
-.bar{max-width:980px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
-.nb{padding:10px 8px;border-radius:16px;border:1px solid var(--b);background:#0b120eaa;color:#b8c7bb;font-weight:950;display:flex;gap:8px;align-items:center;justify-content:center;transition:.18s;position:relative;overflow:hidden}
-.nb i{font-style:normal;opacity:.92}.nb.on{background:#fff;color:#08110c;border-color:#fff;box-shadow:0 10px 30px rgba(255,255,255,.10)}
-.nb.on:after{content:"";position:absolute;inset:-2px;background:radial-gradient(circle at 50% 0,rgba(82,255,138,.25),transparent 55%);opacity:.8;pointer-events:none}
-.list .it{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #162018}
-.tag{font-size:12px;padding:4px 8px;border-radius:999px;border:1px solid var(--b);background:#0b120eaa;color:#cfe2d4}
-canvas.chart{width:100%;height:240px;border-radius:18px;background:linear-gradient(180deg,#08110c,#050a07);border:1px solid var(--b)}
-/* Splash + PIN */
-.overlay{position:fixed;inset:0;z-index:20;display:none;place-items:center;background:rgba(0,0,0,.55);backdrop-filter:blur(10px)}
-.overlay.on{display:grid}
-.modal{width:min(520px,92vw);border-radius:22px;border:1px solid var(--b);background:linear-gradient(180deg,#0e1913ee,#060b08ee);box-shadow:var(--sh);padding:18px}
-.pinRow{display:flex;gap:10px;justify-content:center;margin-top:10px}
-.pinDot{width:14px;height:14px;border-radius:99px;border:1px solid #2b4135;background:#0a120e}
-.pinDot.on{background:var(--g);box-shadow:0 0 18px rgba(82,255,138,.25)}
-.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
-.key{padding:14px;border-radius:16px;border:1px solid var(--b);background:#0b120eaa;color:#eaffef;font-weight:950}
-.key:active{transform:scale(.98)}
-</style></head>
+body{
+  margin:0;
+  font-family:system-ui;
+  background:#07110c;
+  color:#eaffef;
+}
+
+.wrap{padding:18px;max-width:900px;margin:auto}
+
+.card{
+  background:#0e1a14;
+  border:1px solid #1c2d23;
+  border-radius:18px;
+  padding:18px;
+  margin-bottom:16px;
+  box-shadow:0 20px 60px rgba(0,0,0,.6);
+}
+
+.h1{font-size:32px;font-weight:900;text-align:center}
+.sub{text-align:center;color:#9fb3a7;margin-top:8px}
+
+.btn{
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  border:0;
+  background:#52ff8a;
+  color:#08110c;
+  font-weight:900;
+  margin-top:14px;
+  cursor:pointer;
+}
+
+input{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid #2b4135;
+  background:#0b1511;
+  color:#fff;
+  margin-top:8px;
+}
+
+.list .it{
+  display:flex;
+  justify-content:space-between;
+  border-bottom:1px solid #1c2d23;
+  padding:10px 0;
+}
+
+canvas{
+  width:100%;
+  height:240px;
+}
+
+.splash{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SPLASH -->
+<section id="splash" class="splash">
+  <div class="card" style="max-width:520px;width:100%">
+    <div class="h1">Serralheria do Gil</div>
+    <div class="sub">Gostaria de fazer dinheiro?<br>Clique no botão abaixo.</div>
+    <button class="btn" onclick="startApp()">Iniciar</button>
+  </div>
+</section>
+
+<!-- APP -->
+<section id="app" style="display:none">
+<div class="wrap">
+
+<div class="card">
+  <div style="font-weight:900">Saldo do mês</div>
+  <div id="saldo" style="font-size:40px;font-weight:900;color:#52ff8a">
+    R$ 0,00
+  </div>
+</div>
+
+<div class="card">
+  <b>Novo lançamento</b>
+  <input id="valor" type="number" placeholder="Valor">
+  <button class="btn" onclick="addMov('GN')">Ganhos (GN)</button>
+  <button class="btn" style="background:#ff5a6b;color:#fff" onclick="addMov('SD')">Saídas (SD)</button>
+</div>
+
+<div class="card">
+  <b>Gráfico do mês</b>
+  <canvas id="graf" width="900" height="300"></canvas>
+</div>
+
+<div class="card">
+  <b>Histórico</b>
+  <div id="lista" class="list"></div>
+</div>
+
+</div>
+</section>
+
+<script>
+
+/* ===== Dados ===== */
+const KEY="gil_app_simple";
+let DB = JSON.parse(localStorage.getItem(KEY) || '{"mov":[]}');
+
+const brl=v=>Number(v||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+
+/* ===== Splash ===== */
+function startApp(){
+  document.getElementById("splash").style.display="none";
+  document.getElementById("app").style.display="block";
+  render();
+}
+
+/* ===== Salvar ===== */
+function save(){
+  localStorage.setItem(KEY, JSON.stringify(DB));
+}
+
+/* ===== Novo lançamento ===== */
+function addMov(tipo){
+  const v = Number(document.getElementById("valor").value);
+  if(!v || v<=0) return alert("Valor inválido");
+
+  DB.mov.push({tipo,val:v});
+  document.getElementById("valor").value="";
+  save();
+  render();
+}
+
+/* ===== Remover ===== */
+function delMov(i){
+  DB.mov.splice(i,1);
+  save();
+  render();
+}
+
+/* ===== Render geral ===== */
+function render(){
+
+  let gn=0, sd=0;
+
+  DB.mov.forEach(m=>{
+    if(m.tipo==="GN") gn+=m.val;
+    else sd+=m.val;
+  });
+
+  document.getElementById("saldo").textContent = brl(gn - sd);
+
+  /* Lista */
+  const lista = document.getElementById("lista");
+  lista.innerHTML = DB.mov.map((m,i)=>`
+    <div class="it">
+      <div>${m.tipo} — ${brl(m.val)}</div>
+      <button onclick="delMov(${i})">X</button>
+    </div>
+  `).join("");
+
+  /* Gráfico */
+  drawChart(gn, sd);
+}
+
+/* ===== Gráfico animado ===== */
+function drawChart(gn, sd){
+
+  const c = document.getElementById("graf");
+  const g = c.getContext("2d");
+
+  g.clearRect(0,0,c.width,c.height);
+
+  const max = Math.max(gn, sd, 1);
+
+  const hGN = (gn/max) * 200;
+  const hSD = (sd/max) * 200;
+
+  let p=0;
+
+  function anim(){
+    g.clearRect(0,0,c.width,c.height);
+
+    g.fillStyle="#52ff8a";
+    g.fillRect(250,260-hGN*p,120,hGN*p);
+
+    g.fillStyle="#ff5a6b";
+    g.fillRect(500,260-hSD*p,120,hSD*p);
+
+    if(p<1){
+      p+=0.05;
+      requestAnimationFrame(anim);
+    }
+  }
+
+  anim();
+}
+
+/* ===== Auto-render se já houver dados ===== */
+render();
+
+</script>
+</body>
+</html>
 <!-- ===================== PARTE 2/20 ===================== -->
 <body>
 <canvas id="fx"></canvas>
