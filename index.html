@@ -509,52 +509,59 @@ function topCli(m){
   const arr=[...map.entries()].sort((a,b)=>b[1]-a[1]).slice(0,3);
   return arr.length?arr.map(([k,v])=>`${k}: ${brl(v)}`).join(" • "):"Sem dados";
 }
-function donutDraw(gn,sd){
-  const c=$("donut"),ctx=c.getContext("2d"),W=c.width,H=c.height;
-  const cx=W/2,cy=H/2,r=Math.min(W,H)*0.33,th=r*0.30;
-  ctx.clearRect(0,0,W,H);
+function drawChart(gn, sd) {
+  const c = document.getElementById("donut");
+  const ctx = c.getContext("2d");
 
-  const total=Math.max(gn+sd,1e-6);
-  const start=-Math.PI/2;
-  const angGN=(gn/total)*Math.PI*2;
+  const W = c.width;
+  const H = c.height;
 
-  // base ring
-  ctx.save();
-  ctx.lineWidth=th; ctx.lineCap="round";
-  ctx.strokeStyle="rgba(255,255,255,.08)";
-  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.stroke();
-  ctx.restore();
+  ctx.clearRect(0, 0, W, H);
 
-  const arc=(col,from,to,blur)=>{
-    ctx.save();
-    ctx.lineWidth=th; ctx.lineCap="round";
-    ctx.strokeStyle=col;
-    ctx.shadowColor=col; ctx.shadowBlur=blur;
-    ctx.beginPath(); ctx.arc(cx,cy,r,from,to); ctx.stroke();
-    ctx.restore();
-  };
+  const max = Math.max(gn, sd, 1);
 
-  // GN
-  arc("rgba(82,255,138,.95)",start,start+angGN,18);
-  // SD
-  arc("rgba(255,90,107,.92)",start+angGN,start+Math.PI*2,16);
+  const pad = 80;
+  const baseY = H - 60;
 
-  // center text
-  ctx.save();
-  ctx.fillStyle="rgba(255,255,255,.92)";
-  ctx.textAlign="center";
-  ctx.font=`${Math.floor(r*0.26)}px system-ui`;
-  ctx.fillText(CURM.replace("-"," "),cx,cy-6);
-  ctx.fillStyle="rgba(255,255,255,.70)";
-  ctx.font=`${Math.floor(r*0.14)}px system-ui`;
-  ctx.fillText(`GN ${brl(gn)}  •  SD ${brl(sd)}`,cx,cy+Math.floor(r*0.22));
-  ctx.restore();
+  const gnH = (gn / max) * (H - pad);
+  const sdH = (sd / max) * (H - pad);
 
-  c.onclick=()=>{
-    const pGN=Math.round((gn/total)*100),pSD=100-pGN;
-    $("donutTip").innerHTML=`<span class="pos">GN ${pGN}%</span> • <span class="neg">SD ${pSD}%</span> • Total: <b>${brl(gn+sd)}</b>`;
-    vib();
-  };
+  const barW = 140;
+
+  const xGN = W / 2 - barW - 40;
+  const xSD = W / 2 + 40;
+
+  // ===== FUNDO SUTIL =====
+  ctx.fillStyle = "#0a120e";
+  ctx.fillRect(0, 0, W, H);
+
+  // ===== GN (VERDE) =====
+  ctx.fillStyle = "#52ff8a";
+  ctx.fillRect(xGN, baseY - gnH, barW, gnH);
+
+  // ===== SD (VERMELHO) =====
+  ctx.fillStyle = "#ff5a6b";
+  ctx.fillRect(xSD, baseY - sdH, barW, sdH);
+
+  // ===== TEXTOS =====
+  ctx.fillStyle = "#fff";
+  ctx.font = "22px system-ui";
+  ctx.textAlign = "center";
+
+  ctx.fillText("GN", xGN + barW / 2, baseY + 28);
+  ctx.fillText("SD", xSD + barW / 2, baseY + 28);
+
+  ctx.font = "18px system-ui";
+
+  ctx.fillText("R$ " + gn.toFixed(2), xGN + barW / 2, baseY - gnH - 12);
+  ctx.fillText("R$ " + sd.toFixed(2), xSD + barW / 2, baseY - sdH - 12);
+
+  // ===== LINHA BASE =====
+  ctx.strokeStyle = "#1f2a23";
+  ctx.beginPath();
+  ctx.moveTo(40, baseY);
+  ctx.lineTo(W - 40, baseY);
+  ctx.stroke();
 }
 function fech(){
   const m=ym(), c=calc(m);
