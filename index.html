@@ -1,382 +1,485 @@
 <!-- ===================== PARTE 1/20 ===================== -->
-<!doctype html>
-<html lang="pt-br">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Serralheria do Gil</title>
-
-<style>
-body{
-  margin:0;
-  font-family:system-ui;
-  background:#07110c;
-  color:#eaffef;
-}
-
-.wrap{padding:18px;max-width:900px;margin:auto}
-
-.card{
-  background:#0e1a14;
-  border:1px solid #1c2d23;
-  border-radius:18px;
-  padding:18px;
-  margin-bottom:16px;
-  box-shadow:0 20px 60px rgba(0,0,0,.6);
-}
-
-.h1{font-size:32px;font-weight:900;text-align:center}
-.sub{text-align:center;color:#9fb3a7;margin-top:8px}
-
-.btn{
-  width:100%;
-  padding:14px;
-  border-radius:14px;
-  border:0;
-  background:#52ff8a;
-  color:#08110c;
-  font-weight:900;
-  margin-top:14px;
-  cursor:pointer;
-}
-
-input{
-  width:100%;
-  padding:12px;
-  border-radius:12px;
-  border:1px solid #2b4135;
-  background:#0b1511;
-  color:#fff;
-  margin-top:8px;
-}
-
-.list .it{
-  display:flex;
-  justify-content:space-between;
-  border-bottom:1px solid #1c2d23;
-  padding:10px 0;
-}
-
-canvas{
-  width:100%;
-  height:240px;
-}
-
-.splash{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-</style>
-</head>
-
-<body>
-
-<!-- SPLASH -->
-<section id="splash" class="splash">
-  <div class="card" style="max-width:520px;width:100%">
-    <div class="h1">Serralheria do Gil</div>
-    <div class="sub">Gostaria de fazer dinheiro?<br>Clique no botão abaixo.</div>
-    <button class="btn" onclick="startApp()">Iniciar</button>
-  </div>
-</section>
-
-<!-- APP -->
-<section id="app" style="display:none">
-<div class="wrap">
-
-<div class="card">
-  <div style="font-weight:900">Saldo do mês</div>
-  <div id="saldo" style="font-size:40px;font-weight:900;color:#52ff8a">
-    R$ 0,00
-  </div>
-</div>
-
-<div class="card">
-  <b>Novo lançamento</b>
-  <input id="valor" type="number" placeholder="Valor">
-  <button class="btn" onclick="addMov('GN')">Ganhos (GN)</button>
-  <button class="btn" style="background:#ff5a6b;color:#fff" onclick="addMov('SD')">Saídas (SD)</button>
-</div>
-
-<div class="card">
-  <b>Gráfico do mês</b>
-  <canvas id="graf" width="900" height="300"></canvas>
-</div>
-
-<div class="card">
-  <b>Histórico</b>
-  <div id="lista" class="list"></div>
-</div>
-
-</div>
-</section>
-
-<script>
-
-/* ===== Dados ===== */
-const KEY="gil_app_simple";
-let DB = JSON.parse(localStorage.getItem(KEY) || '{"mov":[]}');
-
-const brl=v=>Number(v||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
-
-/* ===== Splash ===== */
-function startApp(){
-  document.getElementById("splash").style.display="none";
-  document.getElementById("app").style.display="block";
-  render();
-}
-
-/* ===== Salvar ===== */
-function save(){
-  localStorage.setItem(KEY, JSON.stringify(DB));
-}
-
-/* ===== Novo lançamento ===== */
-function addMov(tipo){
-  const v = Number(document.getElementById("valor").value);
-  if(!v || v<=0) return alert("Valor inválido");
-
-  DB.mov.push({tipo,val:v});
-  document.getElementById("valor").value="";
-  save();
-  render();
-}
-
-/* ===== Remover ===== */
-function delMov(i){
-  DB.mov.splice(i,1);
-  save();
-  render();
-}
-
-/* ===== Render geral ===== */
-function render(){
-
-  let gn=0, sd=0;
-
-  DB.mov.forEach(m=>{
-    if(m.tipo==="GN") gn+=m.val;
-    else sd+=m.val;
-  });
-
-  document.getElementById("saldo").textContent = brl(gn - sd);
-
-  /* Lista */
-  const lista = document.getElementById("lista");
-  lista.innerHTML = DB.mov.map((m,i)=>`
-    <div class="it">
-      <div>${m.tipo} — ${brl(m.val)}</div>
-      <button onclick="delMov(${i})">X</button>
-    </div>
-  `).join("");
-
-  /* Gráfico */
-  drawChart(gn, sd);
-}
-
-/* ===== Gráfico animado ===== */
-function drawChart(gn, sd){
-
-  const c = document.getElementById("graf");
-  const g = c.getContext("2d");
-
-  g.clearRect(0,0,c.width,c.height);
-
-  const max = Math.max(gn, sd, 1);
-
-  const hGN = (gn/max) * 200;
-  const hSD = (sd/max) * 200;
-
-  let p=0;
-
-  function anim(){
-    g.clearRect(0,0,c.width,c.height);
-
-    g.fillStyle="#52ff8a";
-    g.fillRect(250,260-hGN*p,120,hGN*p);
-
-    g.fillStyle="#ff5a6b";
-    g.fillRect(500,260-hSD*p,120,hSD*p);
-
-    if(p<1){
-      p+=0.05;
-      requestAnimationFrame(anim);
-    }
-  }
-
-  anim();
-}
-
-/* ===== Auto-render se já houver dados ===== */
-render();
-
-</script>
-</body>
-</html>
-<!-- ===================== PARTE 2/20 ===================== -->
-<body>
-<canvas id="fx"></canvas>
-
-<div id="pinOverlay" class="overlay">
-  <div class="modal">
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
-      <div style="font-weight:950;font-size:18px">🔒 PIN de acesso</div>
-      <button class="btn ghost" style="padding:8px 10px" onclick="PIN.close()">Fechar</button>
-    </div>
-    <div class="small" id="pinHint">Digite o PIN para entrar.</div>
-    <div class="pinRow" id="pinDots"></div>
-    <div class="keypad" id="pinKeys"></div>
-    <div class="sep"></div>
-    <button class="btn ghost" onclick="PIN.forgot()">Esqueci o PIN (zera)</button>
-  </div>
-</div>
-
-<div class="wrap">
-  <!-- Splash -->
-  <section id="splash" class="tab on">
-    <div style="height:18vh"></div>
-    <div class="card" style="text-align:center;padding:22px">
-      <div class="h1" style="font-size:34px">Serralheria do Gil</div>
-      <div class="sub" style="font-size:14px;margin-top:10px">Gostaria de fazer dinheiro?<br>Clique no botão abaixo.</div>
-      <div style="height:14px"></div>
-      <button class="btn" id="btnStart" onclick="APP.start()">Iniciar</button>
-      <div class="small" style="margin-top:14px">Funciona offline e salva tudo no celular. Backup no menu “Config”.</div>
-    </div>
-  </section>
-
-  <!-- APP -->
-  <section id="app" class="tab">
-    <div class="top">
-      <div class="badge">🔧</div>
-      <div style="flex:1">
-        <div class="h1">Serralheria do Gil</div>
-        <div class="sub">Controle • Agenda • Orçamentos • Clientes • Materiais</div>
-      </div>
-      <button class="btn ghost" onclick="APP.fechamento()">Fechamento</button>
-    </div>
-
-    <section id="t0" class="tab on"></section>
-    <section id="t1" class="tab"></section>
-    <section id="t2" class="tab"></section>
-    <section id="t3" class="tab"></section>
-    <section id="t4" class="tab"></section>
-  </section>
-</div>
-
-<div class="nav">
-  <div class="bar">
-    <div class="nb on" id="n0" onclick="APP.tab(0)"><i>📊</i>Dash</div>
-    <div class="nb" id="n1" onclick="APP.tab(1)"><i>💰</i>Mov</div>
-    <div class="nb" id="n2" onclick="APP.tab(2)"><i>📅</i>Agenda</div>
-    <div class="nb" id="n3" onclick="APP.tab(3)"><i>👤</i>Clientes</div>
-    <div class="nb" id="n4" onclick="APP.tab(4)"><i>🧾</i>Orç</div>
-  </div>
-</div>
-<!-- ===================== PARTE 3/20 ===================== -->
-<script>
-/* UI builders (Dash/Mov/Agenda/Clientes/Orç) */
 const UI={
-dash(){return `
-  <div class="row">
-    <div class="card kpi">
-      <div class="t">Saldo hoje</div>
-      <div class="v" id="kHoje">R$ 0,00</div>
-      <div class="small" id="kHoje2">GN: R$ 0,00 • SD: R$ 0,00</div>
-    </div>
-    <div class="card kpi">
-      <div class="t">Saldo do mês</div>
-      <div class="v" id="kMes">R$ 0,00</div>
-      <div class="small" id="kMes2">GN: R$ 0,00 • SD: R$ 0,00 • Materiais: R$ 0,00</div>
-    </div>
-  </div>
-
-  <div class="card" style="margin-top:10px">
-    <div class="row" style="justify-content:space-between;align-items:center">
-      <div>
-        <div style="font-weight:950;font-size:16px">GN vs SD (mês)</div>
-        <div class="small">Gráfico animado crescendo. Toque para detalhes.</div>
+  dash:()=>`
+    <div class="row">
+      <div class="card kpi">
+        <div class="t">Saldo hoje</div>
+        <div class="v" id="kHoje">R$ 0,00</div>
+        <div class="small" id="kHoje2">GN: R$ 0,00 • SD: R$ 0,00</div>
       </div>
-      <div class="pill" id="labMes">----</div>
+      <div class="card kpi">
+        <div class="t">Saldo do mês</div>
+        <div class="v" id="kMes">R$ 0,00</div>
+        <div class="small" id="kMes2">GN: R$ 0,00 • SD: R$ 0,00 • Materiais: R$ 0,00</div>
+      </div>
     </div>
-    <div style="margin-top:10px">
-      <canvas class="chart" id="chBars" width="920" height="300"></canvas>
-    </div>
-    <div class="small" id="barsTip" style="margin-top:8px;min-height:18px"></div>
-  </div>
 
-  <div class="row" style="margin-top:10px">
-    <div class="card kpi">
-      <div class="t">Previsão de faturamento</div>
-      <div class="v" id="prev">R$ 0,00</div>
-      <div class="small">Offline: média móvel + tendência.</div>
-    </div>
-    <div class="card kpi">
-      <div class="t">Lucro por cliente (Top 3)</div>
-      <div class="v" style="font-size:16px;margin-top:10px" id="topCli">Sem dados</div>
-      <div class="small">Use “Cliente” nos lançamentos.</div>
-    </div>
-  </div>
+    <div class="card" style="margin-top:10px">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-weight:950">GN vs SD (mês)</div>
+          <div class="small">Barras animadas e atualiza toda vez que salvar.</div>
+        </div>
+        <div class="pill" id="labMes">----</div>
+      </div>
 
-  <div class="card" style="margin-top:10px">
-    <div style="font-weight:950">Radar do mês</div>
-    <div class="small">Distribuição por categoria (GN/SD) com detalhe.</div>
-    <div style="margin-top:10px">
-      <canvas class="chart" id="chRadar" width="920" height="300"></canvas>
+      <div style="margin-top:10px">
+        <canvas class="chart" id="chBars" width="900" height="300"></canvas>
+      </div>
+
+      <div class="small" id="barsTip" style="margin-top:8px;min-height:16px"></div>
     </div>
-  </div>
-`},
+
+    <div class="card" style="margin-top:10px">
+      <div style="font-weight:950">Histórico rápido (mês)</div>
+      <div class="small">O que você salvou aparece aqui.</div>
+      <div class="list" id="movList"></div>
+    </div>
+  `,
+
+  mov:()=>`
+    <div class="card">
+      <div class="grid2">
+        <div>
+          <div class="small">Tipo</div>
+          <div class="row">
+            <button class="btn ghost" id="bGN" onclick="APP.setTipo('GN')">GN (Ganhos)</button>
+            <button class="btn ghost" id="bSD" onclick="APP.setTipo('SD')">SD (Saídas)</button>
+          </div>
+        </div>
+        <div><div class="small">Data</div><input class="in" id="mData" type="date"></div>
+      </div>
+
+      <div class="grid2" style="margin-top:10px">
+        <div><div class="small">Valor (R$)</div><input class="in" id="mVal" type="number" step="0.01" placeholder="Ex: 250"></div>
+        <div><div class="small">Cliente (opcional)</div><input class="in" id="mCli" placeholder="Ex: João / Obra X"></div>
+      </div>
+
+      <div class="grid2" style="margin-top:10px">
+        <div><div class="small">Categoria</div><input class="in" id="mCat" placeholder="Portão / Solda / Gasolina"></div>
+        <div><div class="small">Obs</div><input class="in" id="mObs" placeholder="Sinal / restante..."></div>
+      </div>
+
+      <div class="row" style="margin-top:10px">
+        <button class="btn" onclick="APP.addMov()">Salvar</button>
+        <button class="btn ghost" onclick="APP.clearMov()">Limpar</button>
+        <button class="btn ghost" onclick="APP.quickAdd(100)">+100</button>
+        <button class="btn ghost" onclick="APP.quickAdd(200)">+200</button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:10px">
+      <div style="font-weight:950">Histórico (mês)</div>
+      <div class="small">Copiar ou remover.</div>
+      <div class="list" id="movList2"></div>
+    </div>
+  `,
+
+  agenda:()=>`
+    <div class="card">
+      <div class="grid2">
+        <div><div class="small">Cliente</div><input class="in" id="aCli" placeholder="Nome do cliente"></div>
+        <div><div class="small">Telefone</div><input class="in" id="aTel" inputmode="tel" placeholder="(41) 9...."></div>
+      </div>
+      <div class="grid2" style="margin-top:10px">
+        <div><div class="small">Data</div><input class="in" id="aData" type="date"></div>
+        <div><div class="small">Hora</div><input class="in" id="aHora" type="time"></div>
+      </div>
+      <div style="margin-top:10px"><div class="small">Serviço</div><input class="in" id="aDesc" placeholder="Ex: Portão, solda, ajuste..."></div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn" onclick="APP.addAg()">Salvar</button>
+        <button class="btn ghost" onclick="APP.clearAg()">Limpar</button>
+        <button class="btn ghost" onclick="APP.notifPerm()">Notificações</button>
+      </div>
+      <div class="small" style="margin-top:8px">Lembrete 1h antes funciona com o app aberto.</div>
+    </div>
+
+    <div class="card" style="margin-top:10px">
+      <div style="font-weight:950">Serviços</div>
+      <div class="list" id="agList"></div>
+    </div>
+  `,
+
+  clientes:()=>`
+    <div class="card">
+      <div class="grid2">
+        <div><div class="small">Nome</div><input class="in" id="cNome" placeholder="Cliente"></div>
+        <div><div class="small">Telefone</div><input class="in" id="cTel" inputmode="tel" placeholder="(41) 9...."></div>
+      </div>
+      <div style="margin-top:10px"><div class="small">Endereço</div><input class="in" id="cEnd" placeholder="Rua, bairro..."></div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn" onclick="APP.addCli()">Salvar</button>
+        <button class="btn ghost" onclick="APP.clearCli()">Limpar</button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:10px">
+      <div style="font-weight:950">Clientes</div>
+      <div class="list" id="cliList"></div>
+    </div>
+  `,
+
+  orc:()=>`
+    <div class="card">
+      <div class="grid2">
+        <div><div class="small">Cliente</div><input class="in" id="oCli" placeholder="Nome do cliente"></div>
+        <div><div class="small">Telefone</div><input class="in" id="oTel" inputmode="tel" placeholder="(41) 9...."></div>
+      </div>
+      <div class="grid2" style="margin-top:10px">
+        <div><div class="small">Preço</div><input class="in" id="oVal" type="number" step="0.01" placeholder="Ex: 1200"></div>
+        <div><div class="small">Prazo</div><input class="in" id="oPrazo" placeholder="Ex: 3 dias"></div>
+      </div>
+      <div style="margin-top:10px"><div class="small">Descrição</div><input class="in" id="oDesc" placeholder="Ex: Portão + pintura..."></div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn" onclick="APP.addOrc()">Salvar</button>
+        <button class="btn ghost" onclick="APP.clearOrc()">Limpar</button>
+        <button class="btn ghost" onclick="APP.zapOrc()">Enviar no WhatsApp</button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:10px">
+      <div style="font-weight:950">Orçamentos</div>
+      <div class="list" id="orcList"></div>
+    </div>
+  `,
+
+  mat:()=>`
+    <div class="card">
+      <div class="grid2">
+        <div><div class="small">Material</div><input class="in" id="mtNome" placeholder="Ex: Tubo, eletrodo"></div>
+        <div><div class="small">Custo</div><input class="in" id="mtVal" type="number" step="0.01" placeholder="Ex: 80"></div>
+      </div>
+      <div class="grid2" style="margin-top:10px">
+        <div><div class="small">Data</div><input class="in" id="mtData" type="date"></div>
+        <div><div class="small">Cliente (opcional)</div><input class="in" id="mtCli" placeholder="Nome do cliente"></div>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn" onclick="APP.addMat()">Salvar</button>
+        <button class="btn ghost" onclick="APP.clearMat()">Limpar</button>
+      </div>
+      <div class="small" style="margin-top:8px">Materiais entram como custo no mês.</div>
+    </div>
+
+    <div class="card" style="margin-top:10px">
+      <div style="font-weight:950">Materiais (mês)</div>
+      <div class="list" id="matList"></div>
+    </div>
+  `,
+
+  cfg:()=>`
+    <div class="card">
+      <div style="font-weight:950">Config</div>
+      <div class="small">Número alvo do WhatsApp (pai). Use só números com DDI.</div>
+      <div class="sep"></div>
+
+      <div class="small">WhatsApp alvo</div>
+      <input class="in" id="zNum" inputmode="numeric" placeholder="Ex: 5541999999999">
+
+      <div class="row" style="margin-top:10px">
+        <button class="btn" onclick="CFG.save()">Salvar</button>
+        <button class="btn ghost" onclick="BK.export()">Exportar</button>
+        <button class="btn ghost" onclick="BK.import()">Importar</button>
+        <button class="btn danger" onclick="BK.wipe()">Apagar tudo</button>
+      </div>
+    </div>
+  `
 };
-</script>
-<!-- ===================== PARTE 4/20 ===================== -->
-<script>
-UI.mov=()=>`
-  <div class="card">
-    <div class="grid2">
-      <div>
-        <div class="small">Tipo</div>
-        <div class="row">
-          <button class="btn ghost" id="bGN" onclick="APP.setTipo('GN')">GN (Ganhos)</button>
-          <button class="btn ghost" id="bSD" onclick="APP.setTipo('SD')">SD (Saídas)</button>
+<!-- ===================== PARTE 2/20 ===================== -->
+const RENDER={
+  movList(m){
+    const rows=DB.mov
+      .filter(x=>x.m===m)
+      .slice()
+      .sort((a,b)=> (b.data.localeCompare(a.data)) || (b.id.localeCompare(a.id)));
+
+    const html = rows.length ? rows.map(x=>`
+      <div class="it">
+        <div style="min-width:0">
+          <div style="font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
+            <span class="tag" style="border-color:${x.tipo==="GN"?"#2a6f44":"#6b2a33"};color:${x.tipo==="GN"?"#bfffd4":"#ffd6dc"}">
+              ${x.tipo}
+            </span>
+            ${brl(x.val)}
+            ${x.cli?` <span class="tag">${x.cli}</span>`:""}
+          </div>
+          <div class="small">
+            ${x.data}${x.cat?` • ${x.cat}`:""}${x.obs?` • ${x.obs}`:""}
+          </div>
+        </div>
+        <div class="row" style="gap:8px;flex-wrap:nowrap">
+          <button class="btn ghost" style="padding:10px 10px" onclick="APP.copyMov('${x.id}')">Copiar</button>
+          <button class="btn danger" style="padding:10px 10px" onclick="APP.delMov('${x.id}')">X</button>
         </div>
       </div>
-      <div>
-        <div class="small">Data</div>
-        <input class="in" id="mData" type="date">
+    `).join("") : `<div class="small">Sem lançamentos neste mês.</div>`;
+
+    $("movList") && ($("movList").innerHTML=html);
+    $("movList2") && ($("movList2").innerHTML=html);
+  },
+
+  agList(){
+    const rows=DB.ag.slice().sort((a,b)=>(a.data+a.hora).localeCompare(b.data+b.hora));
+    $("agList") && ($("agList").innerHTML=rows.length?rows.map(s=>`
+      <div class="it">
+        <div style="min-width:0">
+          <div style="font-weight:900">${s.cli} <span class="tag">${s.data} ${s.hora}</span></div>
+          <div class="small">${s.desc}${s.tel?` • 📞 ${s.tel}`:""}</div>
+        </div>
+        <button class="btn danger" style="padding:10px 12px" onclick="APP.delAg('${s.id}')">Remover</button>
       </div>
-    </div>
+    `).join(""):`<div class="small">Sem serviços ainda.</div>`);
+  },
 
-    <div class="grid2" style="margin-top:10px">
-      <div><div class="small">Valor (R$)</div><input class="in" id="mVal" type="number" step="0.01" placeholder="Ex: 250"></div>
-      <div><div class="small">Cliente (opcional)</div><input class="in" id="mCli" placeholder="Ex: João / Obra X"></div>
-    </div>
+  cliList(){
+    const rows=DB.cli.slice().sort((a,b)=>a.nome.localeCompare(b.nome));
+    $("cliList") && ($("cliList").innerHTML=rows.length?rows.map(c=>`
+      <div class="it">
+        <div style="min-width:0">
+          <div style="font-weight:900">${c.nome}</div>
+          <div class="small">${c.tel?`📞 ${c.tel}`:"Sem telefone"}${c.end?` • 📍 ${c.end}`:""}</div>
+        </div>
+        <button class="btn danger" style="padding:10px 12px" onclick="APP.delCli('${c.id}')">Remover</button>
+      </div>
+    `).join(""):`<div class="small">Sem clientes ainda.</div>`);
+  },
 
-    <div class="grid2" style="margin-top:10px">
-      <div><div class="small">Categoria</div><input class="in" id="mCat" placeholder="Portão / Solda / Combustível..."></div>
-      <div><div class="small">Obs</div><input class="in" id="mObs" placeholder="Sinal / restante / etc"></div>
-    </div>
+  orcList(){
+    const rows=DB.orc.slice().sort((a,b)=>b.at-a.at);
+    $("orcList") && ($("orcList").innerHTML=rows.length?rows.map(o=>`
+      <div class="it">
+        <div style="min-width:0">
+          <div style="font-weight:900">${o.cli} <span class="tag">${brl(o.val)}</span></div>
+          <div class="small">${o.desc}${o.prazo?` • ⏱ ${o.prazo}`:""}${o.tel?` • 📞 ${o.tel}`:""}</div>
+        </div>
+        <div class="row" style="gap:8px;flex-wrap:nowrap">
+          <button class="btn ghost" style="padding:10px 10px" onclick="APP.zapOrc('${o.id}')">Zap</button>
+          <button class="btn danger" style="padding:10px 10px" onclick="APP.delOrc('${o.id}')">X</button>
+        </div>
+      </div>
+    `).join(""):`<div class="small">Sem orçamentos ainda.</div>`);
+  },
 
-    <div class="row" style="margin-top:10px">
-      <button class="btn" onclick="APP.addMov()">Salvar</button>
-      <button class="btn ghost" onclick="APP.clearMov()">Limpar</button>
-      <button class="btn ghost" onclick="APP.quickAdd(100)">+100</button>
-      <button class="btn ghost" onclick="APP.quickAdd(200)">+200</button>
-    </div>
+  matList(m){
+    const rows=DB.mat.filter(x=>x.m===m).slice().sort((a,b)=>b.data.localeCompare(a.data));
+    $("matList") && ($("matList").innerHTML=rows.length?rows.map(x=>`
+      <div class="it">
+        <div style="min-width:0">
+          <div style="font-weight:900">${x.nome} <span class="tag">${brl(x.val)}</span> ${x.cli?`<span class="tag">${x.cli}</span>`:""}</div>
+          <div class="small">${x.data}</div>
+        </div>
+        <button class="btn danger" style="padding:10px 12px" onclick="APP.delMat('${x.id}')">Remover</button>
+      </div>
+    `).join(""):`<div class="small">Sem materiais neste mês.</div>`);
+  }
+};
+<!-- ===================== PARTE 3/20 ===================== -->
+const CHART={
+  bars(id,gn,sd){
+    const c=$(id); if(!c) return;
+    const g=c.getContext("2d"), W=c.width, H=c.height, pad=36;
+    const max=Math.max(1,gn,sd);
+    let t=0;
 
-    <div class="sep"></div>
-    <div class="small">Dica: toque em um item no histórico para copiar e mandar no WhatsApp.</div>
-  </div>
+    const draw=()=>{
+      g.clearRect(0,0,W,H);
 
-  <div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <div style="font-weight:950">Histórico do mês</div>
-      <div class="pill" id="movCount">0 itens</div>
-    </div>
-    <div class="list" id="movList"></div>
-  </div>
-`;
-</script>
+      // grid
+      g.globalAlpha=.22; g.strokeStyle="#2b4135"; g.lineWidth=2;
+      for(let i=0;i<=4;i++){
+        const y=pad+(i*(H-2*pad)/4);
+        g.beginPath(); g.moveTo(30,y); g.lineTo(W-30,y); g.stroke();
+      }
+      g.globalAlpha=1;
+
+      const h1=(H-2*pad)*(gn/max)*t, h2=(H-2*pad)*(sd/max)*t;
+      const bw=160, gap=120, x1=W/2-gap-bw, x2=W/2+gap;
+
+      // glow
+      g.globalCompositeOperation="lighter";
+      g.fillStyle="rgba(82,255,138,.16)"; g.fillRect(x1-10,H-pad-h1-10,bw+20,h1+20);
+      g.fillStyle="rgba(255,90,107,.14)"; g.fillRect(x2-10,H-pad-h2-10,bw+20,h2+20);
+      g.globalCompositeOperation="source-over";
+
+      // bars
+      g.fillStyle="rgba(82,255,138,.90)"; rr(g,x1,H-pad-h1,bw,h1,18);
+      g.fillStyle="rgba(255,90,107,.88)"; rr(g,x2,H-pad-h2,bw,h2,18);
+
+      // labels
+      g.fillStyle="#eaffef"; g.font="900 24px system-ui"; g.textAlign="center";
+      g.fillText("GN",x1+bw/2, H-pad-h1-12);
+      g.fillText("SD",x2+bw/2, H-pad-h2-12);
+      g.font="800 18px system-ui"; g.globalAlpha=.85;
+      g.fillText(brl(gn),x1+bw/2, H-pad+28);
+      g.fillText(brl(sd),x2+bw/2, H-pad+28);
+      g.globalAlpha=1;
+
+      if(t<1){ t=Math.min(1,t+0.07); requestAnimationFrame(draw); }
+    };
+    draw();
+  }
+};
+function rr(g,x,y,w,h,r){ g.beginPath(); g.roundRect(x,y,w,h,r); g.fill(); }
+<!-- ===================== PARTE 4/20 ===================== -->
+const APP={
+  started:false, curTab:0, curYM:ym(),
+
+  mount(){
+    $("t0").innerHTML=UI.dash();
+    $("t1").innerHTML=UI.mov();
+    $("t2").innerHTML=UI.agenda();
+    $("t3").innerHTML=UI.clientes();
+    $("t4").innerHTML=UI.orc();
+    $("t5").innerHTML=UI.mat();
+    $("t6").innerHTML=UI.cfg();
+  },
+
+  start(){
+    $("splash").className="tab";
+    $("app").className="tab on";
+    $("nav").style.display="block";
+    this.started=true;
+    this.mount();
+    this.tab(0);
+    this.render();
+  },
+
+  tab(i){
+    if(!this.started) return this.start();
+    this.curTab=i;
+    ["t0","t1","t2","t3","t4","t5","t6"].forEach((t,idx)=>$(t).className="tab"+(idx===i?" on":""));
+    ["n0","n1","n2","n3","n4","n5","n6"].forEach(n=>$(n)?.classList.remove("on"));
+    $("n"+i)?.classList.add("on");
+
+    if(i===1){ $("mData").value=iso(); this.setTipo(DB.tipo,true); }
+    if(i===2){ $("aData").value=iso(); $("aHora").value="08:00"; }
+    if(i===5){ this.clearMat(); }
+    if(i===6){ CFG.load(); }
+
+    this.render();
+  },
+
+  sum(m){
+    let gn=0,sd=0,mat=0;
+    DB.mov.forEach(x=>{ if(x.m!==m) return; (x.tipo==="GN"?gn:sd)+=x.val; });
+    DB.mat.forEach(x=>{ if(x.m!==m) return; mat+=x.val; });
+    return {gn,sd,mat};
+  },
+
+  render(){
+    if(!this.started) return;
+
+    const m=this.curYM || ym();
+    const today=iso();
+    const s=this.sum(m);
+
+    let hgn=0,hsd=0;
+    DB.mov.forEach(x=>{ if(x.data!==today) return; (x.tipo==="GN"?hgn:hsd)+=x.val; });
+
+    $("labMes") && ($("labMes").textContent=m);
+    $("kHoje") && ($("kHoje").textContent=brl(hgn-hsd));
+    $("kHoje2") && ($("kHoje2").textContent=`GN: ${brl(hgn)} • SD: ${brl(hsd)}`);
+    $("kMes") && ($("kMes").textContent=brl(s.gn-s.sd-s.mat));
+    $("kMes2") && ($("kMes2").textContent=`GN: ${brl(s.gn)} • SD: ${brl(s.sd)} • Materiais: ${brl(s.mat)}`);
+
+    RENDER.movList(m);
+    RENDER.agList();
+    RENDER.cliList();
+    RENDER.orcList();
+    RENDER.matList(m);
+
+    if(this.curTab===0){
+      CHART.bars("chBars", s.gn, s.sd+s.mat);
+      $("barsTip") && ($("barsTip").textContent=
+        `GN ${brl(s.gn)} • SD ${brl(s.sd)} • Materiais ${brl(s.mat)} • Saldo ${brl(s.gn-s.sd-s.mat)}`
+      );
+    }
+  },
+
+  /* MOV */
+  setTipo(t,silent){
+    DB.tipo=t;
+    $("bGN") && ($("bGN").className="btn "+(t==="GN"?"":"ghost"));
+    $("bSD") && ($("bSD").className="btn "+(t==="SD"?"":"ghost"));
+    !silent && vib(10);
+    save();
+  },
+  quickAdd(v){ $("mVal").value=+(($("mVal").value||0))+v; vib(8); },
+  clearMov(){ ["mVal","mCli","mCat","mObs"].forEach(id=>$(id).value=""); $("mData").value=iso(); },
+  addMov(){
+    const data=$("mData").value||iso();
+    const val=+($("mVal").value||0);
+    if(!val||val<=0) return alert("Valor inválido");
+    const m=data.slice(0,7);
+    DB.mov.push({id:Date.now()+"",m,data,val,tipo:DB.tipo||"GN",cli:($("mCli").value||"").trim(),cat:($("mCat").value||"").trim(),obs:($("mObs").value||"").trim()});
+    this.curYM=m;
+    this.clearMov();
+    save();
+    this.tab(0);
+  },
+  delMov(id){ if(!confirm("Remover lançamento?")) return; DB.mov=DB.mov.filter(x=>x.id!==id); save(); },
+  copyMov(id){
+    const x=DB.mov.find(a=>a.id===id); if(!x) return;
+    const txt=`${x.tipo} • ${x.data} • ${brl(x.val)}${x.cli?` • ${x.cli}`:""}${x.cat?` • ${x.cat}`:""}${x.obs?` • ${x.obs}`:""}`;
+    navigator.clipboard?.writeText(txt);
+    alert("Copiado ✅");
+  },
+
+  /* AGENDA */
+  clearAg(){ ["aCli","aTel","aDesc"].forEach(id=>$(id).value=""); $("aData").value=iso(); $("aHora").value="08:00"; },
+  async notifPerm(){ if(!("Notification" in window)) return alert("Sem suporte a notificação."); const p=await Notification.requestPermission(); alert(p==="granted"?"OK ✅":"Negado."); },
+  addAg(){
+    const cli=($("aCli").value||"").trim(), desc=($("aDesc").value||"").trim();
+    const data=$("aData").value||iso(), hora=$("aHora").value||"08:00";
+    if(!cli||!desc) return alert("Cliente e serviço obrigatórios");
+    DB.ag.push({id:Date.now()+"",cli,desc,data,hora,tel:digits($("aTel").value)});
+    save(); this.clearAg();
+  },
+  delAg(id){ if(!confirm("Remover serviço?")) return; DB.ag=DB.ag.filter(s=>s.id!==id); save(); },
+
+  /* CLIENTES */
+  clearCli(){ ["cNome","cTel","cEnd"].forEach(id=>$(id).value=""); },
+  addCli(){
+    const nome=($("cNome").value||"").trim(); if(!nome) return alert("Nome obrigatório");
+    const tel=digits($("cTel").value), end=($("cEnd").value||"").trim();
+    const ex=DB.cli.find(c=>c.nome.toLowerCase()===nome.toLowerCase());
+    if(ex){ ex.tel=tel; ex.end=end; } else DB.cli.push({id:Date.now()+"",nome,tel,end});
+    save(); this.clearCli();
+  },
+  delCli(id){ if(!confirm("Remover cliente?")) return; DB.cli=DB.cli.filter(c=>c.id!==id); save(); },
+
+  /* ORÇ */
+  clearOrc(){ ["oCli","oTel","oVal","oPrazo","oDesc"].forEach(id=>$(id).value=""); },
+  addOrc(){
+    const cli=($("oCli").value||"").trim(), val=+($("oVal").value||0), desc=($("oDesc").value||"").trim();
+    if(!cli||!val||val<=0||!desc) return alert("Cliente, preço e descrição obrigatórios");
+    DB.orc.push({id:Date.now()+"",cli,tel:digits($("oTel").value),val,prazo:($("oPrazo").value||"").trim(),desc,at:Date.now()});
+    save(); this.clearOrc();
+  },
+  delOrc(id){ if(!confirm("Remover orçamento?")) return; DB.orc=DB.orc.filter(o=>o.id!==id); save(); },
+  zapOrc(id){
+    const o=id?DB.orc.find(x=>x.id===id):null;
+    const cli=o?o.cli:($("oCli").value||"").trim();
+    const val=o?o.val:+($("oVal").value||0);
+    const prazo=o?o.prazo:($("oPrazo").value||"").trim();
+    const desc=o?o.desc:($("oDesc").value||"").trim();
+    const tel=digits((o?o.tel:$("oTel").value) || DB.cfg.zap || "");
+    if(!cli||!val||!desc) return alert("Preencha cliente, valor e descrição.");
+    const msg=`*Orçamento - Serralheria do Gil*\nCliente: ${cli}\nServiço: ${desc}\nValor: ${brl(val)}\nPrazo: ${prazo||"a combinar"}\n\nSe aprovar, me confirma por aqui.`;
+    const base=tel?`https://wa.me/${tel}`:`https://wa.me/`;
+    window.open(`${base}?text=${encodeURIComponent(msg)}`,"_blank");
+  },
+
+  /* MATERIAIS */
+  clearMat(){ ["mtNome","mtVal","mtCli"].forEach(id=>$(id).value=""); $("mtData").value=iso(); },
+  addMat(){
+    const nome=($("mtNome").value||"").trim(), val=+($("mtVal").value||0), data=$("mtData").value||iso();
+    if(!nome||!val||val<=0) return alert("Material e custo obrigatórios");
+    DB.mat.push({id:Date.now()+"",nome,val,data,cli:($("mtCli").value||"").trim(),m:data.slice(0,7)});
+    this.curYM=data.slice(0,7);
+    save(); this.clearMat();
+  },
+  delMat(id){ if(!confirm("Remover material?")) return; DB.mat=DB.mat.filter(x=>x.id!==id); save(); }
+};
 <!-- ===================== PARTE 5/20 ===================== -->
 <script>
 UI.agenda=()=>`
