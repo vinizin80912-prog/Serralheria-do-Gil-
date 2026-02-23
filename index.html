@@ -1,798 +1,612 @@
-<!doctype html>
-<html lang="pt-br">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Serralheria do Gil</title>
-
+<!doctype html><html lang="pt-br"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Serralheria do Gil</title><meta name="theme-color" content="#070b08">
 <style>
-:root{
- --bg:#050807;
- --card:#0c1411;
- --b:#1a2a22;
- --txt:#eaf6ee;
- --mut:#9fb3a7;
- --g:#4cff88;
- --r:#ff5a6b;
-}
-
-*{box-sizing:border-box}
-body{
- margin:0;
- font-family:system-ui;
- background:var(--bg);
- color:var(--txt);
- overflow-x:hidden;
-}
-
-canvas#fx{
- position:fixed;
- inset:0;
- z-index:0;
-}
-
-.wrap{
- position:relative;
- z-index:1;
- max-width:900px;
- margin:auto;
- padding:18px 14px 100px;
-}
-
-/* CARD */
-.card{
- background:linear-gradient(180deg,#0e1814,#070c0a);
- border:1px solid var(--b);
- border-radius:18px;
- padding:16px;
- box-shadow:0 15px 50px rgba(0,0,0,.6);
-}
-
-/* HOME */
-#home{
- display:flex;
- min-height:90vh;
- align-items:center;
- justify-content:center;
-}
-
-.homeBox{
- text-align:center;
- max-width:520px;
-}
-
-.homeBox h1{
- font-size:34px;
- margin:0 0 10px;
-}
-
-.homeBox p{
- color:var(--mut);
- margin:0 0 24px;
-}
-
-.btn{
- border:0;
- padding:14px 28px;
- border-radius:16px;
- font-weight:900;
- background:#fff;
- color:#000;
- font-size:16px;
- cursor:pointer;
-}
-
-.btn:active{transform:scale(.95)}
-
-.hidden{display:none}
-</style>
-</head>
-
-<body>
-
+:root{--bg:#070b08;--card:#0d1310cc;--b:#1c2a22;--t:#e9f2ea;--m:#9db0a3;--g:#51ff89;--r:#ff5a6b;--gl:0 18px 60px rgba(0,0,0,.55)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{height:100%}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--t);overflow-x:hidden}
+.hidden{display:none!important}
+#fx{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.9}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:16px 14px 94px}
+.top{display:flex;gap:12px;align-items:center;margin:4px 0 14px}
+.badge{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font-weight:950;
+background:linear-gradient(145deg,#0f1a13,#08100b);border:1px solid var(--b);box-shadow:var(--gl)}
+.h1{font-size:28px;font-weight:950;margin:0;letter-spacing:.2px}
+.sub{color:var(--m);font-size:13px;margin-top:2px}
+.card{background:radial-gradient(140% 140% at 15% 10%,#142118cc 0%,#0b100dcc 45%,#070b08cc 100%);
+border:1px solid var(--b);border-radius:18px;padding:14px;box-shadow:var(--gl);backdrop-filter:blur(10px)}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.kpi{flex:1;min-width:240px;position:relative;overflow:hidden}
+.kpi:before{content:"";position:absolute;inset:-2px;opacity:.45;
+background:radial-gradient(circle at 15% 15%,rgba(81,255,137,.18),transparent 45%),
+radial-gradient(circle at 85% 35%,rgba(255,90,107,.14),transparent 50%)}
+.kpi .t{color:var(--m);font-size:13px;position:relative}
+.kpi .v{font-size:34px;font-weight:1000;margin-top:4px;position:relative}
+.pill{padding:7px 10px;border-radius:999px;border:1px solid var(--b);background:#0b120eaa;color:var(--m);font-size:12px}
+.btn{border:0;border-radius:14px;padding:12px 14px;font-weight:950;background:#fff;color:#070b08;cursor:pointer;transition:.15s}
+.btn:active{transform:scale(.98)}
+.ghost{background:transparent;color:var(--t);border:1px solid var(--b)}
+.danger{background:linear-gradient(180deg,#351015,#240a0d);color:#ffd6dc;border:1px solid #4b1a21}
+.in{width:100%;padding:12px;border-radius:14px;border:1px solid var(--b);background:#0b120eaa;color:var(--t);outline:none}
+.in::placeholder{color:#6f8173}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:640px){.grid2{grid-template-columns:1fr}}
+.small{color:var(--m);font-size:12px;line-height:1.35}
+.pos{color:var(--g);font-weight:950}.neg{color:var(--r);font-weight:950}
+.tab{display:none;animation:pop .18s ease both}.tab.on{display:block}
+@keyframes pop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:3;padding:10px 12px;
+background:linear-gradient(180deg,transparent,rgba(0,0,0,.45) 18%,rgba(0,0,0,.88));backdrop-filter:blur(10px)}
+.bar{max-width:980px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.nb{padding:10px 8px;border-radius:16px;border:1px solid var(--b);background:#0b120eaa;color:#b8c7bb;font-weight:950;
+display:flex;gap:8px;align-items:center;justify-content:center;transition:.18s;user-select:none}
+.nb i{font-style:normal;opacity:.9}
+.nb.on{background:#fff;color:#070b08;border-color:#fff;box-shadow:0 10px 30px rgba(255,255,255,.10)}
+.list .it{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #162018}
+.tag{font-size:12px;padding:4px 8px;border-radius:999px;border:1px solid var(--b);background:#0b120eaa;color:#cfe2d4}
+canvas.chart{width:100%;height:220px;border-radius:18px;background:linear-gradient(180deg,#0a100c,#070b08);border:1px solid var(--b)}
+/* animação “montando” */
+.mount .card,.mount .nb{animation:in .32s cubic-bezier(.2,.8,.2,1) both}
+@keyframes in{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}
+</style></head><body>
 <canvas id="fx"></canvas>
-
 <div class="wrap">
-
-<!-- HOME -->
+ <!-- HOME -->
 <section id="home">
- <div class="card homeBox">
-  <h1>Serralheria do Gil</h1>
-  <p>Gostaria de fazer dinheiro?<br>Clique no botão abaixo.</p>
-  <button class="btn" onclick="startApp()">Iniciar</button>
- </div>
+  <div class="card" style="max-width:440px;margin:18vh auto;text-align:center">
+    <div style="font-size:32px;font-weight:1000">Serralheria do Gil</div>
+    <div class="small" style="margin-top:8px">Gostaria de fazer dinheiro?<br>Clique no botão abaixo.</div>
+    <button class="btn" style="margin-top:18px" onclick="startApp()">Iniciar</button>
+    <div class="small" style="margin-top:14px">Funciona offline e salva tudo no celular.</div>
+  </div>
 </section>
 
 <!-- APP -->
 <section id="app" class="hidden">
-  <style>
-/* TOP */
-.top{
- display:flex;gap:12px;align-items:center;justify-content:space-between;
- margin:0 0 12px;
-}
-.brand{
- display:flex;gap:10px;align-items:center;
-}
-.logo{
- width:44px;height:44px;border-radius:14px;
- display:grid;place-items:center;
- background:linear-gradient(145deg,#0f1a13,#08100b);
- border:1px solid var(--b);
-}
-.title{font-weight:950;font-size:18px;line-height:1.1}
-.subtitle{color:var(--mut);font-size:12px;margin-top:2px}
-.pill{
- padding:8px 10px;border-radius:999px;
- border:1px solid var(--b);
- background:rgba(10,18,14,.7);
- color:var(--mut);font-size:12px;
-}
-
-/* GRID */
-.row{display:flex;gap:10px;flex-wrap:wrap}
-.kpi{flex:1;min-width:230px;position:relative;overflow:hidden}
-.kpi .t{color:var(--mut);font-size:12px}
-.kpi .v{font-size:30px;font-weight:950;margin-top:4px}
-.kpi .s{color:var(--mut);font-size:12px;margin-top:6px}
-.sep{height:1px;background:#132019;margin:12px 0}
-
-/* TABS */
-.tab{display:none;animation:pop .18s ease both}
-.tab.on{display:block}
-@keyframes pop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-
-/* INPUTS */
-.in{
- width:100%;
- padding:12px 12px;
- border-radius:14px;
- border:1px solid var(--b);
- background:rgba(10,18,14,.7);
- color:var(--txt);
- outline:none;
-}
-.in::placeholder{color:#6e8578}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-@media(max-width:640px){.grid2{grid-template-columns:1fr}}
-
-/* NAV */
-.nav{
- position:fixed;left:0;right:0;bottom:0;z-index:2;
- padding:10px 12px;
- background:linear-gradient(180deg,transparent,rgba(0,0,0,.55) 20%,rgba(0,0,0,.88));
- backdrop-filter:blur(10px);
-}
-.bar{
- max-width:900px;margin:auto;
- display:grid;grid-template-columns:repeat(5,1fr);gap:10px;
-}
-.nb{
- padding:10px 8px;border-radius:16px;
- border:1px solid var(--b);
- background:rgba(10,18,14,.75);
- color:#b8c7bb;font-weight:900;
- display:flex;gap:8px;align-items:center;justify-content:center;
- transition:.18s;
-}
-.nb.on{background:#fff;color:#000;border-color:#fff}
-.nb:active{transform:scale(.98)}
-
-/* CHART */
-#chart{
- width:100%;height:260px;
- border-radius:18px;
- border:1px solid var(--b);
- background:linear-gradient(180deg,#08110d,#050807);
-}
-.small{color:var(--mut);font-size:12px;line-height:1.35}
-.pos{color:var(--g);font-weight:950}
-.neg{color:var(--r);font-weight:950}
-</style>
-
-<div class="top">
-  <div class="brand">
-    <div class="logo">🔧</div>
-    <div>
-      <div class="title">Serralheria do Gil</div>
-      <div class="subtitle">Controle • Agenda • Orçamentos • Clientes</div>
+  <div class="top">
+    <div class="badge">🔧</div>
+    <div style="flex:1">
+      <div class="h1">Serralheria do Gil</div>
+      <div class="sub">Controle • Agenda • Orçamentos • Clientes • Materiais</div>
     </div>
-  </div>
-  <div class="pill" id="pillMes">----</div>
-</div>
-
-<!-- DASH -->
-<section id="tabDash" class="tab on">
-  <div class="row">
-    <div class="card kpi">
-      <div class="t">Saldo hoje</div>
-      <div class="v" id="kHoje">R$ 0,00</div>
-      <div class="s" id="kHoje2">GN: R$ 0,00 • SD: R$ 0,00</div>
-    </div>
-    <div class="card kpi">
-      <div class="t">Saldo do mês</div>
-      <div class="v" id="kMes">R$ 0,00</div>
-      <div class="s" id="kMes2">GN: R$ 0,00 • SD: R$ 0,00</div>
-    </div>
+    <button class="btn ghost" onclick="fechamento()">Fechamento</button>
   </div>
 
-  <div class="card" style="margin-top:10px">
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
-      <div>
-        <div style="font-weight:950">GN vs SD (mês)</div>
-        <div class="small">Gráfico animado crescendo (sem donut feio).</div>
+  <!-- DASH -->
+  <section id="t0" class="tab on">
+    <div class="row mount">
+      <div class="card kpi">
+        <div class="t">Saldo hoje</div><div class="v" id="kHoje">R$ 0,00</div>
+        <div class="small" id="kHoje2">GN: R$ 0,00 • SD: R$ 0,00</div>
       </div>
-      <div class="pill" id="labMes">----</div>
+      <div class="card kpi">
+        <div class="t">Saldo do mês</div><div class="v" id="kMes">R$ 0,00</div>
+        <div class="small" id="kMes2">GN: R$ 0,00 • SD: R$ 0,00 • Materiais: R$ 0,00</div>
+      </div>
     </div>
-    <div style="margin-top:10px"><canvas id="chart"></canvas></div>
-    <div class="small" id="chartTip" style="margin-top:8px;min-height:16px"></div>
-  </div>
 
-  <div class="row" style="margin-top:10px">
-    <div class="card kpi">
-      <div class="t">Previsão (offline)</div>
-      <div class="v" id="prev">R$ 0,00</div>
-      <div class="s">Média móvel + tendência simples.</div>
-    </div>
-    <div class="card kpi">
-      <div class="t">Top clientes (mês)</div>
-      <div class="v" style="font-size:16px;margin-top:10px" id="topCli">Sem dados</div>
-      <div class="s">Dica: preencha “Cliente” nos lançamentos.</div>
-    </div>
-  </div>
-</section>
-<!-- MOVIMENTOS -->
-<section id="tabMov" class="tab">
-  <div class="card">
-    <div class="grid2">
-      <div>
-        <div class="small">Tipo</div>
-        <div class="row" style="margin-top:6px">
-          <button class="btn" id="bGN" onclick="setTipo('GN')">GN (Ganhos)</button>
-          <button class="btn" id="bSD" onclick="setTipo('SD')" style="background:transparent;color:var(--txt);border:1px solid var(--b)">SD (Saídas)</button>
+    <div class="card mount" style="margin-top:10px">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-weight:1000">GN vs SD (mês)</div>
+          <div class="small">Gráfico animado crescendo. Verde=GN, Vermelho=SD.</div>
         </div>
+        <div class="pill" id="labMes">----</div>
       </div>
-      <div>
-        <div class="small">Data</div>
-        <input class="in" id="mData" type="date">
-      </div>
+      <div style="margin-top:10px"><canvas id="chart" class="chart" width="900" height="300"></canvas></div>
+      <div class="small" id="chartTip" style="margin-top:8px;min-height:16px"></div>
     </div>
 
-    <div class="grid2" style="margin-top:10px">
-      <div>
-        <div class="small">Valor (R$)</div>
-        <input class="in" id="mVal" type="number" step="0.01" placeholder="Ex: 250">
+    <div class="row mount" style="margin-top:10px">
+      <div class="card kpi">
+        <div class="t">Previsão (offline)</div><div class="v" id="prev">R$ 0,00</div>
+        <div class="small">Média móvel + tendência simples.</div>
       </div>
-      <div>
-        <div class="small">Cliente (opcional)</div>
-        <input class="in" id="mCli" placeholder="Ex: João / Obra X">
+      <div class="card kpi">
+        <div class="t">Top clientes (mês)</div>
+        <div class="v" style="font-size:16px;margin-top:10px" id="topCli">Sem dados</div>
+        <div class="small">Ao lançar GN/SD preencha “Cliente”.</div>
       </div>
     </div>
+  </section>
 
-    <div class="grid2" style="margin-top:10px">
-      <div>
-        <div class="small">Categoria (opcional)</div>
-        <input class="in" id="mCat" placeholder="Ex: Portão / Solda">
-      </div>
-      <div>
-        <div class="small">Obs (opcional)</div>
-        <input class="in" id="mObs" placeholder="Ex: sinal, restante…">
-      </div>
-    </div>
-
-    <div class="row" style="margin-top:12px">
-      <button class="btn" onclick="salvarMov()">Salvar</button>
-      <button class="btn" style="background:transparent;color:var(--txt);border:1px solid var(--b)" onclick="limparMov()">Limpar</button>
-      <button class="btn" style="background:transparent;color:var(--txt);border:1px solid var(--b)" onclick="go('Dash')">Ver Dash</button>
-    </div>
-
-    <div class="sep"></div>
-    <div class="small">Atalhos:</div>
-    <div class="row" style="margin-top:8px">
-      <button class="btn" style="background:transparent;color:var(--txt);border:1px solid var(--b)" onclick="addAtalho(50)">+50</button>
-      <button class="btn" style="background:transparent;color:var(--txt);border:1px solid var(--b)" onclick="addAtalho(100)">+100</button>
-      <button class="btn" style="background:transparent;color:var(--txt);border:1px solid var(--b)" onclick="addAtalho(200)">+200</button>
-      <button class="btn" style="background:transparent;color:var(--txt);border:1px solid var(--b)" onclick="addAtalho(500)">+500</button>
-    </div>
-  </div>
-
-  <div class="card" style="margin-top:10px">
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
-      <div>
-        <div style="font-weight:950">Histórico (mês)</div>
-        <div class="small">Aparece assim que salvar. Tem copiar e remover.</div>
-      </div>
-      <div class="pill" id="movMes">----</div>
-    </div>
-    <div id="movList" style="margin-top:8px"></div>
-  </div>
+  <!-- MOV / AGENDA / CLIENTES / ORÇ -->
+  <section id="t1" class="tab"></section>
+  <section id="t2" class="tab"></section>
+  <section id="t3" class="tab"></section>
+  <section id="t4" class="tab"></section>
 </section>
-<!-- AGENDA -->
-<section id="tabAg" class="tab">
-  <div class="card">
-    <div class="grid2">
-      <div>
-        <div class="small">Cliente</div>
-        <input class="in" id="aCli" placeholder="Nome do cliente">
-      </div>
-      <div>
-        <div class="small">Telefone (opcional)</div>
-        <input class="in" id="aTel" inputmode="tel" placeholder="(41) 9....">
-      </div>
-    </div>
-
-    <div class="grid2" style="margin-top:10px">
-      <div>
-        <div class="small">Data</div>
-        <input class="in" id="aData" type="date">
-      </div>
-      <div>
-        <div class="small">Hora</div>
-        <input class="in" id="aHora" type="time">
-      </div>
-    </div>
-
-    <div style="margin-top:10px">
-      <div class="small">Descrição do serviço</div>
-      <input class="in" id="aDesc" placeholder="Ex: Instalar portão, ajuste, solda...">
-    </div>
-
-    <div class="row" style="margin-top:12px">
-      <button class="btn" onclick="salvarAg()">Salvar serviço</button>
-      <button class="btn" style="background:transparent;color:var(--txt);border:1px solid var(--b)" onclick="limparAg()">Limpar</button>
-      <button class="btn" style="background:transparent;color:var(--txt);border:1px solid var(--b)" onclick="notiPerm()">Notificação</button>
-    </div>
-
-    <div class="small" style="margin-top:10px">
-      Lembrete 1h antes: <span style="color:var(--y);font-weight:900">só funciona com a página aberta</span>.
-    </div>
-  </div>
-
-  <div class="card" style="margin-top:10px">
-    <div style="font-weight:950">Próximos serviços</div>
-    <div id="agList" style="margin-top:8px"></div>
-  </div>
-</section>
-<!-- CLIENTES -->
-<section id="tabCli" class="tab">
-  <div class="card">
-    <div class="grid2">
-      <div>
-        <div class="small">Nome</div>
-        <input class="in" id="cNome" placeholder="Cliente">
-      </div>
-      <div>
-        <div class="small">Telefone</div>
-        <input class="in" id="cTel" inputmode="tel" placeholder="(41) 9....">
-      </div>
-    </div>
-
-    <div style="margin-top:10px">
-      <div class="small">Endereço (opcional)</div>
-      <input class="in" id="cEnd" placeholder="Rua, bairro...">
-    </div>
-
-    <div class="row" style="margin-top:12px">
-      <button class="btn" onclick="salvarCliente()">Salvar</button>
-      <button class="btn" style="background:transparent;color:var(--txt);border:1px solid var(--b)" onclick="limparCliente()">Limpar</button>
-    </div>
-  </div>
-
-  <div class="card" style="margin-top:10px">
-    <div style="font-weight:950">Lista de clientes</div>
-    <div id="cliList" style="margin-top:8px"></div>
-  </div>
-</section>
-
-<!-- ORÇAMENTOS -->
-<section id="tabOrc" class="tab">
-  <div class="card">
-    <div class="grid2">
-      <div><div class="small">Cliente</div><input class="in" id="oCli" placeholder="Nome do cliente"></div>
-      <div><div class="small">Telefone (opcional)</div><input class="in" id="oTel" inputmode="tel" placeholder="(41) 9...."></div>
-    </div>
-
-    <div class="grid2" style="margin-top:10px">
-      <div><div class="small">Preço (R$)</div><input class="in" id="oVal" type="number" step="0.01" placeholder="Ex: 1200"></div>
-      <div><div class="small">Prazo</div><input class="in" id="oPrazo" placeholder="Ex: 3 dias / 1 semana"></div>
-    </div>
-
-    <div style="margin-top:10px">
-      <div class="small">Descrição</div>
-      <input class="in" id="oDesc" placeholder="Ex: Portão + pintura...">
-    </div>
-
-    <div class="row" style="margin-top:12px">
-      <button class="btn" onclick="salvarOrc()">Salvar</button>
-      <button class="btn" style="background:transparent;color:var(--txt);border:1px solid var(--b)" onclick="limparOrc()">Limpar</button>
-      <button class="btn" style="background:transparent;color:var(--txt);border:1px solid var(--b)" onclick="zapOrc()">WhatsApp</button>
-    </div>
-
-    <div class="small" style="margin-top:10px">O WhatsApp abre com a mensagem pronta.</div>
-  </div>
-
-  <div class="card" style="margin-top:10px">
-    <div style="font-weight:950">Orçamentos</div>
-    <div id="orcList" style="margin-top:8px"></div>
-  </div>
-</section>
-<div class="nav">
-  <div class="bar">
-    <div class="nb on" id="bDash" onclick="go('Dash')"><i>📊</i>Dash</div>
-    <div class="nb" id="bMov" onclick="go('Mov')"><i>💰</i>Mov</div>
-    <div class="nb" id="bAg" onclick="go('Ag')"><i>📅</i>Agenda</div>
-    <div class="nb" id="bCli" onclick="go('Cli')"><i>👤</i>Clientes</div>
-    <div class="nb" id="bOrc" onclick="go('Orc')"><i>🧾</i>Orç</div>
-  </div>
 </div>
 
-</section><!-- /app -->
-</div><!-- /wrap -->
-
+<div class="nav"><div class="bar mount">
+  <div class="nb on" id="n0" onclick="go('Dash')"><i>📊</i>Dash</div>
+  <div class="nb" id="n1" onclick="go('Mov')"><i>💰</i>Mov</div>
+  <div class="nb" id="n2" onclick="go('Agenda')"><i>📅</i>Agenda</div>
+  <div class="nb" id="n3" onclick="go('Clientes')"><i>👤</i>Clientes</div>
+  <div class="nb" id="n4" onclick="go('Orç')"><i>🧾</i>Orç</div>
+</div></div>
 <script>
-/* ====== APP CORE ====== */
-const KEY="gil_app_v6";
+ /* ===== DB ===== */
+const K="gil_app_v1";
 const $=id=>document.getElementById(id);
+const J=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)||"null")??d}catch{return d}};
+const S=v=>localStorage.setItem(K,JSON.stringify(v));
 const brl=n=>Number(n||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
 const iso=()=>new Date().toISOString().slice(0,10);
 const ym=d=>(d||new Date()).toISOString().slice(0,7);
 const digits=s=>(s||"").replace(/\D/g,"");
 const vib=()=>navigator.vibrate&&navigator.vibrate(12);
 
-const load=()=>{try{
-  return JSON.parse(localStorage.getItem(KEY)||"null")||{mov:[],ag:[],cli:[],orc:[],tipo:"GN"};
-}catch{return {mov:[],ag:[],cli:[],orc:[],tipo:"GN"}}};
+let DB=J(K,{tipo:"GN",mov:[],ag:[],cli:[],orc:[],mat:[],wa:""}), M=ym();
 
-let DB=load(), CUR=ym();
-
-function save(){localStorage.setItem(KEY,JSON.stringify(DB));}
-
+/* ===== START ===== */
 function startApp(){
   $("home").classList.add("hidden");
   $("app").classList.remove("hidden");
-  $("mData").value=iso(); $("aData").value=iso(); $("aHora").value="08:00";
-  setTipo(DB.tipo||"GN");
+  M=ym(); renderAll(); fxResize(); spawn(); requestAnimationFrame(fxTick);
   go("Dash");
-  fxResize(); spawn(); requestAnimationFrame(fxTick);
-  render(); checkAgendaNotifySoon();
 }
+function save(){S(DB)}
+function setTipo(t){DB.tipo=t;save();renderMovBtns()}
 
+/* ===== NAV ===== */
+const tabs={Dash:0,Mov:1,Agenda:2,Clientes:3,"Orç":4};
 function go(name){
-  ["Dash","Mov","Ag","Cli","Orc"].forEach(n=>{
-    $("tab"+n).classList.remove("on");
-    $("b"+n).classList.remove("on");
-  });
-  $("tab"+name).classList.add("on");
-  $("b"+name).classList.add("on");
-  vib(); render();
-}
-</script>
-<script>
-/* ====== MOVIMENTOS ====== */
-function setTipo(t){
-  DB.tipo=t; save();
-  const gn=$("bGN"), sd=$("bSD");
-  if(t==="GN"){
-    gn.style.background="#fff"; gn.style.color="#000"; gn.style.border="0";
-    sd.style.background="transparent"; sd.style.color="var(--txt)"; sd.style.border="1px solid var(--b)";
-  }else{
-    sd.style.background="#fff"; sd.style.color="#000"; sd.style.border="0";
-    gn.style.background="transparent"; gn.style.color="var(--txt)"; gn.style.border="1px solid var(--b)";
-  }
-}
-function addAtalho(v){$("mVal").value=(+($("mVal").value||0)+v).toFixed(2); vib();}
-function limparMov(){["mVal","mCli","mCat","mObs"].forEach(x=>$(x).value=""); $("mData").value=iso();}
-function salvarMov(){
-  const data=$("mData").value||iso(), val=+($("mVal").value||0);
-  if(!val||val<=0) return alert("Valor inválido");
-  DB.mov.unshift({
-    id:Date.now()+"", m:data.slice(0,7), data, tipo:DB.tipo, val,
-    cli:($("mCli").value||"").trim(), cat:($("mCat").value||"").trim(), obs:($("mObs").value||"").trim()
-  });
-  save(); limparMov(); CUR=data.slice(0,7); render(); go("Mov");
-}
-function delMov(id){
-  if(!confirm("Remover lançamento?"))return;
-  DB.mov=DB.mov.filter(x=>x.id!==id); save(); render();
+  const i=tabs[name]; if(i==null) return;
+  ["t0","t1","t2","t3","t4"].forEach((id,ix)=>$(id).className="tab"+(ix===i?" on":""));
+  ["n0","n1","n2","n3","n4"].forEach(n=>$(n).classList.remove("on"));
+  $("n"+i).classList.add("on");
+  // animação “montando”
+  document.querySelectorAll(".mount").forEach(x=>{x.style.animation="none";x.offsetHeight;x.style.animation=""});
+  vib(); renderAll();
 }
 
-/* ====== CLIENTES ====== */
-function limparCliente(){["cNome","cTel","cEnd"].forEach(x=>$(x).value="");}
-function salvarCliente(){
-  const nome=($("cNome").value||"").trim(); if(!nome) return alert("Nome obrigatório");
-  const tel=digits($("cTel").value), end=($("cEnd").value||"").trim();
-  const ex=DB.cli.find(c=>c.nome.toLowerCase()===nome.toLowerCase());
-  if(ex){ex.tel=tel; ex.end=end;}
-  else DB.cli.unshift({id:Date.now()+"",nome,tel,end});
-  save(); limparCliente(); render(); go("Cli");
+/* ===== FX particles ===== */
+const fx=$("fx"),fxc=fx.getContext("2d");
+let P=[],W=0,H=0,seed=0;
+function fxResize(){W=fx.width=innerWidth*devicePixelRatio;H=fx.height=innerHeight*devicePixelRatio}
+addEventListener("resize",fxResize,{passive:true});
+function spawn(){
+  P=[]; for(let i=0;i<70;i++)P.push({x:Math.random()*W,y:Math.random()*H,r:1+Math.random()*2.4,
+  v:.2+Math.random()*1.2,a:.15+Math.random()*.35,h:Math.random()<.7?120:350});
 }
-function delCli(id){
-  if(!confirm("Remover cliente?"))return;
-  DB.cli=DB.cli.filter(x=>x.id!==id); save(); render();
+function fxTick(){
+  if(!W||!H) fxResize();
+  fxc.clearRect(0,0,W,H);
+  seed+=.002;
+  // “aurora” suave
+  const g=fxc.createRadialGradient(W*.25,H*.15,0,W*.25,H*.15,W*.85);
+  g.addColorStop(0,`rgba(80,255,140,.10)`); g.addColorStop(.6,"rgba(0,0,0,0)"); g.addColorStop(1,"rgba(0,0,0,0)");
+  fxc.fillStyle=g; fxc.fillRect(0,0,W,H);
+  P.forEach(p=>{
+    p.y+=p.v*devicePixelRatio; p.x+=Math.sin(seed+p.y/500)*.15*devicePixelRatio;
+    if(p.y>H+20) p.y=-20;
+    fxc.beginPath(); fxc.fillStyle=`hsla(${p.h},90%,70%,${p.a})`;
+    fxc.arc(p.x,p.y,p.r*devicePixelRatio,0,6.283); fxc.fill();
+  });
+  requestAnimationFrame(fxTick);
 }
-</script>
-<script>
-/* ====== AGENDA ====== */
-function limparAg(){["aCli","aTel","aDesc"].forEach(x=>$(x).value=""); $("aData").value=iso(); $("aHora").value="08:00";}
-function salvarAg(){
+ /* ===== MOV (GN/SD) ===== */
+function addMov(){
+  const d=$("mData").value||iso(), v=+($("mVal").value||0);
+  if(!v||v<=0) return alert("Valor inválido");
+  DB.mov.unshift({id:Date.now()+"",m:d.slice(0,7),data:d,tipo:DB.tipo,val:v,
+    cli:($("mCli").value||"").trim(),cat:($("mCat").value||"").trim(),obs:($("mObs").value||"").trim()});
+  save(); clearMov(); renderDash(); renderMovList();
+}
+function delMov(id){if(!confirm("Remover lançamento?"))return; DB.mov=DB.mov.filter(x=>x.id!==id); save(); renderAll();}
+function clearMov(){["mVal","mCli","mCat","mObs"].forEach(x=>$(x).value=""); $("mData").value=iso()}
+function addQuick(n){$("mVal").value=+(($("mVal").value||0))+n; vib()}
+
+function renderMovBtns(){
+  const gn=$("bGN"),sd=$("bSD");
+  if(!gn||!sd) return;
+  gn.className="btn "+(DB.tipo==="GN"?"":"ghost");
+  sd.className="btn "+(DB.tipo==="SD"?"":"ghost");
+}
+function renderMovList(){
+  const box=$("movList"); if(!box) return;
+  const items=DB.mov.filter(x=>x.m===M).slice(0,50);
+  if(!items.length){box.innerHTML=`<div class="small">Sem lançamentos neste mês.</div>`;return}
+  box.innerHTML=items.map(x=>{
+    const s=x.tipo==="GN"?`<span class="pos">GN</span>`:`<span class="neg">SD</span>`;
+    const cli=x.cli?` <span class="tag">${esc(x.cli)}</span>`:"";
+    const cat=x.cat?` <span class="tag">${esc(x.cat)}</span>`:"";
+    return `<div class="it">
+      <div style="min-width:0">
+        <div style="font-weight:950">${s} ${brl(x.val)} <span class="small">• ${x.data}</span></div>
+        <div class="small" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${cli}${cat} ${x.obs?esc(x.obs):""}</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn ghost" onclick="copyMov('${x.id}')">Copiar</button>
+        <button class="btn danger" onclick="delMov('${x.id}')">X</button>
+      </div>
+    </div>`;
+  }).join("");
+}
+function copyMov(id){
+  const x=DB.mov.find(a=>a.id===id); if(!x) return;
+  const msg=`*${x.tipo}* ${brl(x.val)}\nData: ${x.data}\nCliente: ${x.cli||"-"}\nCat: ${x.cat||"-"}\nObs: ${x.obs||"-"}`;
+  navigator.clipboard?.writeText(msg).catch(()=>{});
+  alert("Copiado ✅"); vib();
+}
+function esc(s){return (s||"").replace(/[&<>"']/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m]))}
+ /* ===== AGENDA ===== */
+function addAg(){
   const cli=($("aCli").value||"").trim(), desc=($("aDesc").value||"").trim();
   const data=$("aData").value||iso(), hora=$("aHora").value||"08:00";
   if(!cli||!desc) return alert("Cliente e descrição obrigatórios");
-  DB.ag.unshift({id:Date.now()+"",cli,desc,data,hora,tel:digits($("aTel").value)});
-  save(); limparAg(); render(); checkAgendaNotifySoon(); go("Ag");
+  DB.ag.unshift({id:Date.now()+"",cli,tel:digits($("aTel").value),data,hora,desc});
+  save(); clearAg(); renderAgList(); checkAgendaNotifySoon();
 }
-function delAg(id){
-  if(!confirm("Remover serviço?"))return;
-  DB.ag=DB.ag.filter(x=>x.id!==id); save(); render();
-}
-async function notiPerm(){
-  if(!("Notification" in window)) return alert("Sem suporte a notificações.");
+function delAg(id){if(!confirm("Remover serviço?"))return; DB.ag=DB.ag.filter(x=>x.id!==id); save(); renderAgList()}
+function clearAg(){["aCli","aTel","aDesc"].forEach(x=>$(x).value=""); $("aData").value=iso(); $("aHora").value="08:00"}
+async function askNoti(){
+  if(!("Notification" in window)) return alert("Sem suporte a notificação.");
   const p=await Notification.requestPermission();
   alert(p==="granted"?"Notificações ativadas ✅":"Permissão negada.");
 }
-function checkAgendaNotifySoon(){setTimeout(checkAgendaNotify,900);}
+function checkAgendaNotifySoon(){setTimeout(checkAgendaNotify,900)}
 function checkAgendaNotify(){
   if(!("Notification" in window) || Notification.permission!=="granted") return;
   const now=Date.now();
   DB.ag.forEach(s=>{
-    if(s.done) return;
-    const dt=new Date(`${s.data}T${s.hora}:00`).getTime();
-    const left=dt-now;
+    if(s._done) return;
+    const dt=new Date(`${s.data}T${s.hora}:00`).getTime(), left=dt-now;
     if(left<=3600000 && left>0){
-      s.done=1; save();
+      s._done=1; save();
       new Notification("Serralheria do Gil",{body:`Serviço: ${s.cli}\n${s.desc}\nFalta: ~${Math.ceil(left/60000)} min`});
     }
   });
 }
+function renderAgList(){
+  const box=$("agList"); if(!box) return;
+  const items=[...DB.ag].sort((a,b)=>`${a.data} ${a.hora}`.localeCompare(`${b.data} ${b.hora}`)).slice(0,80);
+  box.innerHTML=items.length?items.map(s=>`<div class="it">
+    <div style="min-width:0">
+      <div style="font-weight:950">${esc(s.cli)} <span class="small">• ${s.data} ${s.hora}</span></div>
+      <div class="small" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(s.desc)}</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn ghost" onclick="zapServico('${s.id}')">Zap</button>
+      <button class="btn danger" onclick="delAg('${s.id}')">X</button>
+    </div>
+  </div>`).join(""):`<div class="small">Sem serviços na agenda.</div>`;
+}
 
-/* ====== ORÇAMENTOS ====== */
-function limparOrc(){["oCli","oTel","oVal","oPrazo","oDesc"].forEach(x=>$(x).value="");}
-function salvarOrc(){
-  const cli=($("oCli").value||"").trim(), val=+($("oVal").value||0), desc=($("oDesc").value||"").trim();
-  if(!cli||!val||val<=0||!desc) return alert("Cliente, valor e descrição obrigatórios");
-  DB.orc.unshift({id:Date.now()+"",cli,tel:digits($("oTel").value),val,prazo:($("oPrazo").value||"").trim(),desc,at:Date.now()});
-  save(); limparOrc(); render(); go("Orc");
+/* ===== CLIENTES ===== */
+function addCli(){
+  const nome=($("cNome").value||"").trim(); if(!nome) return alert("Nome obrigatório");
+  const tel=digits($("cTel").value), end=($("cEnd").value||"").trim();
+  const ex=DB.cli.find(c=>c.nome.toLowerCase()===nome.toLowerCase());
+  if(ex){ex.tel=tel; ex.end=end;} else DB.cli.unshift({id:Date.now()+"",nome,tel,end});
+  save(); clearCli(); renderCliList();
 }
-function delOrc(id){
-  if(!confirm("Remover orçamento?"))return;
-  DB.orc=DB.orc.filter(x=>x.id!==id); save(); render();
+function delCli(id){if(!confirm("Remover cliente?"))return; DB.cli=DB.cli.filter(x=>x.id!==id); save(); renderCliList()}
+function clearCli(){["cNome","cTel","cEnd"].forEach(x=>$(x).value="")}
+function renderCliList(){
+  const box=$("cliList"); if(!box) return;
+  box.innerHTML=DB.cli.length?DB.cli.map(c=>`<div class="it">
+    <div style="min-width:0">
+      <div style="font-weight:950">${esc(c.nome)} ${c.tel?`<span class="tag">${fmtTel(c.tel)}</span>`:""}</div>
+      <div class="small" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.end?esc(c.end):"—"}</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn ghost" onclick="zapCli('${c.id}')">Zap</button>
+      <button class="btn danger" onclick="delCli('${c.id}')">X</button>
+    </div>
+  </div>`).join(""):`<div class="small">Nenhum cliente cadastrado.</div>`;
 }
+function fmtTel(t){t=digits(t); if(t.length<10) return t; return `(${t.slice(0,2)}) ${t.slice(2,7)}-${t.slice(7)}`;}
+ /* ===== HTML das abas (injeta pra evitar sumir coisa) ===== */
+function buildTabs(){
+  $("t1").innerHTML=`
+  <div class="card mount">
+    <div class="grid2">
+      <div>
+        <div class="small">Tipo</div>
+        <div class="row">
+          <button class="btn ghost" id="bGN" onclick="setTipo('GN')">GN (Ganhos)</button>
+          <button class="btn ghost" id="bSD" onclick="setTipo('SD')">SD (Saídas)</button>
+        </div>
+      </div>
+      <div><div class="small">Data</div><input class="in" id="mData" type="date"></div>
+    </div>
+    <div class="grid2" style="margin-top:10px">
+      <div><div class="small">Valor (R$)</div><input class="in" id="mVal" type="number" step="0.01" placeholder="Ex: 250"></div>
+      <div><div class="small">Cliente (opcional)</div><input class="in" id="mCli" placeholder="Ex: João / Construtora X"></div>
+    </div>
+    <div class="grid2" style="margin-top:10px">
+      <div><div class="small">Categoria (opcional)</div><input class="in" id="mCat" placeholder="Ex: Portão / Solda / Combustível"></div>
+      <div><div class="small">Obs (opcional)</div><input class="in" id="mObs" placeholder="Ex: sinal, restante, etc"></div>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn" onclick="addMov()">Salvar</button>
+      <button class="btn ghost" onclick="clearMov()">Limpar</button>
+      <button class="btn ghost" onclick="go('Dash')">Ver Dash</button>
+    </div>
+    <div class="small" style="margin-top:10px">Atalhos:</div>
+    <div class="row">
+      <button class="btn ghost" onclick="addQuick(50)">+50</button>
+      <button class="btn ghost" onclick="addQuick(100)">+100</button>
+      <button class="btn ghost" onclick="addQuick(200)">+200</button>
+      <button class="btn ghost" onclick="addQuick(500)">+500</button>
+    </div>
+  </div>
+  <div class="card mount" style="margin-top:10px">
+    <div style="font-weight:1000">Histórico do mês</div>
+    <div class="small">Tem copiar e remover.</div>
+    <div class="list" id="movList"></div>
+  </div>`;
+
+  $("t2").innerHTML=`
+  <div class="card mount">
+    <div class="grid2">
+      <div><div class="small">Cliente</div><input class="in" id="aCli" placeholder="Nome do cliente"></div>
+      <div><div class="small">Telefone (opcional)</div><input class="in" id="aTel" inputmode="tel" placeholder="(41) 9...."></div>
+    </div>
+    <div class="grid2" style="margin-top:10px">
+      <div><div class="small">Data</div><input class="in" id="aData" type="date"></div>
+      <div><div class="small">Hora</div><input class="in" id="aHora" type="time"></div>
+    </div>
+    <div style="margin-top:10px"><div class="small">Descrição</div><input class="in" id="aDesc" placeholder="Ex: Instalar portão, ajuste, solda..."></div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn" onclick="addAg()">Salvar</button>
+      <button class="btn ghost" onclick="clearAg()">Limpar</button>
+      <button class="btn ghost" onclick="askNoti()">Notificação</button>
+    </div>
+    <div class="small" style="margin-top:8px">Lembrete 1h antes funciona com o app aberto (limite do navegador).</div>
+  </div>
+  <div class="card mount" style="margin-top:10px">
+    <div style="font-weight:1000">Próximos serviços</div>
+    <div class="list" id="agList"></div>
+  </div>`;
+
+  $("t3").innerHTML=`
+  <div class="card mount">
+    <div class="grid2">
+      <div><div class="small">Nome</div><input class="in" id="cNome" placeholder="Cliente"></div>
+      <div><div class="small">Telefone</div><input class="in" id="cTel" inputmode="tel" placeholder="(41) 9...."></div>
+    </div>
+    <div style="margin-top:10px"><div class="small">Endereço</div><input class="in" id="cEnd" placeholder="Rua, bairro..."></div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn" onclick="addCli()">Salvar</button>
+      <button class="btn ghost" onclick="clearCli()">Limpar</button>
+    </div>
+  </div>
+  <div class="card mount" style="margin-top:10px">
+    <div style="font-weight:1000">Lista de clientes</div>
+    <div class="list" id="cliList"></div>
+  </div>`;
+
+  $("t4").innerHTML=`
+  <div class="card mount">
+    <div class="grid2">
+      <div><div class="small">Cliente</div><input class="in" id="oCli" placeholder="Nome do cliente"></div>
+      <div><div class="small">Telefone (opcional)</div><input class="in" id="oTel" inputmode="tel" placeholder="(41) 9...."></div>
+    </div>
+    <div class="grid2" style="margin-top:10px">
+      <div><div class="small">Preço (R$)</div><input class="in" id="oVal" type="number" step="0.01" placeholder="Ex: 1200"></div>
+      <div><div class="small">Prazo</div><input class="in" id="oPrazo" placeholder="Ex: 3 dias / 1 semana"></div>
+    </div>
+    <div style="margin-top:10px"><div class="small">Descrição</div><input class="in" id="oDesc" placeholder="Ex: Portão + pintura..."></div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn" onclick="addOrc()">Salvar</button>
+      <button class="btn ghost" onclick="clearOrc()">Limpar</button>
+      <button class="btn ghost" onclick="zapOrc()">Enviar no WhatsApp</button>
+    </div>
+    <div class="small" style="margin-top:8px">O WhatsApp abre com a mensagem pronta.</div>
+  </div>
+  <div class="card mount" style="margin-top:10px">
+    <div style="font-weight:1000">Orçamentos</div>
+    <div class="list" id="orcList"></div>
+  </div>`;
+}
+
 function openZap(tel,msg){
-  const u=tel?`https://wa.me/${tel}?text=${encodeURIComponent(msg)}`:`https://wa.me/?text=${encodeURIComponent(msg)}`;
+  tel=digits(tel||"");
+  const u = tel?`https://wa.me/${tel}?text=${encodeURIComponent(msg)}`:`https://wa.me/?text=${encodeURIComponent(msg)}`;
   window.open(u,"_blank");
 }
+ /* ===== ORÇAMENTOS ===== */
+function addOrc(){
+  const cli=($("oCli").value||"").trim(), val=+($("oVal").value||0), desc=($("oDesc").value||"").trim();
+  if(!cli||!val||val<=0||!desc) return alert("Preencha Cliente, Valor e Descrição.");
+  DB.orc.unshift({id:Date.now()+"",cli,tel:digits($("oTel").value),val,prazo:($("oPrazo").value||"").trim(),desc,at:Date.now()});
+  save(); clearOrc(); renderOrcList(); vib();
+}
+function clearOrc(){["oCli","oTel","oVal","oPrazo","oDesc"].forEach(x=>$(x).value="")}
+function delOrc(id){if(!confirm("Remover orçamento?"))return; DB.orc=DB.orc.filter(x=>x.id!==id); save(); renderOrcList();}
+
 function zapOrc(){
   const cli=($("oCli").value||"").trim(), val=+($("oVal").value||0), prazo=($("oPrazo").value||"").trim(), desc=($("oDesc").value||"").trim();
-  if(!cli||!val||!desc) return alert("Preencha cliente, valor e descrição.");
-  const tel=digits($("oTel").value)||"";
+  if(!cli||!val||val<=0||!desc) return alert("Preencha cliente, valor e descrição antes.");
+  const tel=digits($("oTel").value)||DB.wa||"";
   const msg=`*Orçamento - Serralheria do Gil*\nCliente: ${cli}\nServiço: ${desc}\nValor: ${brl(val)}\nPrazo: ${prazo||"a combinar"}\n\nSe aprovar, me confirma por aqui.`;
   openZap(tel,msg);
 }
-</script>
-<script>
-/* ====== GRÁFICO (ANIMADO) ====== */
-let chartAnim=0,lastSig="";
-const easeOut=t=>1-Math.pow(1-t,3);
+function renderOrcList(){
+  const box=$("orcList"); if(!box) return;
+  if(!DB.orc.length){box.innerHTML=`<div class="small">Sem orçamentos.</div>`;return}
+  box.innerHTML=DB.orc.slice(0,60).map(o=>`<div class="it">
+    <div style="min-width:0">
+      <div style="font-weight:950">${esc(o.cli)} <span class="small">• ${brl(o.val)}</span></div>
+      <div class="small" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(o.desc)} ${o.prazo?`• ${esc(o.prazo)}`:""}</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn ghost" onclick="openZap('${o.tel||DB.wa||""}',${JSON.stringify("")}.concat('*Orçamento - Serralheria do Gil*\\nCliente: ${o.cli}\\nServiço: ${o.desc}\\nValor: ${brl(o.val)}\\nPrazo: ${o.prazo||"a combinar"}\\n'))">Zap</button>
+      <button class="btn danger" onclick="delOrc('${o.id}')">X</button>
+    </div>
+  </div>`).join("");
+}
 
-function fitCanvas(c){
-  const dpr=Math.max(1,devicePixelRatio||1);
-  const r=c.getBoundingClientRect();
-  const w=Math.round(r.width*dpr), h=Math.round(r.height*dpr);
-  if(c.width!==w||c.height!==h){c.width=w;c.height=h;}
-  return {w,h};
+/* ===== Zap rápido (cliente/serviço) ===== */
+function zapCli(id){
+  const c=DB.cli.find(x=>x.id===id); if(!c) return;
+  const tel=c.tel||DB.wa||"";
+  const msg=`Olá ${c.nome}! Aqui é da *Serralheria do Gil*.\n`;
+  openZap(tel,msg);
 }
-function roundRect(ctx,x,y,w,h,r){
-  r=Math.min(r,w/2,h/2); ctx.beginPath();
-  ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r);
-  ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r);
-  ctx.arcTo(x,y,x+w,y,r); ctx.closePath();
+function zapServico(id){
+  const s=DB.ag.find(x=>x.id===id); if(!s) return;
+  const tel=s.tel||DB.wa||"";
+  const msg=`*Serralheria do Gil* ✅\nServiço: ${s.cli}\n${s.desc}\nData: ${s.data} ${s.hora}`;
+  openZap(tel,msg);
 }
-function drawBars(gn,sd,prog){
-  const c=$("chart"),ctx=c.getContext("2d");
-  const {w,h}=fitCanvas(c);
+ /* ===== DASH (cálculos) ===== */
+function sumMov(rangeYM){
+  let gn=0,sd=0;
+  DB.mov.forEach(x=>{
+    if(rangeYM && x.m!==rangeYM) return;
+    if(x.tipo==="GN") gn+=x.val; else sd+=x.val;
+  });
+  return {gn,sd,net:gn-sd};
+}
+function topClientesMes(){
+  const map=new Map();
+  DB.mov.forEach(x=>{
+    if(x.m!==M || !x.cli) return;
+    const k=x.cli.trim(); if(!k) return;
+    map.set(k,(map.get(k)||0)+(x.tipo==="GN"?x.val:-x.val));
+  });
+  const arr=[...map.entries()].sort((a,b)=>b[1]-a[1]).slice(0,3);
+  if(!arr.length) return "Sem dados";
+  return arr.map(([n,v])=>`${n} • ${brl(v)}`).join("<br>");
+}
+function previsaoNext(){
+  // média móvel dos últimos 3 meses + tendência simples
+  const months=[...new Set(DB.mov.map(x=>x.m))].sort().slice(-4);
+  const totals=months.map(m=>sumMov(m).gn);
+  if(!totals.length) return 0;
+  const avg = totals.slice(-3).reduce((a,b)=>a+b,0)/Math.min(3,totals.length);
+  const trend = totals.length>=2 ? (totals[totals.length-1]-totals[totals.length-2]) : 0;
+  return Math.max(0, avg + trend*0.6);
+}
+function renderDash(){
+  const today=iso(), y=M;
+  const td=DB.mov.filter(x=>x.data===today);
+  const gnH=td.filter(x=>x.tipo==="GN").reduce((a,b)=>a+b.val,0);
+  const sdH=td.filter(x=>x.tipo==="SD").reduce((a,b)=>a+b.val,0);
+  $("kHoje").textContent=brl(gnH-sdH);
+  $("kHoje2").textContent=`GN: ${brl(gnH)} • SD: ${brl(sdH)}`;
+
+  const {gn,sd,net}=sumMov(y);
+  $("kMes").textContent=brl(net);
+  $("kMes2").textContent=`GN: ${brl(gn)} • SD: ${brl(sd)} • Materiais: ${brl(0)}`;
+  $("labMes").textContent=y;
+  $("topCli").innerHTML=topClientesMes();
+  $("prev").textContent=brl(previsaoNext());
+
+  drawChart(); // gráfico animado
+}
+function renderAll(){
+  if(!$("app")||$("app").classList.contains("hidden")) return;
+  if(!$("t1").innerHTML) buildTabs();
+  // defaults
+  if($("mData")) $("mData").value=iso();
+  if($("aData")) $("aData").value=iso();
+  renderMovBtns();
+  renderDash();
+  renderMovList();
+  renderAgList();
+  renderCliList();
+  renderOrcList();
+}
+ /* ===== CHART (canvas animado) ===== */
+let anim=0, lastKey="";
+function monthDays(ymStr){
+  const [Y,Mm]=ymStr.split("-").map(Number);
+  return new Date(Y,Mm,0).getDate();
+}
+function byDay(){
+  const days=monthDays(M);
+  const gn=Array(days).fill(0), sd=Array(days).fill(0);
+  DB.mov.forEach(x=>{
+    if(x.m!==M) return;
+    const d=+x.data.slice(8,10)-1;
+    if(d<0||d>=days) return;
+    (x.tipo==="GN"?gn:sd)[d]+=x.val;
+  });
+  return {gn,sd};
+}
+function drawChart(){
+  const c=$("chart"); if(!c) return;
+  const ctx=c.getContext("2d");
+  const key=M+"|"+DB.mov.length;
+  if(key!==lastKey){anim=0; lastKey=key;}
+  anim=Math.min(1,anim+.06);
+
+  const {gn,sd}=byDay();
+  const w=c.width,h=c.height, pad=26, base=h-pad;
   ctx.clearRect(0,0,w,h);
 
-  const bg=ctx.createLinearGradient(0,0,0,h);
-  bg.addColorStop(0,"#0a120e"); bg.addColorStop(1,"#050807");
-  ctx.fillStyle=bg; ctx.fillRect(0,0,w,h);
+  // grid
+  ctx.globalAlpha=.25; ctx.strokeStyle="#223028";
+  for(let i=0;i<4;i++){
+    const y=pad+(i*(h-pad*2)/3);
+    ctx.beginPath(); ctx.moveTo(pad,y); ctx.lineTo(w-pad,y); ctx.stroke();
+  }
+  ctx.globalAlpha=1;
 
-  const base=h-55, pad=70, max=Math.max(gn,sd,1);
-  const bw=Math.min(170,Math.max(120,w*0.18));
-  const gap=Math.min(90,Math.max(60,w*0.08));
-  const x1=w/2-bw-gap/2, x2=w/2+gap/2;
+  const max=Math.max(1,...gn.map((v,i)=>v+sd[i]));
+  const days=gn.length;
+  const bw=(w-pad*2)/days;
 
-  const H=v=>((v/max)*(h-pad))*prog;
+  // barras GN/SD (stack) com animação
+  for(let i=0;i<days;i++){
+    const x=pad+i*bw+bw*.12, ww=bw*.76;
+    const gH=(gn[i]/max)*(h-pad*2)*anim;
+    const sH=(sd[i]/max)*(h-pad*2)*anim;
 
-  ctx.strokeStyle="#1a2a22"; ctx.lineWidth=2;
-  ctx.beginPath(); ctx.moveTo(40,base); ctx.lineTo(w-40,base); ctx.stroke();
+    // SD base (vermelho)
+    ctx.fillStyle="rgba(255,90,107,.80)";
+    ctx.beginPath();
+    roundRect(ctx,x,base-sH,ww,sH,10); ctx.fill();
 
-  const gh=H(gn); ctx.fillStyle="rgba(76,255,136,.95)"; roundRect(ctx,x1,base-gh,bw,gh,18); ctx.fill();
-  const sh=H(sd); ctx.fillStyle="rgba(255,90,107,.92)"; roundRect(ctx,x2,base-sh,bw,sh,18); ctx.fill();
+    // GN em cima (verde)
+    ctx.fillStyle="rgba(81,255,137,.85)";
+    ctx.beginPath();
+    roundRect(ctx,x,base-sH-gH,ww,gH,10); ctx.fill();
+  }
 
-  ctx.fillStyle="#eaf6ee"; ctx.textAlign="center";
-  ctx.font=Math.max(28,Math.round(w*0.03))+"px system-ui";
-  ctx.fillText("GN",x1+bw/2,base+34); ctx.fillText("SD",x2+bw/2,base+34);
-
-  ctx.font=Math.max(22,Math.round(w*0.025))+"px system-ui";
-  ctx.fillText(brl(gn),x1+bw/2,base-gh-14);
-  ctx.fillText(brl(sd),x2+bw/2,base-sh-14);
-
-  $("chartTip").innerHTML=`GN: <span class="pos">${brl(gn)}</span> • SD: <span class="neg">${brl(sd)}</span> • Saldo: <b>${brl(gn-sd)}</b>`;
+  // legenda / tip
+  const ms=sumMov(M);
+  $("chartTip").innerHTML=`<span class="pos">GN</span> ${brl(ms.gn)} &nbsp; <span class="neg">SD</span> ${brl(ms.sd)} &nbsp; Total: ${brl(ms.net)}`;
 }
-function animateChart(gn,sd){
-  const sig=gn+"|"+sd+"|"+CUR;
-  if(sig===lastSig && chartAnim>=1) return;
-  lastSig=sig; chartAnim=0;
-  const tick=()=>{
-    chartAnim=Math.min(1,chartAnim+0.06);
-    drawBars(gn,sd,easeOut(chartAnim));
-    if(chartAnim<1) requestAnimationFrame(tick);
-  };
-  requestAnimationFrame(tick);
-}
-
-/* ====== FECHAMENTO ====== */
+function roundRect(ctx,x,y,w,h,r){
+  r=Math.min(r,w/2,h/2);
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
+              }
+ /* ===== FECHAMENTO / CONFIG ===== */
 function fechamento(){
-  const mov=DB.mov.filter(x=>x.m===CUR);
-  const gn=mov.filter(x=>x.tipo==="GN").reduce((a,b)=>a+b.val,0);
-  const sd=mov.filter(x=>x.tipo==="SD").reduce((a,b)=>a+b.val,0);
-  alert(`Fechamento ${CUR}\nGN: ${brl(gn)}\nSD: ${brl(sd)}\nSaldo: ${brl(gn-sd)}`);
-}
-</script>
-<script>
-/* ====== RENDER ====== */
-function render(){
-  if(!$("pillMes")) return;
-  $("pillMes").textContent=CUR;
-  $("labMes").textContent=CUR;
-  $("movMes").textContent=CUR;
+  const ms=sumMov(M);
+  const wa=prompt(
+`FECHAMENTO (${M})
+GN: ${brl(ms.gn)}
+SD: ${brl(ms.sd)}
+Líquido: ${brl(ms.net)}
 
-  const today=iso();
-  const movT=DB.mov.filter(x=>x.data===today);
-  const gnT=movT.filter(x=>x.tipo==="GN").reduce((a,b)=>a+b.val,0);
-  const sdT=movT.filter(x=>x.tipo==="SD").reduce((a,b)=>a+b.val,0);
-
-  const movM=DB.mov.filter(x=>x.m===CUR);
-  const gnM=movM.filter(x=>x.tipo==="GN").reduce((a,b)=>a+b.val,0);
-  const sdM=movM.filter(x=>x.tipo==="SD").reduce((a,b)=>a+b.val,0);
-
-  $("kHoje").textContent=brl(gnT-sdT);
-  $("kHoje2").textContent=`GN: ${brl(gnT)} • SD: ${brl(sdT)}`;
-  $("kMes").textContent=brl(gnM-sdM);
-  $("kMes2").textContent=`GN: ${brl(gnM)} • SD: ${brl(sdM)}`;
-
-  // previsão offline simples (últimos 6 meses de GN)
-  const months=[0,1,2,3,4,5].map(i=>{
-    const d=new Date(); d.setMonth(d.getMonth()-i);
-    const mm=d.toISOString().slice(0,7);
-    const v=DB.mov.filter(x=>x.m===mm&&x.tipo==="GN").reduce((a,b)=>a+b.val,0);
-    return {mm,v};
-  }).reverse();
-  const avg=months.reduce((a,b)=>a+b.v,0)/Math.max(1,months.length);
-  const trend=(months.length>=2)?(months[months.length-1].v-months[0].v)/Math.max(1,months.length-1):0;
-  $("prev").textContent=brl(Math.max(0,avg+trend));
-
-  // top clientes
-  const map={};
-  movM.forEach(x=>{if(!x.cli)return; map[x.cli]=(map[x.cli]||0)+(x.tipo==="GN"?x.val:-x.val);});
-  const top=Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,3);
-  $("topCli").textContent=top.length?top.map(([n,v])=>`${n} • ${brl(v)}`).join("  |  "):"Sem dados";
-
-  animateChart(gnM,sdM);
-
-  // histórico (mov)
-  const L=$("movList"); L.innerHTML="";
-  if(!movM.length){L.innerHTML=`<div class="small">Sem lançamentos neste mês.</div>`;}
-  else movM.slice(0,80).forEach(x=>{
-    const sign=x.tipo==="GN"?"pos":"neg";
-    const row=document.createElement("div");
-    row.className="card"; row.style.marginTop="8px";
-    row.innerHTML=`
-      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
-        <div style="min-width:0">
-          <div style="font-weight:950">${x.cli||"Sem cliente"}</div>
-          <div class="small">${x.obs||x.cat||"—"}</div>
-        </div>
-        <div style="text-align:right">
-          <div class="${sign}" style="font-weight:950">${x.tipo} ${brl(x.val)}</div>
-          <div class="small">${x.data}${x.cat?` • ${x.cat}`:""}</div>
-        </div>
-      </div>
-      <div class="row" style="margin-top:10px">
-        <button class="btn" style="background:transparent;color:var(--txt);border:1px solid var(--b)" onclick="copyText('${x.tipo} ${brl(x.val)} - ${x.data}')">Copiar</button>
-        <button class="btn" style="background:transparent;color:var(--txt);border:1px solid var(--b)" onclick="delMov('${x.id}')">Remover</button>
-      </div>`;
-    L.appendChild(row);
-  });
-
-  // agenda
-  const A=$("agList"); A.innerHTML="";
-  const ag=DB.ag.slice().sort((a,b)=>(a.data+a.hora).localeCompare(b.data+b.hora));
-  if(!ag.length) A.innerHTML=`<div class="small">Sem serviços cadastrados.</div>`;
-  else ag.forEach(s=>{
-    const row=document.createElement("div"); row.className="card"; row.style.marginTop="8px";
-    row.innerHTML=`
-      <div style="font-weight:950">${s.cli} <span class="pill" style="margin-left:8px">${s.data} ${s.hora}</span></div>
-      <div class="small" style="margin-top:6px">${s.desc}</div>
-      <div class="row" style="margin-top:10px">
-        <button class="btn" style="background:transparent;color:var(--txt);border:1px solid var(--b)" onclick="openZap('${s.tel||""}','*Serralheria do Gil*\\nServiço: ${s.desc}\\nCliente: ${s.cli}\\nData: ${s.data} ${s.hora}')">Whats</button>
-        <button class="btn" style="background:transparent;color:var(--txt);border:1px solid var(--b)" onclick="delAg('${s.id}')">Remover</button>
-      </div>`;
-    A.appendChild(row);
-  });
-
-  // clientes
-  const C=$("cliList"); C.innerHTML="";
-  if(!DB.cli.length) C.innerHTML=`<div class="small">Sem clientes ainda.</div>`;
-  else DB.cli.forEach(c=>{
-    const row=document.createElement("div"); row.className="card"; row.style.marginTop="8px";
-    row.innerHTML=`
-      <div style="font-weight:950">${c.nome}</div>
-      <div class="small">${c.tel?c.tel:""} ${c.end?("• "+c.end):""}</div>
-      <div class="row" style="margin-top:10px">
-        <button class="btn" style="background:transparent;color:var(--txt);border:1px solid var(--b)" onclick="delCli('${c.id}')">Remover</button>
-      </div>`;
-    C.appendChild(row);
-  });
-
-  // orçamentos
-  const O=$("orcList"); O.innerHTML="";
-  if(!DB.orc.length) O.innerHTML=`<div class="small">Sem orçamentos ainda.</div>`;
-  else DB.orc.forEach(o=>{
-    const row=document.createElement("div"); row.className="card"; row.style.marginTop="8px";
-    row.innerHTML=`
-      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
-        <div style="min-width:0">
-          <div style="font-weight:950">${o.cli}</div>
-          <div class="small">${o.desc}${o.prazo?(" • Prazo: "+o.prazo):""}</div>
-        </div>
-        <div style="font-weight:950">${brl(o.val)}</div>
-      </div>
-      <div class="row" style="margin-top:10px">
-        <button class="btn" style="background:transparent;color:var(--txt);border:1px solid var(--b)" onclick="openZap('${o.tel||""}', '*Orçamento - Serralheria do Gil*\\nCliente: ${o.cli}\\nServiço: ${o.desc}\\nValor: ${brl(o.val)}\\nPrazo: ${o.prazo||"a combinar"}')">Whats</button>
-        <button class="btn" style="background:transparent;color:var(--txt);border:1px solid var(--b)" onclick="delOrc('${o.id}')">Remover</button>
-      </div>`;
-    O.appendChild(row);
-  });
+WhatsApp padrão (somente números, ex: 55419xxxxxxx):
+(deixe vazio pra não salvar)`, DB.wa||""
+  );
+  if(wa!=null){
+    DB.wa=digits(wa)||DB.wa||"";
+    save(); alert("Config salva ✅"); vib();
+  }
 }
 
-/* ====== COPY ====== */
-function copyText(txt){
-  navigator.clipboard?.writeText(txt).then(()=>alert("Copiado ✅")).catch(()=>prompt("Copie:",txt));
-}
+/* ===== start hooks ===== */
+(function boot(){
+  fxResize(); spawn(); requestAnimationFrame(fxTick);
+  // se quiser iniciar direto sem home, descomenta:
+  // startApp();
+})();
 
-/* ====== PARTICLES FX ====== */
-const fx=$("fx"),ctx=fx.getContext("2d");
-let P=[],last=0;
+/* garante render ao voltar pro app */
+document.addEventListener("visibilitychange",()=>{ if(!document.hidden) renderAll(); });
 
-function fxResize(){
-  const dpr=Math.max(1,devicePixelRatio||1);
-  fx.width=Math.floor(innerWidth*dpr);
-  fx.height=Math.floor(innerHeight*dpr);
-}
-function spawn(n=60){
-  const dpr=Math.max(1,devicePixelRatio||1);
-  P=[...Array(n)].map(()=>({
-    x:Math.random()*fx.width,
-    y:Math.random()*fx.height,
-    r:(Math.random()*1.8+0.6)*dpr,
-    v:(Math.random()*0.28+0.08)*dpr,
-    a:Math.random()*0.35+0.1,
-    c:Math.random()<.7?"76,255,136":"255,90,107"
-  }));
-}
-function fxTick(t){
-  const dt=Math.min(33,t-last||16); last=t;
-  ctx.clearRect(0,0,fx.width,fx.height);
-  P.forEach(p=>{
-    p.y+=p.v*dt;
-    if(p.y>fx.height+30){p.y=-30;p.x=Math.random()*fx.width;}
-    ctx.fillStyle=`rgba(${p.c},${p.a})`;
-    ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
-  });
-  requestAnimationFrame(fxTick);
-}
-window.addEventListener("resize",()=>{fxResize();spawn();render();});
-</script>
-
-</body></html>
+</script></body></html>
