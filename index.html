@@ -1,364 +1,1423 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Serralheria do Gil</title>
-
+<!-- ===================== PARTE 1/20 ===================== -->
+<!doctype html><html lang="pt-br"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Serralheria do Gil • App</title>
+<meta name="theme-color" content="#08110c">
 <style>
-:root{
---bg:#070b08;
---card:#0e1511;
---b:#1f2c25;
---g:#52ff8a;
---r:#ff5a6b;
---mut:#8fa39a;
-}
-
-*{box-sizing:border-box;margin:0}
-body{
-font-family:system-ui;
-background:var(--bg);
-color:#fff;
-overflow-x:hidden
-}
-
-/* partículas */
-canvas{position:fixed;inset:0;z-index:-1}
-
-/* cards */
-.card{
-background:var(--card);
-border:1px solid var(--b);
-border-radius:22px;
-padding:16px;
-margin:12px;
-box-shadow:0 12px 40px #000a
-}
-
-.title{
-font-size:28px;
-font-weight:900;
-margin-bottom:6px
-}
-
-.small{color:var(--mut);font-size:13px}
-
-/* botões */
-.btn{
-background:#fff;
-color:#000;
-border:none;
-padding:14px 20px;
-border-radius:18px;
-font-weight:900;
-margin-top:12px
-}
-
-.ghost{
-background:#0f1914;
-color:#fff;
-border:1px solid var(--b)
-}
-
-/* navegação */
-nav{
-position:fixed;
-bottom:0;
-left:0;
-right:0;
-background:#0b120e;
-border-top:1px solid var(--b);
-display:flex;
-justify-content:space-around;
-padding:10px 0
-}
-
-nav button{
-background:none;
-border:none;
-color:#9fb3a8;
-font-weight:800
-}
-
-nav button.active{color:#fff}
-
-/* home */
-.home{
-display:grid;
-place-items:center;
-height:80vh;
-text-align:center;
-padding:20px
-}
-
-.big{
-font-size:36px;
-font-weight:1000
-}
-
-/* PIN */
-.lock{
-position:fixed;
-inset:0;
-background:#000c;
-display:none;
-place-items:center;
-z-index:10
-}
-
-.lock.on{display:grid}
-
-.pin{
-background:#0d1511;
-padding:20px;
-border-radius:22px;
-border:1px solid var(--b)
-}
-
-.dots{
-display:flex;
-gap:10px;
-justify-content:center;
-margin:14px 0
-}
-
-.dot{
-width:12px;
-height:12px;
-border-radius:50%;
-background:#0b120e;
-border:1px solid var(--b)
-}
-
-.dot.on{background:#fff}
-
-.pad{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:10px
-}
-
-.pad button{
-padding:16px;
-border-radius:14px;
-border:1px solid var(--b);
-background:#0f1914;
-color:#fff;
-font-weight:900
-}
-</style>
-</head>
+:root{--bg:#050a07;--card:#0b1511cc;--b:#1b2d23;--txt:#eaffef;--mut:#93a79a;--g:#52ff8a;--r:#ff5a6b;--y:#ffd166;--w:#fff;--sh:0 18px 60px rgba(0,0,0,.55)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{height:100%}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--txt);overflow:hidden}
+a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit}
+#fx{position:fixed;inset:0;z-index:0;pointer-events:none;filter:saturate(1.05) contrast(1.05)}
+.wrap{position:relative;z-index:1;height:100%;overflow:auto;-webkit-overflow-scrolling:touch;padding:18px 14px 92px;max-width:980px;margin:0 auto}
+.top{display:flex;gap:12px;align-items:center;margin:8px 0 14px}
+.badge{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(145deg,#0f1a13,#08100b);border:1px solid var(--b);box-shadow:var(--sh);font-weight:900}
+.h1{font-size:28px;font-weight:950;letter-spacing:.2px;margin:0;line-height:1.1}
+.sub{color:var(--mut);margin-top:3px;font-size:13px}
+.pill{padding:7px 10px;border-radius:999px;border:1px solid var(--b);background:#0a120eaa;color:var(--mut);font-size:12px}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.card{background:radial-gradient(140% 140% at 20% 10%,#132018cc 0%,#0b100dcc 40%,#070b08cc 100%);
+border:1px solid var(--b);border-radius:18px;padding:14px;box-shadow:var(--sh);backdrop-filter:blur(10px)}
+.kpi{flex:1;min-width:230px;position:relative;overflow:hidden}
+.kpi:before{content:"";position:absolute;inset:-2px;opacity:.45;background:
+radial-gradient(circle at 15% 15%,rgba(82,255,138,.18),transparent 45%),
+radial-gradient(circle at 85% 35%,rgba(255,90,107,.14),transparent 50%);pointer-events:none}
+.kpi .t{color:var(--mut);font-size:13px}.kpi .v{font-size:34px;font-weight:950;margin-top:4px}
+.sep{height:1px;background:#162018;margin:10px 0}
+.small{color:var(--mut);font-size:12px;line-height:1.35}
+.in{width:100%;padding:12px 12px;border-radius:14px;border:1px solid var(--b);background:#0b120eaa;color:var(--txt);outline:none}
+.in::placeholder{color:#6f8173}
+.btn{border:0;border-radius:14px;padding:12px 14px;font-weight:950;background:#fff;color:#08110c;cursor:pointer;transition:.15s;transform:translateZ(0)}
+.btn:active{transform:scale(.98)}.ghost{background:transparent;color:var(--txt);border:1px solid var(--b)}
+.danger{background:linear-gradient(180deg,#351015,#240a0d);color:#ffd6dc;border:1px solid #4b1a21}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:640px){.grid2{grid-template-columns:1fr}}
+.tab{display:none;animation:pop .18s ease both}.tab.on{display:block}@keyframes pop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:10;padding:10px 12px;background:linear-gradient(180deg,transparent,rgba(0,0,0,.45) 18%,rgba(0,0,0,.86))}
+.bar{max-width:980px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.nb{padding:10px 8px;border-radius:16px;border:1px solid var(--b);background:#0b120eaa;color:#b8c7bb;font-weight:950;display:flex;gap:8px;align-items:center;justify-content:center;transition:.18s;position:relative;overflow:hidden}
+.nb i{font-style:normal;opacity:.92}.nb.on{background:#fff;color:#08110c;border-color:#fff;box-shadow:0 10px 30px rgba(255,255,255,.10)}
+.nb.on:after{content:"";position:absolute;inset:-2px;background:radial-gradient(circle at 50% 0,rgba(82,255,138,.25),transparent 55%);opacity:.8;pointer-events:none}
+.list .it{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #162018}
+.tag{font-size:12px;padding:4px 8px;border-radius:999px;border:1px solid var(--b);background:#0b120eaa;color:#cfe2d4}
+canvas.chart{width:100%;height:240px;border-radius:18px;background:linear-gradient(180deg,#08110c,#050a07);border:1px solid var(--b)}
+/* Splash + PIN */
+.overlay{position:fixed;inset:0;z-index:20;display:none;place-items:center;background:rgba(0,0,0,.55);backdrop-filter:blur(10px)}
+.overlay.on{display:grid}
+.modal{width:min(520px,92vw);border-radius:22px;border:1px solid var(--b);background:linear-gradient(180deg,#0e1913ee,#060b08ee);box-shadow:var(--sh);padding:18px}
+.pinRow{display:flex;gap:10px;justify-content:center;margin-top:10px}
+.pinDot{width:14px;height:14px;border-radius:99px;border:1px solid #2b4135;background:#0a120e}
+.pinDot.on{background:var(--g);box-shadow:0 0 18px rgba(82,255,138,.25)}
+.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.key{padding:14px;border-radius:16px;border:1px solid var(--b);background:#0b120eaa;color:#eaffef;font-weight:950}
+.key:active{transform:scale(.98)}
+</style></head>
+<!-- ===================== PARTE 2/20 ===================== -->
 <body>
+<canvas id="fx"></canvas>
 
-<canvas id="bg"></canvas>
-<div id="home" class="home">
-<div class="card">
-<div class="big">Serralheria do Gil</div>
-<p class="small">Controle total da serralheria</p>
-
-<button class="btn" onclick="start()">Iniciar</button>
-</div>
-</div>
-
-<div id="app" style="display:none">
-
-<div id="dash" class="card">
-<div class="title">Saldo do mês</div>
-<div id="saldo" style="font-size:40px;color:var(--g)">R$ 0</div>
-
-<div class="card">
-<div class="title">GN vs SD</div>
-<canvas id="graf" height="120"></canvas>
+<div id="pinOverlay" class="overlay">
+  <div class="modal">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+      <div style="font-weight:950;font-size:18px">🔒 PIN de acesso</div>
+      <button class="btn ghost" style="padding:8px 10px" onclick="PIN.close()">Fechar</button>
+    </div>
+    <div class="small" id="pinHint">Digite o PIN para entrar.</div>
+    <div class="pinRow" id="pinDots"></div>
+    <div class="keypad" id="pinKeys"></div>
+    <div class="sep"></div>
+    <button class="btn ghost" onclick="PIN.forgot()">Esqueci o PIN (zera)</button>
+  </div>
 </div>
 
-<div class="card">
-<div class="title">Histórico</div>
-<div id="hist"></div>
+<div class="wrap">
+  <!-- Splash -->
+  <section id="splash" class="tab on">
+    <div style="height:18vh"></div>
+    <div class="card" style="text-align:center;padding:22px">
+      <div class="h1" style="font-size:34px">Serralheria do Gil</div>
+      <div class="sub" style="font-size:14px;margin-top:10px">Gostaria de fazer dinheiro?<br>Clique no botão abaixo.</div>
+      <div style="height:14px"></div>
+      <button class="btn" id="btnStart" onclick="APP.start()">Iniciar</button>
+      <div class="small" style="margin-top:14px">Funciona offline e salva tudo no celular. Backup no menu “Config”.</div>
+    </div>
+  </section>
+
+  <!-- APP -->
+  <section id="app" class="tab">
+    <div class="top">
+      <div class="badge">🔧</div>
+      <div style="flex:1">
+        <div class="h1">Serralheria do Gil</div>
+        <div class="sub">Controle • Agenda • Orçamentos • Clientes • Materiais</div>
+      </div>
+      <button class="btn ghost" onclick="APP.fechamento()">Fechamento</button>
+    </div>
+
+    <section id="t0" class="tab on"></section>
+    <section id="t1" class="tab"></section>
+    <section id="t2" class="tab"></section>
+    <section id="t3" class="tab"></section>
+    <section id="t4" class="tab"></section>
+  </section>
 </div>
+
+<div class="nav">
+  <div class="bar">
+    <div class="nb on" id="n0" onclick="APP.tab(0)"><i>📊</i>Dash</div>
+    <div class="nb" id="n1" onclick="APP.tab(1)"><i>💰</i>Mov</div>
+    <div class="nb" id="n2" onclick="APP.tab(2)"><i>📅</i>Agenda</div>
+    <div class="nb" id="n3" onclick="APP.tab(3)"><i>👤</i>Clientes</div>
+    <div class="nb" id="n4" onclick="APP.tab(4)"><i>🧾</i>Orç</div>
+  </div>
 </div>
-
-<div id="mov" class="card" style="display:none">
-<div class="title">Novo lançamento</div>
-
-<input id="desc" placeholder="Descrição">
-<input id="valor" type="number" placeholder="Valor">
-
-<select id="tipo">
-<option value="gn">Ganho</option>
-<option value="sd">Despesa</option>
-</select>
-
-<button class="btn" onclick="add()">Salvar</button>
-</div>
-
-<div id="clientes" class="card" style="display:none">
-<div class="title">Clientes</div>
-
-<input id="nomeCli" placeholder="Nome">
-<input id="telCli" placeholder="Telefone">
-
-<button class="btn" onclick="addCli()">Salvar</button>
-
-<div id="listaCli"></div>
-</div>
-</div>
-<nav id="nav" style="display:none">
-<button onclick="go('dash')" class="active">Dash</button>
-<button onclick="go('mov')">Mov</button>
-<button onclick="go('clientes')">Clientes</button>
-</nav>
-
-<!-- PIN -->
-<div id="lock" class="lock">
-<div class="pin">
-<h3>PIN</h3>
-
-<div id="dots" class="dots"></div>
-
-<div class="pad">
-<button onclick="key(1)">1</button>
-<button onclick="key(2)">2</button>
-<button onclick="key(3)">3</button>
-<button onclick="key(4)">4</button>
-<button onclick="key(5)">5</button>
-<button onclick="key(6)">6</button>
-<button onclick="key(7)">7</button>
-<button onclick="key(8)">8</button>
-<button onclick="key(9)">9</button>
-<button onclick="back()">⌫</button>
-<button onclick="key(0)">0</button>
-<button onclick="ok()">OK</button>
-</div>
-</div>
-</div>
+<!-- ===================== PARTE 3/20 ===================== -->
 <script>
+/* UI builders (Dash/Mov/Agenda/Clientes/Orç) */
+const UI={
+dash(){return `
+  <div class="row">
+    <div class="card kpi">
+      <div class="t">Saldo hoje</div>
+      <div class="v" id="kHoje">R$ 0,00</div>
+      <div class="small" id="kHoje2">GN: R$ 0,00 • SD: R$ 0,00</div>
+    </div>
+    <div class="card kpi">
+      <div class="t">Saldo do mês</div>
+      <div class="v" id="kMes">R$ 0,00</div>
+      <div class="small" id="kMes2">GN: R$ 0,00 • SD: R$ 0,00 • Materiais: R$ 0,00</div>
+    </div>
+  </div>
 
-/* ====== partículas ====== */
-const c = bg.getContext("2d")
-bg.width = innerWidth
-bg.height = innerHeight
+  <div class="card" style="margin-top:10px">
+    <div class="row" style="justify-content:space-between;align-items:center">
+      <div>
+        <div style="font-weight:950;font-size:16px">GN vs SD (mês)</div>
+        <div class="small">Gráfico animado crescendo. Toque para detalhes.</div>
+      </div>
+      <div class="pill" id="labMes">----</div>
+    </div>
+    <div style="margin-top:10px">
+      <canvas class="chart" id="chBars" width="920" height="300"></canvas>
+    </div>
+    <div class="small" id="barsTip" style="margin-top:8px;min-height:18px"></div>
+  </div>
 
-let p = Array.from({length:50},()=>({
-x:Math.random()*bg.width,
-y:Math.random()*bg.height,
-r:Math.random()*2+1,
-v:Math.random()*0.5+0.2
-}))
+  <div class="row" style="margin-top:10px">
+    <div class="card kpi">
+      <div class="t">Previsão de faturamento</div>
+      <div class="v" id="prev">R$ 0,00</div>
+      <div class="small">Offline: média móvel + tendência.</div>
+    </div>
+    <div class="card kpi">
+      <div class="t">Lucro por cliente (Top 3)</div>
+      <div class="v" style="font-size:16px;margin-top:10px" id="topCli">Sem dados</div>
+      <div class="small">Use “Cliente” nos lançamentos.</div>
+    </div>
+  </div>
 
-function draw(){
-c.clearRect(0,0,bg.width,bg.height)
-p.forEach(o=>{
-o.y-=o.v
-if(o.y<0)o.y=bg.height
-c.beginPath()
-c.arc(o.x,o.y,o.r,0,7)
-c.fillStyle="#52ff8a"
-c.fill()
-})
-requestAnimationFrame(draw)
-}
-draw()
-
-/* ====== dados ====== */
-let db = JSON.parse(localStorage.db||`{"mov":[], "cli":[], "pin":""}`)
-
-function save(){
-localStorage.db = JSON.stringify(db)
-render()
-}
-
-/* ====== iniciar ====== */
-function start(){
-home.style.display="none"
-app.style.display="block"
-nav.style.display="flex"
-render()
-lockOn()
-}
-
-/* ====== abas ====== */
-function go(t){
-["dash","mov","clientes"].forEach(x=>document.getElementById(x).style.display="none")
-document.getElementById(t).style.display="block"
-
-nav.querySelectorAll("button").forEach(b=>b.classList.remove("active"))
-event.target.classList.add("active")
-}
- /* ====== lançamentos ====== */
-function add(){
-db.mov.push({
-d:desc.value,
-v:+valor.value,
-t:tipo.value
-})
-desc.value=valor.value=""
-save()
-}
-
-/* ====== clientes ====== */
-function addCli(){
-db.cli.push({
-n:nomeCli.value,
-t:telCli.value
-})
-nomeCli.value=telCli.value=""
-save()
-}
-
-/* ====== render ====== */
-function render(){
-
-// saldo
-let gn=0,sd=0
-db.mov.forEach(m=>m.t==="gn"?gn+=m.v:sd+=m.v)
-saldo.textContent="R$ "+(gn-sd).toFixed(2)
-
-// histórico
-hist.innerHTML=db.mov.map(m=>
-`<div>${m.d} — R$ ${m.v} (${m.t})</div>`
-).join("")
-
-// clientes
-listaCli.innerHTML=db.cli.map(c=>
-`<div>${c.n} — ${c.t}</div>`
-).join("")
-
-drawGraf(gn,sd)
-}
-
-/* ====== gráfico animado ====== */
-function drawGraf(gn,sd){
-const ctx = graf.getContext("2d")
-let p=0
-function anim(){
-p+=0.05
-ctx.clearRect(0,0,300,150)
-ctx.fillStyle="#52ff8a"
-ctx.fillRect(20,120-gn*p,40,gn*p)
-ctx.fillStyle="#ff5a6b"
-ctx.fillRect(80,120-sd*p,40,sd*p)
-if(p<1)requestAnimationFrame(anim)
-}
-anim()
-}
-
-/* ====== PIN ====== */
-let buf=""
-function lockOn(){lock.classList.add("on")}
-function key(n){if(buf.length<4){buf+=n;showDots()}}
-function back(){buf=buf.slice(0,-1);showDots()}
-function showDots(){
-dots.innerHTML=Array(4).fill(0).map((_,i)=>
-`<div class="dot ${i<buf.length?"on":""}"></div>`).join("")
-}
-function ok(){
-if(!db.pin){db.pin=buf;save();lock.classList.remove("on");buf="";return}
-if(buf===db.pin)lock.classList.remove("on")
-buf=""
-showDots()
-}
-
+  <div class="card" style="margin-top:10px">
+    <div style="font-weight:950">Radar do mês</div>
+    <div class="small">Distribuição por categoria (GN/SD) com detalhe.</div>
+    <div style="margin-top:10px">
+      <canvas class="chart" id="chRadar" width="920" height="300"></canvas>
+    </div>
+  </div>
+`},
+};
 </script>
-</body>
-</html>
+<!-- ===================== PARTE 4/20 ===================== -->
+<script>
+UI.mov=()=>`
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <div class="small">Tipo</div>
+        <div class="row">
+          <button class="btn ghost" id="bGN" onclick="APP.setTipo('GN')">GN (Ganhos)</button>
+          <button class="btn ghost" id="bSD" onclick="APP.setTipo('SD')">SD (Saídas)</button>
+        </div>
+      </div>
+      <div>
+        <div class="small">Data</div>
+        <input class="in" id="mData" type="date">
+      </div>
+    </div>
+
+    <div class="grid2" style="margin-top:10px">
+      <div><div class="small">Valor (R$)</div><input class="in" id="mVal" type="number" step="0.01" placeholder="Ex: 250"></div>
+      <div><div class="small">Cliente (opcional)</div><input class="in" id="mCli" placeholder="Ex: João / Obra X"></div>
+    </div>
+
+    <div class="grid2" style="margin-top:10px">
+      <div><div class="small">Categoria</div><input class="in" id="mCat" placeholder="Portão / Solda / Combustível..."></div>
+      <div><div class="small">Obs</div><input class="in" id="mObs" placeholder="Sinal / restante / etc"></div>
+    </div>
+
+    <div class="row" style="margin-top:10px">
+      <button class="btn" onclick="APP.addMov()">Salvar</button>
+      <button class="btn ghost" onclick="APP.clearMov()">Limpar</button>
+      <button class="btn ghost" onclick="APP.quickAdd(100)">+100</button>
+      <button class="btn ghost" onclick="APP.quickAdd(200)">+200</button>
+    </div>
+
+    <div class="sep"></div>
+    <div class="small">Dica: toque em um item no histórico para copiar e mandar no WhatsApp.</div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div style="font-weight:950">Histórico do mês</div>
+      <div class="pill" id="movCount">0 itens</div>
+    </div>
+    <div class="list" id="movList"></div>
+  </div>
+`;
+</script>
+<!-- ===================== PARTE 5/20 ===================== -->
+<script>
+UI.agenda=()=>`
+  <div class="card">
+    <div class="grid2">
+      <div><div class="small">Cliente</div><input class="in" id="aCli" placeholder="Nome do cliente"></div>
+      <div><div class="small">Telefone</div><input class="in" id="aTel" inputmode="tel" placeholder="(41) 9...."></div>
+    </div>
+    <div class="grid2" style="margin-top:10px">
+      <div><div class="small">Data</div><input class="in" id="aData" type="date"></div>
+      <div><div class="small">Hora</div><input class="in" id="aHora" type="time"></div>
+    </div>
+    <div style="margin-top:10px"><div class="small">Serviço</div><input class="in" id="aDesc" placeholder="Ex: instalar portão, solda, ajuste..."></div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn" onclick="APP.addAg()">Salvar serviço</button>
+      <button class="btn ghost" onclick="APP.notifPerm()">Ativar notificações</button>
+      <button class="btn ghost" onclick="APP.clearAg()">Limpar</button>
+    </div>
+    <div class="small" style="margin-top:8px">Lembrete 1h antes: funciona com o app aberto (modo PWA melhora).</div>
+  </div>
+  <div class="card"><div style="font-weight:950">Próximos serviços</div><div class="list" id="agList"></div></div>
+`;
+UI.clientes=()=>`
+  <div class="card">
+    <div class="grid2">
+      <div><div class="small">Nome</div><input class="in" id="cNome" placeholder="Cliente"></div>
+      <div><div class="small">Telefone</div><input class="in" id="cTel" inputmode="tel" placeholder="(41) 9...."></div>
+    </div>
+    <div style="margin-top:10px"><div class="small">Endereço</div><input class="in" id="cEnd" placeholder="Rua, bairro..."></div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn" onclick="APP.addCli()">Salvar</button>
+      <button class="btn ghost" onclick="APP.clearCli()">Limpar</button>
+    </div>
+  </div>
+  <div class="card"><div style="font-weight:950">Lista de clientes</div><div class="list" id="cliList"></div></div>
+`;
+UI.orc=()=>`
+  <div class="card">
+    <div class="grid2">
+      <div><div class="small">Cliente</div><input class="in" id="oCli" placeholder="Nome do cliente"></div>
+      <div><div class="small">Telefone</div><input class="in" id="oTel" inputmode="tel" placeholder="(41) 9...."></div>
+    </div>
+    <div class="grid2" style="margin-top:10px">
+      <div><div class="small">Preço</div><input class="in" id="oVal" type="number" step="0.01" placeholder="Ex: 1200"></div>
+      <div><div class="small">Prazo</div><input class="in" id="oPrazo" placeholder="Ex: 3 dias / 1 semana"></div>
+    </div>
+    <div style="margin-top:10px"><div class="small">Descrição</div><input class="in" id="oDesc" placeholder="Ex: portão + pintura..."></div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn" onclick="APP.addOrc()">Salvar</button>
+      <button class="btn ghost" onclick="APP.zapOrc()">Enviar no WhatsApp</button>
+      <button class="btn ghost" onclick="APP.clearOrc()">Limpar</button>
+    </div>
+  </div>
+  <div class="card"><div style="font-weight:950">Orçamentos</div><div class="list" id="orcList"></div></div>
+`;
+</script>
+<!-- fim parte 5 -->
+ <!-- ===================== PARTE 6/20 ===================== -->
+<script>
+/* ===== Helpers + Storage ===== */
+const $=id=>document.getElementById(id);
+const brl=n=>Number(n||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const iso=()=>new Date().toISOString().slice(0,10);
+const ym=d=>(d||new Date()).toISOString().slice(0,7);
+const pad=n=>String(n).padStart(2,"0");
+const digits=s=>(s||"").replace(/\D/g,"");
+const vib=ms=>navigator.vibrate&&navigator.vibrate(ms||12);
+
+const KEY="gil_app_v1";
+const load=()=>{try{return JSON.parse(localStorage.getItem(KEY)||"null")}catch{return null}};
+const save=()=>localStorage.setItem(KEY,JSON.stringify(DB));
+
+let DB=load()||{
+  cfg:{pinOn:false,pinHash:"",zap:"554195008252"}, // <== número do Whats do seu pai (DDI+DDD+numero)
+  tipo:"GN",mov:[],ag:[],cli:[],orc:[],mat:[]
+};
+
+const APP={
+  started:false,curTab:0,curYM:ym(),
+  mount(){
+    // injeta HTML das telas (o conteúdo real fica aqui, não “some” do nada)
+    $("t0").innerHTML=UI.dash();
+    $("t1").innerHTML=UI.mov();
+    $("t2").innerHTML=UI.agenda();
+    $("t3").innerHTML=UI.clientes();
+    $("t4").innerHTML=UI.orc();
+
+    // defaults
+    if($("mData")) $("mData").value=iso();
+    if($("aData")) $("aData").value=iso();
+    if($("aHora")) $("aHora").value="08:00";
+    this.setTipo(DB.tipo,true);
+  },
+  start(){
+    vib(18);
+    $("splash").className="tab";
+    $("app").className="tab on";
+    this.started=true;
+    this.mount();
+    FX.start();
+    if(DB.cfg.pinOn) PIN.open(); else this.render();
+  },
+  tab(i){
+    if(!this.started) return this.start();
+    this.curTab=i;
+    ["t0","t1","t2","t3","t4"].forEach((t,idx)=>$(t).className="tab"+(idx===i?" on":""));
+    ["n0","n1","n2","n3","n4"].forEach(n=>$(n).classList.remove("on"));
+    $("n"+i).classList.add("on");
+    vib(10); this.render(); ANIM.page();
+  },
+  fechamento(){
+    // trava tudo com uma “virada” de mês (só um resumo, sem apagar dados)
+    const m=this.curYM;
+    const s=this.sum(m);
+    alert(`Fechamento ${m}\nGN: ${brl(s.gn)}\nSD: ${brl(s.sd)}\nSaldo: ${brl(s.gn-s.sd)}`);
+  }
+};
+</script>
+<!-- ===================== PARTE 7/20 ===================== -->
+<script>
+/* ===== PIN (offline) ===== */
+const PIN={
+  buf:"",mode:"check", // check / set1 / set2
+  open(){ this.buf=""; this.mode=DB.cfg.pinHash?"check":"set1"; this.draw(); $("pinOverlay").classList.add("on"); },
+  close(){ $("pinOverlay").classList.remove("on"); this.buf=""; },
+  forgot(){
+    if(!confirm("Zerar PIN? Isso remove a proteção.")) return;
+    DB.cfg.pinOn=false; DB.cfg.pinHash=""; save(); this.close(); APP.render();
+  },
+  tap(k){
+    if(k==="del") this.buf=this.buf.slice(0,-1);
+    else if(k==="ok") return this.ok();
+    else if(this.buf.length<4) this.buf+=k;
+    vib(8); this.draw();
+    if(this.buf.length===4) setTimeout(()=>this.ok(),120);
+  },
+  ok(){
+    if(this.buf.length<4) return;
+    const h=this.hash(this.buf);
+    if(this.mode==="check"){
+      if(h===DB.cfg.pinHash){ this.close(); APP.render(); return; }
+      this.buf=""; $("pinHint").textContent="PIN incorreto. Tenta de novo."; this.draw(); vib(40);
+    }else if(this.mode==="set1"){
+      this.tmp=h; this.buf=""; this.mode="set2";
+      $("pinHint").textContent="Confirme o PIN (4 dígitos)."; this.draw();
+    }else{
+      if(h!==this.tmp){ this.buf=""; this.mode="set1"; $("pinHint").textContent="Não bateu. Digite um PIN novo."; this.draw(); return; }
+      DB.cfg.pinOn=true; DB.cfg.pinHash=h; save();
+      $("pinHint").textContent="PIN ativado ✅"; this.close(); APP.render();
+    }
+  },
+  draw(){
+    // dots
+    $("pinDots").innerHTML=Array.from({length:4},(_,i)=>`<div class="pinDot ${i<this.buf.length?"on":""}"></div>`).join("");
+    // keypad
+    const keys=["1","2","3","4","5","6","7","8","9","del","0","ok"];
+    $("pinKeys").innerHTML=keys.map(k=>`<button class="key" onclick="PIN.tap('${k}')">${k==="del"?"⌫":k==="ok"?"OK":k}</button>`).join("");
+    if(!DB.cfg.pinHash) $("pinHint").textContent=this.mode==="set2"?"Confirme o PIN (4 dígitos).":"Crie um PIN (4 dígitos).";
+  },
+  hash(s){ // hash simples (só pra não guardar o PIN puro)
+    let x=2166136261; for(let i=0;i<s.length;i++){ x^=s.charCodeAt(i); x+=(x<<1)+(x<<4)+(x<<7)+(x<<8)+(x<<24); }
+    return (x>>>0).toString(16);
+  }
+};
+</script>
+<!-- ===================== PARTE 8/20 ===================== -->
+<script>
+/* ===== Movimentações ===== */
+APP.setTipo=(t,silent)=>{
+  DB.tipo=t; if(!silent) vib(12);
+  if($("bGN")) $("bGN").className="btn "+(t==="GN"?"":"ghost");
+  if($("bSD")) $("bSD").className="btn "+(t==="SD"?"":"ghost");
+  save();
+};
+APP.quickAdd=v=>{ const el=$("mVal"); el.value=+(el.value||0)+v; vib(8); };
+
+APP.clearMov=()=>{
+  ["mVal","mCli","mCat","mObs"].forEach(id=>$(id).value="");
+  $("mData").value=iso();
+};
+
+APP.addMov=()=>{
+  const data=$("mData").value||iso();
+  const val=+($("mVal").value||0);
+  if(!val||val<=0) return alert("Valor inválido");
+  const m=data.slice(0,7);
+  DB.mov.push({
+    id:Date.now()+"",m,data,val,tipo:DB.tipo,
+    cli:($("mCli").value||"").trim(),
+    cat:($("mCat").value||"").trim(),
+    obs:($("mObs").value||"").trim()
+  });
+  save(); APP.curYM=m; APP.clearMov(); APP.render(); APP.tab(0);
+};
+
+APP.delMov=id=>{
+  if(!confirm("Remover lançamento?")) return;
+  DB.mov=DB.mov.filter(x=>x.id!==id); save(); APP.render();
+};
+
+APP.copyMov=id=>{
+  const x=DB.mov.find(a=>a.id===id); if(!x) return;
+  const txt=`${x.tipo} • ${x.data} • ${brl(x.val)}${x.cli?` • ${x.cli}`:""}${x.cat?` • ${x.cat}`:""}${x.obs?` • ${x.obs}`:""}`;
+  navigator.clipboard?.writeText(txt);
+  alert("Copiado ✅ Agora cola no WhatsApp.");
+};
+</script>
+<!-- ===================== PARTE 9/20 ===================== -->
+<script>
+/* ===== Clientes ===== */
+APP.clearCli=()=>["cNome","cTel","cEnd"].forEach(id=>$(id).value="");
+APP.addCli=()=>{
+  const nome=($("cNome").value||"").trim(); if(!nome) return alert("Nome obrigatório");
+  const tel=digits($("cTel").value), end=($("cEnd").value||"").trim();
+  const ex=DB.cli.find(c=>c.nome.toLowerCase()===nome.toLowerCase());
+  if(ex){ ex.tel=tel; ex.end=end; } else DB.cli.push({id:Date.now()+"",nome,tel,end});
+  save(); APP.clearCli(); APP.render();
+};
+APP.delCli=id=>{
+  if(!confirm("Remover cliente?")) return;
+  DB.cli=DB.cli.filter(c=>c.id!==id); save(); APP.render();
+};
+
+/* ===== Agenda ===== */
+APP.clearAg=()=>{
+  ["aCli","aTel","aDesc"].forEach(id=>$(id).value="");
+  $("aData").value=iso(); $("aHora").value="08:00";
+};
+APP.notifPerm=async()=>{
+  if(!("Notification" in window)) return alert("Navegador sem suporte a notificação.");
+  const p=await Notification.requestPermission();
+  alert(p==="granted"?"Notificações ativadas ✅":"Permissão negada.");
+};
+APP.addAg=()=>{
+  const cli=($("aCli").value||"").trim();
+  const desc=($("aDesc").value||"").trim();
+  const data=$("aData").value||iso();
+  const hora=$("aHora").value||"08:00";
+  if(!cli||!desc) return alert("Cliente e serviço obrigatórios");
+  DB.ag.push({id:Date.now()+"",cli,desc,data,hora,tel:digits($("aTel").value),done:0});
+  save(); APP.clearAg(); APP.render(); APP._tickAg(true); vib(18);
+};
+APP.delAg=id=>{
+  if(!confirm("Remover serviço?")) return;
+  DB.ag=DB.ag.filter(s=>s.id!==id); save(); APP.render();
+};
+APP._tickAg=(fast)=>{
+  if(!("Notification" in window) || Notification.permission!=="granted") return;
+  setTimeout(()=>APP._checkAg(), fast?600:2500);
+};
+APP._checkAg=()=>{
+  const now=Date.now();
+  DB.ag.forEach(s=>{
+    if(s.done) return;
+    const dt=new Date(`${s.data}T${s.hora}:00`).getTime();
+    const left=dt-now;
+    if(left<=3600000 && left>0){
+      s.done=1; save();
+      new Notification("Serralheria do Gil",{
+        body:`Serviço: ${s.cli}\n${s.desc}\nFalta: ~${Math.ceil(left/60000)} min`
+      });
+    }
+  });
+};
+</script>
+<!-- ===================== PARTE 10/20 ===================== -->
+<script>
+/* ===== Sumários + Render ===== */
+APP.sum=m=>{
+  let gn=0,sd=0,mat=0;
+  DB.mov.forEach(x=>{ if(x.m!==m) return; (x.tipo==="GN"?gn:sd)+=x.val; });
+  DB.mat.forEach(x=>{ if(x.m!==m) return; mat+=x.val; });
+  return {gn,sd,mat};
+};
+
+APP.render=()=>{
+  if(!APP.started) return;
+  const m=APP.curYM, s=APP.sum(m), today=iso();
+  const st=APP.sum(today.slice(0,7));
+  const h=DB.mov.filter(x=>x.data===today);
+  let hgn=0,hsd=0; h.forEach(x=>x.tipo==="GN"?hgn+=x.val:hsd+=x.val);
+
+  $("labMes").textContent=m;
+  $("kHoje").textContent=brl(hgn-hsd);
+  $("kHoje2").textContent=`GN: ${brl(hgn)} • SD: ${brl(hsd)}`;
+  $("kMes").textContent=brl(s.gn-s.sd-s.mat);
+  $("kMes2").textContent=`GN: ${brl(s.gn)} • SD: ${brl(s.sd)} • Materiais: ${brl(s.mat)}`;
+
+  RENDER.movList(m);
+  RENDER.cliList();
+  RENDER.agList();
+  RENDER.orcList();
+  CHART.bars("chBars",s.gn,s.sd);
+  CHART.radar("chRadar",m);
+
+  // previsão simples (offline)
+  $("prev").textContent=brl(RENDER.prev(m));
+  $("topCli").textContent=RENDER.topCli(m) || "Sem dados";
+  APP._tickAg(false);
+};
+
+const RENDER={
+  prev(m){
+    // pega últimos 4 meses GN e projeta tendência
+    const months=[0,1,2,3].map(i=>{
+      const d=new Date(m+"-01"); d.setMonth(d.getMonth()-i);
+      const mm=d.toISOString().slice(0,7); return APP.sum(mm).gn;
+    }).reverse();
+    const a=months[0]||0,b=months[months.length-1]||0;
+    const trend=(b-a)/(months.length-1||1);
+    return Math.max(0,(b+trend));
+  },
+  topCli(m){
+    const map={};
+    DB.mov.forEach(x=>{
+      if(x.m!==m||!x.cli) return;
+      const k=x.cli.trim(); map[k]=(map[k]||0)+(x.tipo==="GN"?x.val:-x.val);
+    });
+    const arr=Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,3);
+    return arr.length?arr.map(([n,v])=>`${n}: ${brl(v)}`).join(" • "):"";
+  }
+};
+
+const CHART={
+  bars(id,gn,sd){
+    const c=$(id); if(!c) return; const g=c.getContext("2d");
+    const W=c.width,H=c.height; g.clearRect(0,0,W,H);
+    const max=Math.max(gn,sd,1), pad=48, bw=180, gap=90;
+    const x1=W/2-bw-gap/2, x2=W/2+gap/2;
+    const y0=H-pad, h1=(gn/max)*(H-2*pad), h2=(sd/max)*(H-2*pad);
+    const draw=(t)=>{
+      g.clearRect(0,0,W,H);
+      // grid
+      g.globalAlpha=.25; g.strokeStyle="#2b4135"; g.lineWidth=2;
+      for(let i=0;i<5;i++){ const y=pad+(i*(H-2*pad)/4); g.beginPath(); g.moveTo(40,y); g.lineTo(W-40,y); g.stroke(); }
+      g.globalAlpha=1;
+      // bars
+      const a=Math.min(1,t);
+      bar(x1,y0,bw,h1*a,"#52ff8a","GN");
+      bar(x2,y0,bw,h2*a,"#ff5a6b","SD");
+      // labels
+      g.fillStyle="#eaffef"; g.font="bold 34px system-ui";
+      g.textAlign="center"; g.fillText("GN vs SD",W/2,42);
+      $("barsTip").textContent=`GN ${brl(gn)} • SD ${brl(sd)} • Saldo ${brl(gn-sd)}`;
+      if(a<1) requestAnimationFrame(()=>draw(t+0.05));
+    };
+    const bar=(x,y,bw,bh,col,lab)=>{
+      g.fillStyle="rgba(0,0,0,.25)"; rr(x,y-(H-2*pad),bw,(H-2*pad),18);
+      g.fillStyle=col; rr(x,y-bh,bw,bh,18);
+      g.fillStyle="#08110c"; g.font="900 26px system-ui"; g.textAlign="center";
+      g.fillText(lab,x+bw/2,y-bh+34);
+      g.fillStyle="#eaffef"; g.font="800 18px system-ui";
+      g.fillText(brl(lab==="GN"?gn:sd),x+bw/2,y+26);
+    };
+    const rr=(x,y,w,h,r)=>{ g.beginPath(); g.roundRect(x,y,w,h,r); g.fill(); };
+    draw(0);
+  },
+  radar(id,m){
+    const c=$(id); if(!c) return; const g=c.getContext("2d");
+    const W=c.width,H=c.height; g.clearRect(0,0,W,H);
+    const cx=W/2, cy=H/2+10, R=Math.min(W,H)*0.32;
+    // categorias do mês (GN e SD)
+    const cat={}, catS={};
+    DB.mov.forEach(x=>{
+      if(x.m!==m||!x.cat) return;
+      const k=x.cat.trim(); (x.tipo==="GN"?cat:catS)[k]=(x.tipo==="GN"?cat:catS)[k]||0;
+      (x.tipo==="GN"?cat:catS)[k]+=x.val;
+    });
+    const keys=[...new Set([...Object.keys(cat),...Object.keys(catS)])].slice(0,6);
+    if(!keys.length){ g.fillStyle="#93a79a"; g.font="800 22px system-ui"; g.textAlign="center";
+      g.fillText("Sem categorias ainda",cx,cy); return; }
+    const vals=keys.map(k=>(cat[k]||0)-(catS[k]||0));
+    const max=Math.max(...vals.map(v=>Math.abs(v)),1);
+    // base grid
+    g.globalAlpha=.25; g.strokeStyle="#2b4135"; g.lineWidth=2;
+    for(let r=1;r<=4;r++){ g.beginPath(); for(let i=0;i<keys.length;i++){
+      const a=(Math.PI*2/keys.length)*i- Math.PI/2;
+      const rr=R*(r/4); const x=cx+Math.cos(a)*rr, y=cy+Math.sin(a)*rr;
+      i?g.lineTo(x,y):g.moveTo(x,y);
+    } g.closePath(); g.stroke(); }
+    g.globalAlpha=1;
+    // polygon anim
+    let t=0;
+    const draw=()=>{
+      g.clearRect(0,0,W,H);
+      // regrid
+      g.globalAlpha=.22; g.strokeStyle="#2b4135"; g.lineWidth=2;
+      for(let r=1;r<=4;r++){ g.beginPath(); for(let i=0;i<keys.length;i++){
+        const a=(Math.PI*2/keys.length)*i- Math.PI/2;
+        const rr=R*(r/4); const x=cx+Math.cos(a)*rr, y=cy+Math.sin(a)*rr;
+        i?g.lineTo(x,y):g.moveTo(x,y);
+      } g.closePath(); g.stroke(); }
+      g.globalAlpha=1;
+      // poly
+      g.beginPath();
+      for(let i=0;i<keys.length;i++){
+        const a=(Math.PI*2/keys.length)*i- Math.PI/2;
+        const rr=R*((Math.abs(vals[i])/max)*Math.min(1,t))* (vals[i]>=0?1:1);
+        const x=cx+Math.cos(a)*rr, y=cy+Math.sin(a)*rr;
+        i?g.lineTo(x,y):g.moveTo(x,y);
+      }
+      g.closePath();
+      g.fillStyle="rgba(82,255,138,.18)"; g.fill();
+      g.strokeStyle="rgba(82,255,138,.55)"; g.lineWidth=3; g.stroke();
+      // labels
+      g.fillStyle="#eaffef"; g.font="800 18px system-ui"; g.textAlign="center";
+      for(let i=0;i<keys.length;i++){
+        const a=(Math.PI*2/keys.length)*i- Math.PI/2;
+        const x=cx+Math.cos(a)*(R+42), y=cy+Math.sin(a)*(R+42);
+        g.fillText(keys[i].slice(0,10),x,y);
+      }
+      if(t<1){ t+=0.06; requestAnimationFrame(draw); }
+    };
+    draw();
+  }
+};
+</script>
+<!-- ===================== PARTE 11/20 ===================== -->
+<script>
+/* ===== UI (telas) ===== */
+const UI={
+  dash:()=>`
+  <div class="row">
+    <div class="card kpi"><div class="t">Saldo hoje</div><div class="v" id="kHoje">R$ 0,00</div><div class="small" id="kHoje2">GN: R$ 0,00 • SD: R$ 0,00</div></div>
+    <div class="card kpi"><div class="t">Saldo do mês</div><div class="v" id="kMes">R$ 0,00</div><div class="small" id="kMes2">GN: R$ 0,00 • SD: R$ 0,00 • Materiais: R$ 0,00</div></div>
+  </div>
+
+  <div class="card" style="margin-top:10px">
+    <div class="row" style="justify-content:space-between;align-items:center">
+      <div>
+        <div style="font-weight:950">GN vs SD (mês)</div>
+        <div class="small">Gráfico animado crescendo (sem donut feio).</div>
+      </div>
+      <div class="pill" id="labMes">----</div>
+    </div>
+    <div style="margin-top:10px"><canvas id="chBars" width="900" height="320"></canvas></div>
+    <div class="small" id="barsTip" style="margin-top:8px;min-height:16px"></div>
+  </div>
+
+  <div class="row" style="margin-top:10px">
+    <div class="card kpi"><div class="t">Previsão de faturamento (offline)</div><div class="v" id="prev">R$ 0,00</div><div class="small">Tendência simples por meses.</div></div>
+    <div class="card kpi"><div class="t">Top clientes (mês)</div><div class="v" style="font-size:16px;margin-top:10px" id="topCli">Sem dados</div><div class="small">Adicione cliente no lançamento.</div></div>
+  </div>
+
+  <div class="card" style="margin-top:10px">
+    <div style="font-weight:950">Radar (categorias do mês)</div>
+    <div class="small">Mostra o “peso” das categorias (até 6).</div>
+    <div style="margin-top:10px"><canvas id="chRadar" width="900" height="320"></canvas></div>
+  </div>
+  `,
+
+  mov:()=>`
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <div class="small">Tipo</div>
+        <div class="row">
+          <button class="btn ghost" id="bGN" onclick="APP.setTipo('GN')">GN (Ganhos)</button>
+          <button class="btn ghost" id="bSD" onclick="APP.setTipo('SD')">SD (Saídas)</button>
+        </div>
+      </div>
+      <div><div class="small">Data</div><input class="in" id="mData" type="date"></div>
+    </div>
+    <div class="grid2" style="margin-top:10px">
+      <div><div class="small">Valor (R$)</div><input class="in" id="mVal" type="number" step="0.01" placeholder="Ex: 250"></div>
+      <div><div class="small">Cliente (opcional)</div><input class="in" id="mCli" placeholder="Ex: João / Empresa X"></div>
+    </div>
+    <div class="grid2" style="margin-top:10px">
+      <div><div class="small">Categoria (opcional)</div><input class="in" id="mCat" placeholder="Ex: Portão / Solda / Gasolina"></div>
+      <div><div class="small">Obs (opcional)</div><input class="in" id="mObs" placeholder="Ex: sinal, restante..."></div>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn" onclick="APP.addMov()">Salvar</button>
+      <button class="btn ghost" onclick="APP.clearMov()">Limpar</button>
+      <button class="btn ghost" onclick="APP.tab(0)">Ver no Dash</button>
+    </div>
+    <div class="sep"></div>
+    <div class="small">Atalhos:</div>
+    <div class="row">
+      <button class="btn ghost" onclick="APP.quickAdd(50)">+50</button>
+      <button class="btn ghost" onclick="APP.quickAdd(100)">+100</button>
+      <button class="btn ghost" onclick="APP.quickAdd(200)">+200</button>
+      <button class="btn ghost" onclick="APP.quickAdd(500)">+500</button>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:10px">
+    <div style="font-weight:950">Histórico (mês)</div>
+    <div class="small">Copiar ou remover cada item.</div>
+    <div class="list" id="movList"></div>
+  </div>
+  `,
+
+  agenda:()=>`
+  <div class="card">
+    <div class="grid2">
+      <div><div class="small">Cliente</div><input class="in" id="aCli" placeholder="Nome do cliente"></div>
+      <div><div class="small">Telefone (opcional)</div><input class="in" id="aTel" inputmode="tel" placeholder="(41) 9...."></div>
+    </div>
+    <div class="grid2" style="margin-top:10px">
+      <div><div class="small">Data</div><input class="in" id="aData" type="date"></div>
+      <div><div class="small">Hora</div><input class="in" id="aHora" type="time"></div>
+    </div>
+    <div style="margin-top:10px"><div class="small">Descrição</div><input class="in" id="aDesc" placeholder="Ex: Ajuste, solda, portão..."></div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn" onclick="APP.addAg()">Salvar</button>
+      <button class="btn ghost" onclick="APP.clearAg()">Limpar</button>
+      <button class="btn ghost" onclick="APP.notifPerm()">Notificações</button>
+    </div>
+    <div class="small" style="margin-top:8px">Lembrete 1h antes funciona com a página aberta.</div>
+  </div>
+
+  <div class="card" style="margin-top:10px">
+    <div style="font-weight:950">Próximos serviços</div>
+    <div class="list" id="agList"></div>
+  </div>
+  `,
+
+  clientes:()=>`
+  <div class="card">
+    <div class="grid2">
+      <div><div class="small">Nome</div><input class="in" id="cNome" placeholder="Cliente"></div>
+      <div><div class="small">Telefone</div><input class="in" id="cTel" inputmode="tel" placeholder="(41) 9...."></div>
+    </div>
+    <div style="margin-top:10px"><div class="small">Endereço (opcional)</div><input class="in" id="cEnd" placeholder="Rua, bairro..."></div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn" onclick="APP.addCli()">Salvar</button>
+      <button class="btn ghost" onclick="APP.clearCli()">Limpar</button>
+      <button class="btn ghost" onclick="PIN.open()">PIN</button>
+    </div>
+    <div class="small" style="margin-top:8px">PIN protege o app (offline).</div>
+  </div>
+
+  <div class="card" style="margin-top:10px">
+    <div style="font-weight:950">Clientes</div>
+    <div class="list" id="cliList"></div>
+  </div>
+  `,
+
+  orc:()=>`
+  <div class="card">
+    <div class="grid2">
+      <div><div class="small">Cliente</div><input class="in" id="oCli" placeholder="Nome do cliente"></div>
+      <div><div class="small">Telefone (opcional)</div><input class="in" id="oTel" inputmode="tel" placeholder="(41) 9...."></div>
+    </div>
+    <div class="grid2" style="margin-top:10px">
+      <div><div class="small">Preço (R$)</div><input class="in" id="oVal" type="number" step="0.01" placeholder="Ex: 1200"></div>
+      <div><div class="small">Prazo</div><input class="in" id="oPrazo" placeholder="Ex: 3 dias / 1 semana"></div>
+    </div>
+    <div style="margin-top:10px"><div class="small">Descrição</div><input class="in" id="oDesc" placeholder="Ex: Portão + pintura..."></div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn" onclick="APP.addOrc()">Salvar</button>
+      <button class="btn ghost" onclick="APP.clearOrc()">Limpar</button>
+      <button class="btn ghost" onclick="APP.zapOrc()">Enviar no WhatsApp</button>
+    </div>
+    <div class="small" style="margin-top:8px">WhatsApp abre com mensagem pronta. Você só envia.</div>
+  </div>
+
+  <div class="card" style="margin-top:10px">
+    <div style="font-weight:950">Orçamentos salvos</div>
+    <div class="list" id="orcList"></div>
+  </div>
+  `
+};
+ </script>
+ <!-- ===================== PARTE 12/20 ===================== -->
+<script>
+/* ===== Render listas ===== */
+RENDER.movList=m=>{
+  const box=$("movList"); if(!box) return;
+  const arr=DB.mov.filter(x=>x.m===m).slice().sort((a,b)=>b.data.localeCompare(a.data)||b.id.localeCompare(a.id));
+  if(!arr.length){ box.innerHTML=`<div class="small">Sem lançamentos neste mês.</div>`; return; }
+  box.innerHTML=arr.map(x=>`
+    <div class="it">
+      <div style="min-width:0">
+        <div style="font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
+          <span class="${x.tipo==="GN"?"pos":"neg"}">${x.tipo}</span> • ${brl(x.val)}
+          ${x.cli?`<span class="tag">${x.cli}</span>`:""}
+        </div>
+        <div class="small">${x.data}${x.cat?` • ${x.cat}`:""}${x.obs?` • ${x.obs}`:""}</div>
+      </div>
+      <div class="row" style="gap:8px;flex-wrap:nowrap">
+        <button class="btn ghost" style="padding:10px 10px" onclick="APP.copyMov('${x.id}')">Copiar</button>
+        <button class="btn danger" style="padding:10px 10px" onclick="APP.delMov('${x.id}')">X</button>
+      </div>
+    </div>
+  `).join("");
+};
+
+RENDER.cliList=()=>{
+  const box=$("cliList"); if(!box) return;
+  const arr=DB.cli.slice().sort((a,b)=>a.nome.localeCompare(b.nome));
+  if(!arr.length){ box.innerHTML=`<div class="small">Sem clientes ainda.</div>`; return; }
+  box.innerHTML=arr.map(c=>`
+    <div class="it">
+      <div style="min-width:0">
+        <div style="font-weight:900">${c.nome}</div>
+        <div class="small">${c.tel?`📞 ${c.tel}`:"Sem telefone"}${c.end?` • 📍 ${c.end}`:""}</div>
+      </div>
+      <button class="btn danger" style="padding:10px 12px" onclick="APP.delCli('${c.id}')">Remover</button>
+    </div>
+  `).join("");
+};
+
+RENDER.agList=()=>{
+  const box=$("agList"); if(!box) return;
+  const arr=DB.ag.slice().sort((a,b)=>(a.data+a.hora).localeCompare(b.data+b.hora));
+  if(!arr.length){ box.innerHTML=`<div class="small">Sem serviços agendados.</div>`; return; }
+  box.innerHTML=arr.map(s=>`
+    <div class="it">
+      <div style="min-width:0">
+        <div style="font-weight:900">${s.cli} <span class="tag">${s.data} ${s.hora}</span></div>
+        <div class="small">${s.desc}${s.tel?` • 📞 ${s.tel}`:""}</div>
+      </div>
+      <button class="btn danger" style="padding:10px 12px" onclick="APP.delAg('${s.id}')">Remover</button>
+    </div>
+  `).join("");
+};
+
+RENDER.orcList=()=>{
+  const box=$("orcList"); if(!box) return;
+  const arr=DB.orc.slice().sort((a,b)=>b.at-a.at);
+  if(!arr.length){ box.innerHTML=`<div class="small">Sem orçamentos ainda.</div>`; return; }
+  box.innerHTML=arr.map(o=>`
+    <div class="it">
+      <div style="min-width:0">
+        <div style="font-weight:900">${o.cli} <span class="tag">${brl(o.val)}</span></div>
+        <div class="small">${o.desc}${o.prazo?` • ⏱ ${o.prazo}`:""}${o.tel?` • 📞 ${o.tel}`:""}</div>
+      </div>
+      <div class="row" style="gap:8px;flex-wrap:nowrap">
+        <button class="btn ghost" style="padding:10px 10px" onclick="APP.zapOrc('${o.id}')">Zap</button>
+        <button class="btn danger" style="padding:10px 10px" onclick="APP.delOrc('${o.id}')">X</button>
+      </div>
+    </div>
+  `).join("");
+};
+</script>
+<!-- ===================== PARTE 13/20 ===================== -->
+<script>
+/* ===== Orçamentos ===== */
+APP.clearOrc=()=>["oCli","oTel","oVal","oPrazo","oDesc"].forEach(id=>$(id).value="");
+
+APP.addOrc=()=>{
+  const cli=($("oCli").value||"").trim();
+  const val=+($("oVal").value||0);
+  const desc=($("oDesc").value||"").trim();
+  if(!cli||!val||val<=0||!desc) return alert("Cliente, preço e descrição obrigatórios");
+  DB.orc.push({
+    id:Date.now()+"",
+    cli, tel:digits($("oTel").value),
+    val, prazo:($("oPrazo").value||"").trim(),
+    desc, at:Date.now()
+  });
+  save(); APP.clearOrc(); APP.render(); vib(18);
+};
+
+APP.delOrc=id=>{
+  if(!confirm("Remover orçamento?")) return;
+  DB.orc=DB.orc.filter(o=>o.id!==id); save(); APP.render();
+};
+
+// se receber id -> usa orçamento salvo; se não -> usa campos atuais
+APP.zapOrc=(id)=>{
+  let cli, val, prazo, desc, tel;
+  if(id){
+    const o=DB.orc.find(x=>x.id===id); if(!o) return;
+    ({cli,val,prazo,desc,tel}=o);
+  }else{
+    cli=($("oCli").value||"").trim();
+    val=+($("oVal").value||0);
+    prazo=($("oPrazo").value||"").trim();
+    desc=($("oDesc").value||"").trim();
+    tel=digits($("oTel").value);
+    if(!cli||!val||!desc) return alert("Preencha cliente, valor e descrição.");
+  }
+
+  // prioridade: tel do orçamento; se vazio, abre no número do pai (cfg.zap); se também vazio, abre WhatsApp sem número
+  const alvo = tel || DB.cfg.zap || "";
+
+  const msg=
+`*Orçamento - Serralheria do Gil*
+Cliente: ${cli}
+Serviço: ${desc}
+Valor: ${brl(val)}
+Prazo: ${prazo||"a combinar"}
+
+Se aprovar, me confirma por aqui.`;
+
+  APP.openZap(alvo,msg);
+};
+
+APP.openZap=(tel,msg)=>{
+  const base = tel ? `https://wa.me/${tel}` : `https://wa.me/`;
+  const url = `${base}?text=${encodeURIComponent(msg)}`;
+  window.open(url,"_blank");
+};
+</script>
+<!-- ===================== PARTE 14/20 ===================== -->
+<script>
+/* ===== FX (partículas) ===== */
+const FX={
+  c:null,g:null,w:0,h:0,p:[],on:false,
+  start(){
+    this.c=$("fx"); if(!this.c) return;
+    this.g=this.c.getContext("2d");
+    this.resize(); this.seed();
+    if(this.on) return; this.on=true;
+    window.addEventListener("resize",()=>this.resize());
+    requestAnimationFrame(()=>this.tick());
+  },
+  resize(){
+    this.w=this.c.width=innerWidth*devicePixelRatio;
+    this.h=this.c.height=innerHeight*devicePixelRatio;
+  },
+  seed(){
+    const n=Math.min(140,Math.floor((innerWidth*innerHeight)/9000));
+    this.p=Array.from({length:n},()=>this.mk());
+  },
+  mk(){
+    const s=devicePixelRatio||1;
+    return {
+      x:Math.random()*this.w, y:Math.random()*this.h,
+      r:(Math.random()*2.4+0.9)*s,
+      vy:(Math.random()*0.55+0.15)*s,
+      vx:(Math.random()*0.25-0.125)*s,
+      a:Math.random()*0.65+0.15,
+      t:Math.random()*999
+    };
+  },
+  tick(){
+    const g=this.g,w=this.w,h=this.h;
+    g.clearRect(0,0,w,h);
+    // glow
+    g.globalCompositeOperation="lighter";
+    for(const p of this.p){
+      p.t+=0.02; p.x+=p.vx; p.y+=p.vy*(1.1+Math.sin(p.t)*0.2);
+      if(p.y>h+40) { p.y=-40; p.x=Math.random()*w; }
+      if(p.x<-40) p.x=w+40; if(p.x>w+40) p.x=-40;
+
+      const grad=g.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*6);
+      grad.addColorStop(0,`rgba(82,255,138,${p.a*0.28})`);
+      grad.addColorStop(1,`rgba(0,0,0,0)`);
+      g.fillStyle=grad; g.beginPath(); g.arc(p.x,p.y,p.r*6,0,Math.PI*2); g.fill();
+
+      g.fillStyle=`rgba(180,255,205,${p.a})`;
+      g.beginPath(); g.arc(p.x,p.y,p.r,0,Math.PI*2); g.fill();
+    }
+    g.globalCompositeOperation="source-over";
+    requestAnimationFrame(()=>this.tick());
+  }
+};
+</script>
+<!-- ===================== PARTE 15/20 ===================== -->
+<script>
+/* ===== Anim + binds ===== */
+const ANIM={
+  page(){
+    const t=["t0","t1","t2","t3","t4"][APP.curTab];
+    const el=$(t); if(!el) return;
+    el.classList.remove("pop"); void el.offsetWidth; el.classList.add("pop");
+    // stagger nos cards
+    [...el.querySelectorAll(".card")].forEach((c,i)=>{
+      c.style.animationDelay=(i*35)+"ms";
+      c.classList.remove("stg"); void c.offsetWidth; c.classList.add("stg");
+    });
+  }
+};
+
+// classes de animação (inject leve)
+(()=>{
+  const css=document.createElement("style");
+  css.textContent=`
+  .pop{animation:pop .18s ease both}
+  .stg{animation:stg .32s ease both}
+  @keyframes stg{from{opacity:0;transform:translateY(14px) scale(.99)}to{opacity:1;transform:none}}
+  `;
+  document.head.appendChild(css);
+})();
+
+// binds p/ onclick do HTML (evita “cliquei e não fez nada”)
+window.startApp=()=>APP.start();
+window.tab=i=>APP.tab(i);
+window.fechamento=()=>APP.fechamento();
+
+// boot: se app já começou antes, volta direto (opcional)
+window.addEventListener("load",()=>{
+  // mantém FX leve já no splash também
+  FX.start();
+});
+</script>
+<!-- ===================== FIM PARTE 15/20 ===================== -->
+ <!-- ===================== PARTE 16/20 ===================== -->
+<script>
+/* ===== PIN (offline) =====
+- Guarda hash simples no localStorage (não é “banco real”, é trava de bolso)
+- Fluxo: definir PIN -> travar/destravar
+*/
+const PIN={
+  open(){
+    const has=!!DB.cfg.pin;
+    const t=has?"Desbloquear / Trocar PIN":"Criar PIN";
+    const html=`
+      <div class="card">
+        <div style="font-weight:950;font-size:18px">${t}</div>
+        <div class="small">PIN é local (offline). Não recupera se esquecer.</div>
+        <div class="sep"></div>
+        <div class="grid2">
+          <div>
+            <div class="small">${has?"PIN atual":"Novo PIN"}</div>
+            <input class="in" id="p1" inputmode="numeric" maxlength="8" placeholder="4 a 8 dígitos">
+          </div>
+          <div>
+            <div class="small">${has?"Novo PIN (opcional)":"Confirmar PIN"}</div>
+            <input class="in" id="p2" inputmode="numeric" maxlength="8" placeholder="${has?"novo (opcional)":"repita"}">
+          </div>
+        </div>
+        <div class="row" style="margin-top:10px">
+          <button class="btn" onclick="PIN.ok()">OK</button>
+          <button class="btn ghost" onclick="PIN.close()">Fechar</button>
+          ${has?`<button class="btn danger" onclick="PIN.clear()">Remover PIN</button>`:""}
+        </div>
+        <div class="small" style="margin-top:8px">Dica: use algo que seu pai lembre.</div>
+      </div>`;
+    MODAL.show(html);
+  },
+  close(){MODAL.hide()},
+  hash(s){ // hash curtinho só pra não ficar “texto puro”
+    s=String(s||""); let h=2166136261;
+    for(let i=0;i<s.length;i++){h^=s.charCodeAt(i); h=Math.imul(h,16777619);}
+    return (h>>>0).toString(16);
+  },
+  ok(){
+    const a=digits($("p1").value), b=digits($("p2").value);
+    if(a.length<4||a.length>8) return alert("PIN precisa ter 4 a 8 dígitos.");
+    const has=!!DB.cfg.pin;
+
+    // se não tem PIN ainda: criar
+    if(!has){
+      if(a!==b) return alert("Confirmação diferente.");
+      DB.cfg.pin=this.hash(a); DB.cfg.lock=0; save(); this.close(); alert("PIN criado ✅");
+      return;
+    }
+
+    // se tem PIN: validar atual
+    if(this.hash(a)!==DB.cfg.pin) return alert("PIN atual incorreto.");
+
+    // trocar pin (b opcional)
+    if(b){
+      if(b.length<4||b.length>8) return alert("Novo PIN inválido.");
+      DB.cfg.pin=this.hash(b);
+      save(); this.close(); alert("PIN atualizado ✅"); return;
+    }
+
+    // só desbloquear
+    DB.cfg.lock=0; save(); this.close(); alert("Desbloqueado ✅"); APP.render();
+  },
+  clear(){
+    if(!confirm("Remover PIN?")) return;
+    DB.cfg.pin=""; DB.cfg.lock=0; save(); this.close(); alert("PIN removido.");
+  },
+  require(){
+    if(!DB.cfg.pin) return false;
+    if(DB.cfg.lock) { this.lockScreen(); return true; }
+    return false;
+  },
+  lockNow(){
+    if(!DB.cfg.pin) return alert("Crie um PIN primeiro.");
+    DB.cfg.lock=1; save(); this.lockScreen();
+  },
+  lockScreen(){
+    MODAL.show(`
+      <div class="card">
+        <div style="font-weight:950;font-size:18px">🔒 PIN</div>
+        <div class="small">Digite para desbloquear.</div>
+        <div class="sep"></div>
+        <input class="in" id="pl" inputmode="numeric" maxlength="8" placeholder="PIN">
+        <div class="row" style="margin-top:10px">
+          <button class="btn" onclick="PIN.unlock()">Entrar</button>
+        </div>
+      </div>`);
+    setTimeout(()=>{$("pl")?.focus?.()},60);
+  },
+  unlock(){
+    const p=digits($("pl").value);
+    if(this.hash(p)!==DB.cfg.pin) return alert("PIN errado.");
+    DB.cfg.lock=0; save(); MODAL.hide(); APP.render();
+  }
+};
+</script>
+<!-- ===================== PARTE 17/20 ===================== -->
+<script>
+/* ===== Config =====
+- Aqui fica o número do WhatsApp alvo (pai)
+- Formato: só dígitos com DDI + DDD + número (ex: 5541999999999)
+*/
+UI.cfg=()=>`
+  <div class="card">
+    <div style="font-weight:950">Config</div>
+    <div class="small">Tudo offline. O número do WhatsApp é usado ao “Enviar”.</div>
+    <div class="sep"></div>
+
+    <div class="small">WhatsApp alvo (pai)</div>
+    <input class="in" id="zNum" inputmode="numeric" placeholder="Ex: 5541999999999">
+    <div class="small" style="margin-top:8px">Dica: sem espaços, sem +, só números.</div>
+
+    <div class="row" style="margin-top:10px">
+      <button class="btn" onclick="CFG.save()">Salvar</button>
+      <button class="btn ghost" onclick="PIN.open()">PIN</button>
+      <button class="btn ghost" onclick="PIN.lockNow()">Travar agora</button>
+    </div>
+
+    <div class="sep"></div>
+    <div style="font-weight:950">Backup</div>
+    <div class="small">Exporta e importa tudo (clientes, agenda, lançamentos...).</div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn ghost" onclick="BK.export()">Exportar</button>
+      <button class="btn ghost" onclick="BK.import()">Importar</button>
+      <button class="btn danger" onclick="BK.wipe()">Apagar tudo</button>
+    </div>
+
+    <div class="sep"></div>
+    <div class="small">Versão: <b>v20</b> • Salvo no celular via LocalStorage.</div>
+  </div>
+`;
+
+const CFG={
+  save(){
+    const n=digits($("zNum").value);
+    DB.cfg.zap=n||"";
+    save(); alert("Config salva ✅");
+  },
+  load(){
+    // se você QUISER deixar o número já preenchido, descomenta e troca:
+    // if(!DB.cfg.zap) DB.cfg.zap="554195008252";
+    $("zNum") && ($("zNum").value=DB.cfg.zap||"");
+  }
+};
+</script>
+<!-- ===================== PARTE 18/20 ===================== -->
+<script>
+/* ===== Backup ===== */
+const BK={
+  dl(name,txt,type){
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(new Blob([txt],{type:type||"text/plain"}));
+    a.download=name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+  },
+  export(){
+    const pack={v:20,at:Date.now(),db:DB};
+    const txt=JSON.stringify(pack);
+    const name="serralheria_do_gil_backup_"+iso()+".json";
+    this.dl(name,txt,"application/json");
+  },
+  import(){
+    const inp=document.createElement("input");
+    inp.type="file"; inp.accept=".json,application/json";
+    inp.onchange=async()=>{
+      const f=inp.files?.[0]; if(!f) return;
+      const txt=await f.text();
+      try{
+        const pack=JSON.parse(txt);
+        if(!pack.db) throw 0;
+        DB=pack.db;
+        // sane defaults
+        DB.cfg=DB.cfg||{};
+        DB.mov=DB.mov||[]; DB.ag=DB.ag||[]; DB.cli=DB.cli||[]; DB.orc=DB.orc||[];
+        DB.mat=DB.mat||[]; DB.tipo=DB.tipo||"GN";
+        save(); alert("Importado ✅"); APP.render();
+      }catch(e){ alert("Arquivo inválido."); }
+    };
+    inp.click();
+  },
+  wipe(){
+    if(!confirm("Apagar TUDO do app?")) return;
+    DB={mov:[],ag:[],cli:[],orc:[],mat:[],tipo:"GN",cfg:{zap:"",pin:"",lock:0,started:0}};
+    save(); alert("Limpo."); APP.render();
+  }
+};
+</script>
+<!-- ===================== PARTE 19/20 ===================== -->
+<script>
+/* ===== Materiais ===== */
+UI.mat=()=>`
+  <div class="card">
+    <div class="grid2">
+      <div><div class="small">Material</div><input class="in" id="mtn" placeholder="Ex: tubo, eletrodo, tinta"></div>
+      <div><div class="small">Custo (R$)</div><input class="in" id="mtv" type="number" step="0.01" placeholder="Ex: 80"></div>
+    </div>
+    <div class="grid2" style="margin-top:10px">
+      <div><div class="small">Data</div><input class="in" id="mtd" type="date"></div>
+      <div><div class="small">Cliente (opcional)</div><input class="in" id="mtc" placeholder="Nome do cliente"></div>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn" onclick="APP.addMat()">Salvar</button>
+      <button class="btn ghost" onclick="APP.clearMat()">Limpar</button>
+    </div>
+    <div class="small" style="margin-top:8px">Materiais contam como custo do mês.</div>
+  </div>
+
+  <div class="card" style="margin-top:10px">
+    <div style="font-weight:950">Materiais (mês)</div>
+    <div class="list" id="matList"></div>
+  </div>
+`;
+
+APP.clearMat=()=>{["mtn","mtv","mtc"].forEach(i=>$(i).value=""); $("mtd").value=iso();};
+
+APP.addMat=()=>{
+  const nome=($("mtn").value||"").trim();
+  const val=+($("mtv").value||0);
+  const data=$("mtd").value||iso();
+  if(!nome||!val||val<=0) return alert("Material e custo obrigatórios.");
+  DB.mat.push({id:Date.now()+"",nome,val,data,cli:($("mtc").value||"").trim(),m:data.slice(0,7)});
+  save(); APP.clearMat(); APP.render(); vib(18);
+};
+
+APP.delMat=id=>{
+  if(!confirm("Remover material?")) return;
+  DB.mat=DB.mat.filter(x=>x.id!==id); save(); APP.render();
+};
+
+RENDER.matList=m=>{
+  const box=$("matList"); if(!box) return;
+  const arr=DB.mat.filter(x=>x.m===m).slice().sort((a,b)=>b.data.localeCompare(a.data));
+  if(!arr.length){ box.innerHTML=`<div class="small">Sem materiais neste mês.</div>`; return; }
+  box.innerHTML=arr.map(x=>`
+    <div class="it">
+      <div style="min-width:0">
+        <div style="font-weight:900">${x.nome} <span class="tag">${brl(x.val)}</span> ${x.cli?`<span class="tag">${x.cli}</span>`:""}</div>
+        <div class="small">${x.data}</div>
+      </div>
+      <button class="btn danger" style="padding:10px 12px" onclick="APP.delMat('${x.id}')">Remover</button>
+    </div>
+  `).join("");
+};
+</script>
+<!-- ===================== PARTE 20/20 ===================== -->
+<script>
+/* ===== Charts (barras + radar) ===== */
+const CH={
+  bars(c,gn,sd){
+    if(!c) return; const g=c.getContext("2d");
+    const W=c.width,H=c.height;
+    const pad=40, bw=90, gap=90;
+    const max=Math.max(1,gn,sd);
+    let t0=performance.now();
+
+    const draw=(p)=>{
+      g.clearRect(0,0,W,H);
+      // base
+      g.fillStyle="rgba(255,255,255,.05)";
+      g.fillRect(pad, H-pad, W-2*pad, 1);
+
+      const hGN=(H-2*pad)*(gn/max)*p;
+      const hSD=(H-2*pad)*(sd/max)*p;
+
+      const x1=W/2-gap, x2=W/2+gap-bw;
+      // glow
+      g.globalCompositeOperation="lighter";
+      g.fillStyle="rgba(82,255,138,.18)";
+      g.fillRect(x1-6, H-pad-hGN-6, bw+12, hGN+12);
+      g.fillStyle="rgba(255,90,107,.16)";
+      g.fillRect(x2-6, H-pad-hSD-6, bw+12, hSD+12);
+      g.globalCompositeOperation="source-over";
+
+      // bars
+      g.fillStyle="rgba(82,255,138,.88)";
+      g.fillRect(x1, H-pad-hGN, bw, hGN);
+      g.fillStyle="rgba(255,90,107,.85)";
+      g.fillRect(x2, H-pad-hSD, bw, hSD);
+
+      // labels
+      g.fillStyle="rgba(255,255,255,.88)";
+      g.font="800 30px system-ui";
+      g.textAlign="center";
+      g.fillText("GN", x1+bw/2, H-pad-hGN-14);
+      g.fillText("SD", x2+bw/2, H-pad-hSD-14);
+
+      g.font="700 22px system-ui";
+      g.fillStyle="rgba(255,255,255,.72)";
+      g.fillText(brl(gn), x1+bw/2, H-pad+30);
+      g.fillText(brl(sd), x2+bw/2, H-pad+30);
+    };
+
+    const tick=()=>{
+      const p=Math.min(1,(performance.now()-t0)/520);
+      const e=1-Math.pow(1-p,3);
+      draw(e);
+      if(p<1) requestAnimationFrame(tick);
+    };
+    tick();
+  },
+
+  radar(c,items){
+    if(!c) return; const g=c.getContext("2d");
+    const W=c.width,H=c.height, cx=W/2, cy=H/2+10;
+    const r=Math.min(W,H)*0.32;
+    const n=Math.max(3,items.length);
+    const max=Math.max(1,...items.map(x=>x.v));
+
+    g.clearRect(0,0,W,H);
+    g.strokeStyle="rgba(255,255,255,.10)";
+    for(let k=1;k<=4;k++){
+      g.beginPath();
+      for(let i=0;i<n;i++){
+        const a=-Math.PI/2 + i*(2*Math.PI/n);
+        const rr=r*(k/4);
+        const x=cx+Math.cos(a)*rr, y=cy+Math.sin(a)*rr;
+        i?g.lineTo(x,y):g.moveTo(x,y);
+      }
+      g.closePath(); g.stroke();
+    }
+
+    // polygon
+    g.beginPath();
+    items.forEach((it,i)=>{
+      const a=-Math.PI/2 + i*(2*Math.PI/n);
+      const rr=r*(it.v/max);
+      const x=cx+Math.cos(a)*rr, y=cy+Math.sin(a)*rr;
+      i?g.lineTo(x,y):g.moveTo(x,y);
+    });
+    g.closePath();
+    g.fillStyle="rgba(82,255,138,.14)"; g.fill();
+    g.strokeStyle="rgba(82,255,138,.65)"; g.stroke();
+
+    // labels
+    g.fillStyle="rgba(255,255,255,.70)";
+    g.font="700 18px system-ui"; g.textAlign="center";
+    items.forEach((it,i)=>{
+      const a=-Math.PI/2 + i*(2*Math.PI/n);
+      const x=cx+Math.cos(a)*(r+28), y=cy+Math.sin(a)*(r+28);
+      g.fillText(it.k, x, y);
+    });
+  }
+};
+
+/* ===== Render geral final ===== */
+APP.render=()=>{
+  if(PIN.require()) return; // se travado, abre lockscreen
+
+  const root=$("root"); if(!root) return;
+  // tela atual
+  const screens=[UI.dash,UI.mov,UI.agenda,UI.clientes,UI.orc,UI.mat,UI.cfg];
+  root.innerHTML=screens[APP.curTab]();
+
+  // preencher defaults
+  if(APP.curTab===1){ $("mData").value=iso(); APP.setTipo(DB.tipo||"GN"); }
+  if(APP.curTab===2){ $("aData").value=iso(); $("aHora").value="08:00"; }
+  if(APP.curTab===5){ APP.clearMat(); }
+  if(APP.curTab===6){ CFG.load(); }
+
+  // mês atual
+  const m=APP.month(); $("labMes") && ($("labMes").textContent=m);
+
+  // lists
+  RENDER.movList(m);
+  RENDER.agList();
+  RENDER.cliList();
+  RENDER.orcList();
+  RENDER.matList(m);
+
+  // KPIs + charts
+  const sums=APP.sum(m);
+  $("kHoje") && ($("kHoje").textContent=brl(sums.hoje.t));
+  $("kHoje2") && ($("kHoje2").textContent=`GN: ${brl(sums.hoje.gn)} • SD: ${brl(sums.hoje.sd)}`);
+  $("kMes") && ($("kMes").textContent=brl(sums.mes.t));
+  $("kMes2") && ($("kMes2").textContent=`GN: ${brl(sums.mes.gn)} • SD: ${brl(sums.mes.sd)} • Materiais: ${brl(sums.mes.mat)}`);
+  $("prev") && ($("prev").textContent=brl(APP.forecast()));
+
+  const top=APP.topClients(m);
+  $("topCli") && ($("topCli").textContent=top||"Sem dados");
+
+  // charts só no dash
+  if(APP.curTab===0){
+    CH.bars($("chBars"),sums.mes.gn,sums.mes.sd+sums.mes.mat);
+    const cats=APP.topCats(m);
+    CH.radar($("chRadar"),cats.length?cats:[{k:"Sem",v:1},{k:"Dados",v:1},{k:"Ainda",v:1}]);
+  }
+
+  ANIM.page();
+};
+
+/* ===== Nav: adiciona Materiais + Config ===== */
+APP.nav=()=>{
+  const nav=$("nav");
+  nav.innerHTML=`
+  <div class="bar">
+    <div class="nb ${APP.curTab===0?"on":""}" onclick="APP.tab(0)"><i>📊</i>Dash</div>
+    <div class="nb ${APP.curTab===1?"on":""}" onclick="APP.tab(1)"><i>💰</i>Mov</div>
+    <div class="nb ${APP.curTab===2?"on":""}" onclick="APP.tab(2)"><i>📅</i>Agenda</div>
+    <div class="nb ${APP.curTab===3?"on":""}" onclick="APP.tab(3)"><i>👤</i>Clientes</div>
+    <div class="nb ${APP.curTab===4?"on":""}" onclick="APP.tab(4)"><i>🧾</i>Orç</div>
+  </div>
+  <div class="bar" style="margin-top:8px;grid-template-columns:repeat(2,1fr)">
+    <div class="nb ${APP.curTab===5?"on":""}" onclick="APP.tab(5)"><i>🧱</i>Mat</div>
+    <div class="nb ${APP.curTab===6?"on":""}" onclick="APP.tab(6)"><i>⚙️</i>Config</div>
+  </div>`;
+};
+
+window.addEventListener("load",()=>{
+  FX.start();
+  APP.nav();
+  APP.render();
+  APP.loopAgenda(); // lembretes
+});
+</script>
+<!-- ===================== FIM 20/20 ===================== -->
