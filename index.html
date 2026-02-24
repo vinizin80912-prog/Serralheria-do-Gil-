@@ -1,1690 +1,453 @@
-<!-- ===================== PARTE 1/20 ===================== -->
-const UI={
-  dash:()=>`
-    <div class="row">
-      <div class="card kpi">
-        <div class="t">Saldo hoje</div>
-        <div class="v" id="kHoje">R$ 0,00</div>
-        <div class="small" id="kHoje2">GN: R$ 0,00 • SD: R$ 0,00</div>
-      </div>
-      <div class="card kpi">
-        <div class="t">Saldo do mês</div>
-        <div class="v" id="kMes">R$ 0,00</div>
-        <div class="small" id="kMes2">GN: R$ 0,00 • SD: R$ 0,00 • Materiais: R$ 0,00</div>
-      </div>
-    </div>
+<!doctype html><html lang="pt-br"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Serralheria do Gil</title>
+<meta name="theme-color" content="#050806">
+<style>
+:root{
+--bg:#040705;--b:rgba(120,210,160,.10);--txt:#eafff0;--mut:rgba(233,255,241,.58);
+--g:#45ff86;--r:#ff4c62;--y:#ffd166;--shadow:0 24px 80px rgba(0,0,0,.72);--blur:18px;--rad:26px;
+--ig:linear-gradient(145deg,rgba(255,255,255,.92),rgba(215,255,235,.72));
+--pulse:0; /* pulso bem sutil */
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+background:
+radial-gradient(1200px 800px at 20% 10%,rgba(55,255,140,.06),transparent 58%),
+radial-gradient(900px 900px at 90% 30%,rgba(255,80,120,.06),transparent 60%),
+radial-gradient(1100px 900px at 50% 90%,rgba(120,180,255,.035),transparent 62%),
+var(--bg);
+color:var(--txt);overflow:hidden;
+}
+#bg,#fx{position:fixed;inset:0;z-index:0;pointer-events:none}
+#bg{filter:saturate(1.03) contrast(1.08) brightness(.94)}
+#fx{z-index:2}
+.stage{position:relative;z-index:3;height:100%;display:grid;place-items:center;padding:22px}
+.shell{width:min(920px,92vw);perspective:900px}
+.card{
+position:relative;border-radius:var(--rad);border:1px solid var(--b);
+background:linear-gradient(180deg,rgba(12,18,14,.74),rgba(6,9,7,.58));
+box-shadow:var(--shadow);backdrop-filter:blur(var(--blur));overflow:hidden;transform-style:preserve-3d;
+}
+.card:before{
+content:"";position:absolute;inset:-2px;opacity:.45;pointer-events:none;
+background:
+radial-gradient(820px 260px at 18% 22%,rgba(70,255,150,.15),transparent 65%),
+radial-gradient(740px 280px at 92% 10%,rgba(255,76,98,.10),transparent 62%),
+radial-gradient(700px 320px at 50% 110%,rgba(255,255,255,.05),transparent 58%);
+filter:brightness(calc(1 + var(--pulse)*.12));
+}
+.inner{position:relative;padding:22px 22px 18px}
+.top{display:flex;gap:14px;align-items:center}
+.logo{
+width:54px;height:54px;border-radius:18px;display:grid;place-items:center;
+background:linear-gradient(145deg,rgba(12,22,16,.92),rgba(6,9,7,.62));
+border:1px solid var(--b);box-shadow:0 20px 60px rgba(0,0,0,.6);
+transform:translateZ(30px);
+}
+.h1{font-weight:950;letter-spacing:.2px;font-size:34px;line-height:1;margin:0;transform:translateZ(28px)}
+.sub{color:var(--mut);margin-top:6px;font-size:13px;transform:translateZ(18px)}
+.pill{
+margin-left:auto;align-self:flex-start;padding:9px 12px;border-radius:999px;
+border:1px solid var(--b);background:rgba(6,9,7,.55);color:rgba(233,255,241,.74);
+font-weight:850;font-size:12px;transform:translateZ(26px);
+}
+.hr{height:1px;background:rgba(120,210,160,.10);margin:14px 0}
+.center{padding:10px 0 6px;text-align:center;transform:translateZ(18px)}
+.center .q{color:rgba(233,255,241,.90);font-size:16px}
+.center .p{color:var(--mut);font-size:13px;margin-top:2px}
+.row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .btn{position:relative;user-select:none;cursor:pointer;border:0;border-radius:18px;
+padding:14px 22px;font-weight:950;letter-spacing:.2px;
+transition:transform .18s, filter .18s, box-shadow .18s, background .18s;
+transform:translateZ(18px);
+}
+.btn.primary{
+background:var(--ig);color:#06100a;
+box-shadow:0 18px 70px rgba(0,0,0,.50), 0 0 0 1px rgba(255,255,255,.16) inset;
+}
+.btn.ghost{
+background:rgba(255,255,255,.045);color:rgba(233,255,241,.90);
+border:1px solid rgba(120,210,160,.12);
+box-shadow:0 16px 55px rgba(0,0,0,.40), 0 0 0 1px rgba(255,255,255,.05) inset;
+}
+.btn:before{
+content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;
+background:
+radial-gradient(140px 70px at var(--mx,50%) var(--my,50%),rgba(255,255,255,.34),transparent 64%),
+radial-gradient(220px 120px at var(--mx,50%) var(--my,50%),rgba(70,255,150,.12),transparent 72%);
+transition:opacity .16s;
+}
+.btn:after{
+content:"";position:absolute;inset:-2px;border-radius:inherit;pointer-events:none;opacity:.0;
+background:conic-gradient(from 180deg,rgba(70,255,150,.0),rgba(70,255,150,.20),rgba(255,76,98,.14),rgba(70,255,150,.0));
+filter:blur(10px);transition:opacity .18s;
+}
+.btn:hover:before,.btn.touch:before{opacity:1}
+.btn.pop{transform:translateZ(26px) scale(1.04);filter:brightness(1.06)}
+.btn.pop:after{opacity:.45}
+.btn:active{transform:translateZ(22px) scale(.99)}
+.btn.assem{opacity:0;transform:translate3d(var(--sx,0),var(--sy,26px),18px) scale(.94);filter:blur(4px)}
+.btn.assem.on{opacity:1;transform:translate3d(0,0,18px) scale(1);filter:blur(0);
+transition:transform .55s cubic-bezier(.2,.9,.2,1),opacity .45s,filter .45s}
 
-    <div class="card" style="margin-top:10px">
-      <div class="row" style="justify-content:space-between;align-items:center">
-        <div>
-          <div style="font-weight:950">GN vs SD (mês)</div>
-          <div class="small">Barras animadas e atualiza toda vez que salvar.</div>
-        </div>
-        <div class="pill" id="labMes">----</div>
-      </div>
+.small{color:var(--mut);font-size:12px;line-height:1.35;margin-top:10px;text-align:center;transform:translateZ(14px)}
+.pinbox{margin:14px auto 6px;width:min(520px,92%);transform:translateZ(16px)}
+.pin{
+width:100%;max-width:520px;border-radius:18px;border:1px solid rgba(120,210,160,.12);
+background:rgba(6,9,7,.55);color:var(--txt);outline:none;padding:14px 16px;
+font-size:18px;letter-spacing:10px;text-align:center;
+box-shadow:0 22px 90px rgba(0,0,0,.42) inset, 0 0 0 1px rgba(255,255,255,.05) inset;
+}
+.pin::placeholder{letter-spacing:1px;color:rgba(233,255,241,.30)}
+.dots{display:flex;gap:6px;justify-content:center;margin-top:10px;opacity:.85}
+.dots i{width:10px;height:10px;border-radius:999px;background:rgba(233,255,241,.12);border:1px solid rgba(120,210,160,.10)}
+.dots i.on{background:rgba(70,255,150,.82);box-shadow:0 0 0 7px rgba(70,255,150,.08)}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+.note{display:flex;gap:10px;align-items:center;justify-content:center;color:rgba(233,255,241,.56);font-size:12px;margin-top:8px}
+.bad{color:#ffd6dc}.lock{color:#ffd166}
+.shake{animation:shake .38s linear}
+@keyframes shake{0%,100%{transform:translateZ(16px)}20%{transform:translateZ(16px) translateX(-10px)}40%{transform:translateZ(16px) translateX(9px)}60%{transform:translateZ(16px) translateX(-6px)}80%{transform:translateZ(16px) translateX(4px)}}
+.fadeOut{animation:fadeOut .45s ease forwards}
+@keyframes fadeOut{to{opacity:0;transform:translateY(14px) scale(.98)}}
+.main{position:fixed;inset:0;z-index:5;display:none}
+.main.on{display:block}
+.main .wrap{position:absolute;inset:0;display:grid;place-items:center;padding:22px}
+.main .box{width:min(920px,92vw);border-radius:var(--rad);border:1px solid var(--b);
+background:rgba(6,9,7,.65);backdrop-filter:blur(18px);box-shadow:var(--shadow);padding:22px;text-align:center}
+.main h2{margin:0;font-size:26px;font-weight:950}
+.main p{margin:8px 0 0;color:var(--mut)}
+.main .row{margin-top:16px}
+</style></head><body>
+<canvas id="bg"></canvas><canvas id="fx"></canvas>
 
-      <div style="margin-top:10px">
-        <canvas class="chart" id="chBars" width="900" height="300"></canvas>
-      </div>
-
-      <div class="small" id="barsTip" style="margin-top:8px;min-height:16px"></div>
-    </div>
-
-    <div class="card" style="margin-top:10px">
-      <div style="font-weight:950">Histórico rápido (mês)</div>
-      <div class="small">O que você salvou aparece aqui.</div>
-      <div class="list" id="movList"></div>
-    </div>
-  `,
-
-  mov:()=>`
-    <div class="card">
-      <div class="grid2">
-        <div>
-          <div class="small">Tipo</div>
-          <div class="row">
-            <button class="btn ghost" id="bGN" onclick="APP.setTipo('GN')">GN (Ganhos)</button>
-            <button class="btn ghost" id="bSD" onclick="APP.setTipo('SD')">SD (Saídas)</button>
-          </div>
-        </div>
-        <div><div class="small">Data</div><input class="in" id="mData" type="date"></div>
-      </div>
-
-      <div class="grid2" style="margin-top:10px">
-        <div><div class="small">Valor (R$)</div><input class="in" id="mVal" type="number" step="0.01" placeholder="Ex: 250"></div>
-        <div><div class="small">Cliente (opcional)</div><input class="in" id="mCli" placeholder="Ex: João / Obra X"></div>
-      </div>
-
-      <div class="grid2" style="margin-top:10px">
-        <div><div class="small">Categoria</div><input class="in" id="mCat" placeholder="Portão / Solda / Gasolina"></div>
-        <div><div class="small">Obs</div><input class="in" id="mObs" placeholder="Sinal / restante..."></div>
-      </div>
-
-      <div class="row" style="margin-top:10px">
-        <button class="btn" onclick="APP.addMov()">Salvar</button>
-        <button class="btn ghost" onclick="APP.clearMov()">Limpar</button>
-        <button class="btn ghost" onclick="APP.quickAdd(100)">+100</button>
-        <button class="btn ghost" onclick="APP.quickAdd(200)">+200</button>
-      </div>
-    </div>
-
-    <div class="card" style="margin-top:10px">
-      <div style="font-weight:950">Histórico (mês)</div>
-      <div class="small">Copiar ou remover.</div>
-      <div class="list" id="movList2"></div>
-    </div>
-  `,
-
-  agenda:()=>`
-    <div class="card">
-      <div class="grid2">
-        <div><div class="small">Cliente</div><input class="in" id="aCli" placeholder="Nome do cliente"></div>
-        <div><div class="small">Telefone</div><input class="in" id="aTel" inputmode="tel" placeholder="(41) 9...."></div>
-      </div>
-      <div class="grid2" style="margin-top:10px">
-        <div><div class="small">Data</div><input class="in" id="aData" type="date"></div>
-        <div><div class="small">Hora</div><input class="in" id="aHora" type="time"></div>
-      </div>
-      <div style="margin-top:10px"><div class="small">Serviço</div><input class="in" id="aDesc" placeholder="Ex: Portão, solda, ajuste..."></div>
-      <div class="row" style="margin-top:10px">
-        <button class="btn" onclick="APP.addAg()">Salvar</button>
-        <button class="btn ghost" onclick="APP.clearAg()">Limpar</button>
-        <button class="btn ghost" onclick="APP.notifPerm()">Notificações</button>
-      </div>
-      <div class="small" style="margin-top:8px">Lembrete 1h antes funciona com o app aberto.</div>
-    </div>
-
-    <div class="card" style="margin-top:10px">
-      <div style="font-weight:950">Serviços</div>
-      <div class="list" id="agList"></div>
-    </div>
-  `,
-
-  clientes:()=>`
-    <div class="card">
-      <div class="grid2">
-        <div><div class="small">Nome</div><input class="in" id="cNome" placeholder="Cliente"></div>
-        <div><div class="small">Telefone</div><input class="in" id="cTel" inputmode="tel" placeholder="(41) 9...."></div>
-      </div>
-      <div style="margin-top:10px"><div class="small">Endereço</div><input class="in" id="cEnd" placeholder="Rua, bairro..."></div>
-      <div class="row" style="margin-top:10px">
-        <button class="btn" onclick="APP.addCli()">Salvar</button>
-        <button class="btn ghost" onclick="APP.clearCli()">Limpar</button>
-      </div>
-    </div>
-
-    <div class="card" style="margin-top:10px">
-      <div style="font-weight:950">Clientes</div>
-      <div class="list" id="cliList"></div>
-    </div>
-  `,
-
-  orc:()=>`
-    <div class="card">
-      <div class="grid2">
-        <div><div class="small">Cliente</div><input class="in" id="oCli" placeholder="Nome do cliente"></div>
-        <div><div class="small">Telefone</div><input class="in" id="oTel" inputmode="tel" placeholder="(41) 9...."></div>
-      </div>
-      <div class="grid2" style="margin-top:10px">
-        <div><div class="small">Preço</div><input class="in" id="oVal" type="number" step="0.01" placeholder="Ex: 1200"></div>
-        <div><div class="small">Prazo</div><input class="in" id="oPrazo" placeholder="Ex: 3 dias"></div>
-      </div>
-      <div style="margin-top:10px"><div class="small">Descrição</div><input class="in" id="oDesc" placeholder="Ex: Portão + pintura..."></div>
-      <div class="row" style="margin-top:10px">
-        <button class="btn" onclick="APP.addOrc()">Salvar</button>
-        <button class="btn ghost" onclick="APP.clearOrc()">Limpar</button>
-        <button class="btn ghost" onclick="APP.zapOrc()">Enviar no WhatsApp</button>
-      </div>
-    </div>
-
-    <div class="card" style="margin-top:10px">
-      <div style="font-weight:950">Orçamentos</div>
-      <div class="list" id="orcList"></div>
-    </div>
-  `,
-
-  mat:()=>`
-    <div class="card">
-      <div class="grid2">
-        <div><div class="small">Material</div><input class="in" id="mtNome" placeholder="Ex: Tubo, eletrodo"></div>
-        <div><div class="small">Custo</div><input class="in" id="mtVal" type="number" step="0.01" placeholder="Ex: 80"></div>
-      </div>
-      <div class="grid2" style="margin-top:10px">
-        <div><div class="small">Data</div><input class="in" id="mtData" type="date"></div>
-        <div><div class="small">Cliente (opcional)</div><input class="in" id="mtCli" placeholder="Nome do cliente"></div>
-      </div>
-      <div class="row" style="margin-top:10px">
-        <button class="btn" onclick="APP.addMat()">Salvar</button>
-        <button class="btn ghost" onclick="APP.clearMat()">Limpar</button>
-      </div>
-      <div class="small" style="margin-top:8px">Materiais entram como custo no mês.</div>
-    </div>
-
-    <div class="card" style="margin-top:10px">
-      <div style="font-weight:950">Materiais (mês)</div>
-      <div class="list" id="matList"></div>
-    </div>
-  `,
-
-  cfg:()=>`
-    <div class="card">
-      <div style="font-weight:950">Config</div>
-      <div class="small">Número alvo do WhatsApp (pai). Use só números com DDI.</div>
-      <div class="sep"></div>
-
-      <div class="small">WhatsApp alvo</div>
-      <input class="in" id="zNum" inputmode="numeric" placeholder="Ex: 5541999999999">
-
-      <div class="row" style="margin-top:10px">
-        <button class="btn" onclick="CFG.save()">Salvar</button>
-        <button class="btn ghost" onclick="BK.export()">Exportar</button>
-        <button class="btn ghost" onclick="BK.import()">Importar</button>
-        <button class="btn danger" onclick="BK.wipe()">Apagar tudo</button>
-      </div>
-    </div>
-  `
-};
-<!-- ===================== PARTE 2/20 ===================== -->
-const RENDER={
-  movList(m){
-    const rows=DB.mov
-      .filter(x=>x.m===m)
-      .slice()
-      .sort((a,b)=> (b.data.localeCompare(a.data)) || (b.id.localeCompare(a.id)));
-
-    const html = rows.length ? rows.map(x=>`
-      <div class="it">
-        <div style="min-width:0">
-          <div style="font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
-            <span class="tag" style="border-color:${x.tipo==="GN"?"#2a6f44":"#6b2a33"};color:${x.tipo==="GN"?"#bfffd4":"#ffd6dc"}">
-              ${x.tipo}
-            </span>
-            ${brl(x.val)}
-            ${x.cli?` <span class="tag">${x.cli}</span>`:""}
-          </div>
-          <div class="small">
-            ${x.data}${x.cat?` • ${x.cat}`:""}${x.obs?` • ${x.obs}`:""}
-          </div>
-        </div>
-        <div class="row" style="gap:8px;flex-wrap:nowrap">
-          <button class="btn ghost" style="padding:10px 10px" onclick="APP.copyMov('${x.id}')">Copiar</button>
-          <button class="btn danger" style="padding:10px 10px" onclick="APP.delMov('${x.id}')">X</button>
-        </div>
-      </div>
-    `).join("") : `<div class="small">Sem lançamentos neste mês.</div>`;
-
-    $("movList") && ($("movList").innerHTML=html);
-    $("movList2") && ($("movList2").innerHTML=html);
-  },
-
-  agList(){
-    const rows=DB.ag.slice().sort((a,b)=>(a.data+a.hora).localeCompare(b.data+b.hora));
-    $("agList") && ($("agList").innerHTML=rows.length?rows.map(s=>`
-      <div class="it">
-        <div style="min-width:0">
-          <div style="font-weight:900">${s.cli} <span class="tag">${s.data} ${s.hora}</span></div>
-          <div class="small">${s.desc}${s.tel?` • 📞 ${s.tel}`:""}</div>
-        </div>
-        <button class="btn danger" style="padding:10px 12px" onclick="APP.delAg('${s.id}')">Remover</button>
-      </div>
-    `).join(""):`<div class="small">Sem serviços ainda.</div>`);
-  },
-
-  cliList(){
-    const rows=DB.cli.slice().sort((a,b)=>a.nome.localeCompare(b.nome));
-    $("cliList") && ($("cliList").innerHTML=rows.length?rows.map(c=>`
-      <div class="it">
-        <div style="min-width:0">
-          <div style="font-weight:900">${c.nome}</div>
-          <div class="small">${c.tel?`📞 ${c.tel}`:"Sem telefone"}${c.end?` • 📍 ${c.end}`:""}</div>
-        </div>
-        <button class="btn danger" style="padding:10px 12px" onclick="APP.delCli('${c.id}')">Remover</button>
-      </div>
-    `).join(""):`<div class="small">Sem clientes ainda.</div>`);
-  },
-
-  orcList(){
-    const rows=DB.orc.slice().sort((a,b)=>b.at-a.at);
-    $("orcList") && ($("orcList").innerHTML=rows.length?rows.map(o=>`
-      <div class="it">
-        <div style="min-width:0">
-          <div style="font-weight:900">${o.cli} <span class="tag">${brl(o.val)}</span></div>
-          <div class="small">${o.desc}${o.prazo?` • ⏱ ${o.prazo}`:""}${o.tel?` • 📞 ${o.tel}`:""}</div>
-        </div>
-        <div class="row" style="gap:8px;flex-wrap:nowrap">
-          <button class="btn ghost" style="padding:10px 10px" onclick="APP.zapOrc('${o.id}')">Zap</button>
-          <button class="btn danger" style="padding:10px 10px" onclick="APP.delOrc('${o.id}')">X</button>
-        </div>
-      </div>
-    `).join(""):`<div class="small">Sem orçamentos ainda.</div>`);
-  },
-
-  matList(m){
-    const rows=DB.mat.filter(x=>x.m===m).slice().sort((a,b)=>b.data.localeCompare(a.data));
-    $("matList") && ($("matList").innerHTML=rows.length?rows.map(x=>`
-      <div class="it">
-        <div style="min-width:0">
-          <div style="font-weight:900">${x.nome} <span class="tag">${brl(x.val)}</span> ${x.cli?`<span class="tag">${x.cli}</span>`:""}</div>
-          <div class="small">${x.data}</div>
-        </div>
-        <button class="btn danger" style="padding:10px 12px" onclick="APP.delMat('${x.id}')">Remover</button>
-      </div>
-    `).join(""):`<div class="small">Sem materiais neste mês.</div>`);
-  }
-};
-<!-- ===================== PARTE 3/20 ===================== -->
-const CHART={
-  bars(id,gn,sd){
-    const c=$(id); if(!c) return;
-    const g=c.getContext("2d"), W=c.width, H=c.height, pad=36;
-    const max=Math.max(1,gn,sd);
-    let t=0;
-
-    const draw=()=>{
-      g.clearRect(0,0,W,H);
-
-      // grid
-      g.globalAlpha=.22; g.strokeStyle="#2b4135"; g.lineWidth=2;
-      for(let i=0;i<=4;i++){
-        const y=pad+(i*(H-2*pad)/4);
-        g.beginPath(); g.moveTo(30,y); g.lineTo(W-30,y); g.stroke();
-      }
-      g.globalAlpha=1;
-
-      const h1=(H-2*pad)*(gn/max)*t, h2=(H-2*pad)*(sd/max)*t;
-      const bw=160, gap=120, x1=W/2-gap-bw, x2=W/2+gap;
-
-      // glow
-      g.globalCompositeOperation="lighter";
-      g.fillStyle="rgba(82,255,138,.16)"; g.fillRect(x1-10,H-pad-h1-10,bw+20,h1+20);
-      g.fillStyle="rgba(255,90,107,.14)"; g.fillRect(x2-10,H-pad-h2-10,bw+20,h2+20);
-      g.globalCompositeOperation="source-over";
-
-      // bars
-      g.fillStyle="rgba(82,255,138,.90)"; rr(g,x1,H-pad-h1,bw,h1,18);
-      g.fillStyle="rgba(255,90,107,.88)"; rr(g,x2,H-pad-h2,bw,h2,18);
-
-      // labels
-      g.fillStyle="#eaffef"; g.font="900 24px system-ui"; g.textAlign="center";
-      g.fillText("GN",x1+bw/2, H-pad-h1-12);
-      g.fillText("SD",x2+bw/2, H-pad-h2-12);
-      g.font="800 18px system-ui"; g.globalAlpha=.85;
-      g.fillText(brl(gn),x1+bw/2, H-pad+28);
-      g.fillText(brl(sd),x2+bw/2, H-pad+28);
-      g.globalAlpha=1;
-
-      if(t<1){ t=Math.min(1,t+0.07); requestAnimationFrame(draw); }
-    };
-    draw();
-  }
-};
-function rr(g,x,y,w,h,r){ g.beginPath(); g.roundRect(x,y,w,h,r); g.fill(); }
-<!-- ===================== PARTE 4/20 ===================== -->
-const APP={
-  started:false, curTab:0, curYM:ym(),
-
-  mount(){
-    $("t0").innerHTML=UI.dash();
-    $("t1").innerHTML=UI.mov();
-    $("t2").innerHTML=UI.agenda();
-    $("t3").innerHTML=UI.clientes();
-    $("t4").innerHTML=UI.orc();
-    $("t5").innerHTML=UI.mat();
-    $("t6").innerHTML=UI.cfg();
-  },
-
-  start(){
-    $("splash").className="tab";
-    $("app").className="tab on";
-    $("nav").style.display="block";
-    this.started=true;
-    this.mount();
-    this.tab(0);
-    this.render();
-  },
-
-  tab(i){
-    if(!this.started) return this.start();
-    this.curTab=i;
-    ["t0","t1","t2","t3","t4","t5","t6"].forEach((t,idx)=>$(t).className="tab"+(idx===i?" on":""));
-    ["n0","n1","n2","n3","n4","n5","n6"].forEach(n=>$(n)?.classList.remove("on"));
-    $("n"+i)?.classList.add("on");
-
-    if(i===1){ $("mData").value=iso(); this.setTipo(DB.tipo,true); }
-    if(i===2){ $("aData").value=iso(); $("aHora").value="08:00"; }
-    if(i===5){ this.clearMat(); }
-    if(i===6){ CFG.load(); }
-
-    this.render();
-  },
-
-  sum(m){
-    let gn=0,sd=0,mat=0;
-    DB.mov.forEach(x=>{ if(x.m!==m) return; (x.tipo==="GN"?gn:sd)+=x.val; });
-    DB.mat.forEach(x=>{ if(x.m!==m) return; mat+=x.val; });
-    return {gn,sd,mat};
-  },
-
-  render(){
-    if(!this.started) return;
-
-    const m=this.curYM || ym();
-    const today=iso();
-    const s=this.sum(m);
-
-    let hgn=0,hsd=0;
-    DB.mov.forEach(x=>{ if(x.data!==today) return; (x.tipo==="GN"?hgn:hsd)+=x.val; });
-
-    $("labMes") && ($("labMes").textContent=m);
-    $("kHoje") && ($("kHoje").textContent=brl(hgn-hsd));
-    $("kHoje2") && ($("kHoje2").textContent=`GN: ${brl(hgn)} • SD: ${brl(hsd)}`);
-    $("kMes") && ($("kMes").textContent=brl(s.gn-s.sd-s.mat));
-    $("kMes2") && ($("kMes2").textContent=`GN: ${brl(s.gn)} • SD: ${brl(s.sd)} • Materiais: ${brl(s.mat)}`);
-
-    RENDER.movList(m);
-    RENDER.agList();
-    RENDER.cliList();
-    RENDER.orcList();
-    RENDER.matList(m);
-
-    if(this.curTab===0){
-      CHART.bars("chBars", s.gn, s.sd+s.mat);
-      $("barsTip") && ($("barsTip").textContent=
-        `GN ${brl(s.gn)} • SD ${brl(s.sd)} • Materiais ${brl(s.mat)} • Saldo ${brl(s.gn-s.sd-s.mat)}`
-      );
-    }
-  },
-
-  /* MOV */
-  setTipo(t,silent){
-    DB.tipo=t;
-    $("bGN") && ($("bGN").className="btn "+(t==="GN"?"":"ghost"));
-    $("bSD") && ($("bSD").className="btn "+(t==="SD"?"":"ghost"));
-    !silent && vib(10);
-    save();
-  },
-  quickAdd(v){ $("mVal").value=+(($("mVal").value||0))+v; vib(8); },
-  clearMov(){ ["mVal","mCli","mCat","mObs"].forEach(id=>$(id).value=""); $("mData").value=iso(); },
-  addMov(){
-    const data=$("mData").value||iso();
-    const val=+($("mVal").value||0);
-    if(!val||val<=0) return alert("Valor inválido");
-    const m=data.slice(0,7);
-    DB.mov.push({id:Date.now()+"",m,data,val,tipo:DB.tipo||"GN",cli:($("mCli").value||"").trim(),cat:($("mCat").value||"").trim(),obs:($("mObs").value||"").trim()});
-    this.curYM=m;
-    this.clearMov();
-    save();
-    this.tab(0);
-  },
-  delMov(id){ if(!confirm("Remover lançamento?")) return; DB.mov=DB.mov.filter(x=>x.id!==id); save(); },
-  copyMov(id){
-    const x=DB.mov.find(a=>a.id===id); if(!x) return;
-    const txt=`${x.tipo} • ${x.data} • ${brl(x.val)}${x.cli?` • ${x.cli}`:""}${x.cat?` • ${x.cat}`:""}${x.obs?` • ${x.obs}`:""}`;
-    navigator.clipboard?.writeText(txt);
-    alert("Copiado ✅");
-  },
-
-  /* AGENDA */
-  clearAg(){ ["aCli","aTel","aDesc"].forEach(id=>$(id).value=""); $("aData").value=iso(); $("aHora").value="08:00"; },
-  async notifPerm(){ if(!("Notification" in window)) return alert("Sem suporte a notificação."); const p=await Notification.requestPermission(); alert(p==="granted"?"OK ✅":"Negado."); },
-  addAg(){
-    const cli=($("aCli").value||"").trim(), desc=($("aDesc").value||"").trim();
-    const data=$("aData").value||iso(), hora=$("aHora").value||"08:00";
-    if(!cli||!desc) return alert("Cliente e serviço obrigatórios");
-    DB.ag.push({id:Date.now()+"",cli,desc,data,hora,tel:digits($("aTel").value)});
-    save(); this.clearAg();
-  },
-  delAg(id){ if(!confirm("Remover serviço?")) return; DB.ag=DB.ag.filter(s=>s.id!==id); save(); },
-
-  /* CLIENTES */
-  clearCli(){ ["cNome","cTel","cEnd"].forEach(id=>$(id).value=""); },
-  addCli(){
-    const nome=($("cNome").value||"").trim(); if(!nome) return alert("Nome obrigatório");
-    const tel=digits($("cTel").value), end=($("cEnd").value||"").trim();
-    const ex=DB.cli.find(c=>c.nome.toLowerCase()===nome.toLowerCase());
-    if(ex){ ex.tel=tel; ex.end=end; } else DB.cli.push({id:Date.now()+"",nome,tel,end});
-    save(); this.clearCli();
-  },
-  delCli(id){ if(!confirm("Remover cliente?")) return; DB.cli=DB.cli.filter(c=>c.id!==id); save(); },
-
-  /* ORÇ */
-  clearOrc(){ ["oCli","oTel","oVal","oPrazo","oDesc"].forEach(id=>$(id).value=""); },
-  addOrc(){
-    const cli=($("oCli").value||"").trim(), val=+($("oVal").value||0), desc=($("oDesc").value||"").trim();
-    if(!cli||!val||val<=0||!desc) return alert("Cliente, preço e descrição obrigatórios");
-    DB.orc.push({id:Date.now()+"",cli,tel:digits($("oTel").value),val,prazo:($("oPrazo").value||"").trim(),desc,at:Date.now()});
-    save(); this.clearOrc();
-  },
-  delOrc(id){ if(!confirm("Remover orçamento?")) return; DB.orc=DB.orc.filter(o=>o.id!==id); save(); },
-  zapOrc(id){
-    const o=id?DB.orc.find(x=>x.id===id):null;
-    const cli=o?o.cli:($("oCli").value||"").trim();
-    const val=o?o.val:+($("oVal").value||0);
-    const prazo=o?o.prazo:($("oPrazo").value||"").trim();
-    const desc=o?o.desc:($("oDesc").value||"").trim();
-    const tel=digits((o?o.tel:$("oTel").value) || DB.cfg.zap || "");
-    if(!cli||!val||!desc) return alert("Preencha cliente, valor e descrição.");
-    const msg=`*Orçamento - Serralheria do Gil*\nCliente: ${cli}\nServiço: ${desc}\nValor: ${brl(val)}\nPrazo: ${prazo||"a combinar"}\n\nSe aprovar, me confirma por aqui.`;
-    const base=tel?`https://wa.me/${tel}`:`https://wa.me/`;
-    window.open(`${base}?text=${encodeURIComponent(msg)}`,"_blank");
-  },
-
-  /* MATERIAIS */
-  clearMat(){ ["mtNome","mtVal","mtCli"].forEach(id=>$(id).value=""); $("mtData").value=iso(); },
-  addMat(){
-    const nome=($("mtNome").value||"").trim(), val=+($("mtVal").value||0), data=$("mtData").value||iso();
-    if(!nome||!val||val<=0) return alert("Material e custo obrigatórios");
-    DB.mat.push({id:Date.now()+"",nome,val,data,cli:($("mtCli").value||"").trim(),m:data.slice(0,7)});
-    this.curYM=data.slice(0,7);
-    save(); this.clearMat();
-  },
-  delMat(id){ if(!confirm("Remover material?")) return; DB.mat=DB.mat.filter(x=>x.id!==id); save(); }
-};
-<!-- ===================== PARTE 5/20 ===================== -->
-<script>
-UI.agenda=()=>`
-  <div class="card">
-    <div class="grid2">
-      <div><div class="small">Cliente</div><input class="in" id="aCli" placeholder="Nome do cliente"></div>
-      <div><div class="small">Telefone</div><input class="in" id="aTel" inputmode="tel" placeholder="(41) 9...."></div>
-    </div>
-    <div class="grid2" style="margin-top:10px">
-      <div><div class="small">Data</div><input class="in" id="aData" type="date"></div>
-      <div><div class="small">Hora</div><input class="in" id="aHora" type="time"></div>
-    </div>
-    <div style="margin-top:10px"><div class="small">Serviço</div><input class="in" id="aDesc" placeholder="Ex: instalar portão, solda, ajuste..."></div>
-    <div class="row" style="margin-top:10px">
-      <button class="btn" onclick="APP.addAg()">Salvar serviço</button>
-      <button class="btn ghost" onclick="APP.notifPerm()">Ativar notificações</button>
-      <button class="btn ghost" onclick="APP.clearAg()">Limpar</button>
-    </div>
-    <div class="small" style="margin-top:8px">Lembrete 1h antes: funciona com o app aberto (modo PWA melhora).</div>
+<div class="stage"><div class="shell" id="shell"><div class="card" id="card"><div class="inner">
+  <div class="top">
+    <div class="logo">🔧</div>
+    <div><div class="h1">Serralheria do Gil</div><div class="sub">Controle offline • PIN • Tudo salvo no celular</div></div>
+    <div class="pill" id="pinStatus">Sem PIN</div>
   </div>
-  <div class="card"><div style="font-weight:950">Próximos serviços</div><div class="list" id="agList"></div></div>
-`;
-UI.clientes=()=>`
-  <div class="card">
-    <div class="grid2">
-      <div><div class="small">Nome</div><input class="in" id="cNome" placeholder="Cliente"></div>
-      <div><div class="small">Telefone</div><input class="in" id="cTel" inputmode="tel" placeholder="(41) 9...."></div>
-    </div>
-    <div style="margin-top:10px"><div class="small">Endereço</div><input class="in" id="cEnd" placeholder="Rua, bairro..."></div>
-    <div class="row" style="margin-top:10px">
-      <button class="btn" onclick="APP.addCli()">Salvar</button>
-      <button class="btn ghost" onclick="APP.clearCli()">Limpar</button>
-    </div>
+  <div class="hr"></div>
+  <div class="center"><div class="q">Gostaria de fazer dinheiro?</div><div class="p">Clique no botão abaixo.</div></div>
+
+  <div class="row" id="heroBtns">
+    <button class="btn primary assem" id="btnStart" style="--sx:-40px;--sy:18px">Iniciar</button>
+    <button class="btn ghost assem" id="btnReset" style="--sx:50px;--sy:22px">Reset</button>
+    <button class="btn ghost assem" id="btnSound" style="--sx:0px;--sy:40px">Som: OFF</button>
   </div>
-  <div class="card"><div style="font-weight:950">Lista de clientes</div><div class="list" id="cliList"></div></div>
-`;
-UI.orc=()=>`
-  <div class="card">
-    <div class="grid2">
-      <div><div class="small">Cliente</div><input class="in" id="oCli" placeholder="Nome do cliente"></div>
-      <div><div class="small">Telefone</div><input class="in" id="oTel" inputmode="tel" placeholder="(41) 9...."></div>
+
+  <div class="pinbox" id="pinArea">
+    <input class="pin" id="pinInput" inputmode="numeric" maxlength="4" placeholder="PIN (4 dígitos)">
+    <div class="dots" id="dots"><i></i><i></i><i></i><i></i></div>
+    <div class="actions">
+      <button class="btn ghost assem" id="btnSetPin" style="--sx:-30px;--sy:26px">Criar/Alterar PIN</button>
+      <button class="btn ghost assem" id="btnUnlock" style="--sx:30px;--sy:26px">Desbloquear</button>
     </div>
-    <div class="grid2" style="margin-top:10px">
-      <div><div class="small">Preço</div><input class="in" id="oVal" type="number" step="0.01" placeholder="Ex: 1200"></div>
-      <div><div class="small">Prazo</div><input class="in" id="oPrazo" placeholder="Ex: 3 dias / 1 semana"></div>
-    </div>
-    <div style="margin-top:10px"><div class="small">Descrição</div><input class="in" id="oDesc" placeholder="Ex: portão + pintura..."></div>
-    <div class="row" style="margin-top:10px">
-      <button class="btn" onclick="APP.addOrc()">Salvar</button>
-      <button class="btn ghost" onclick="APP.zapOrc()">Enviar no WhatsApp</button>
-      <button class="btn ghost" onclick="APP.clearOrc()">Limpar</button>
-    </div>
+    <div class="note" id="note">Digite seu PIN para entrar.</div>
   </div>
-  <div class="card"><div style="font-weight:950">Orçamentos</div><div class="list" id="orcList"></div></div>
-`;
-</script>
-<!-- fim parte 5 -->
- <!-- ===================== PARTE 6/20 ===================== -->
+
+  <div class="small" id="smallTip">Dica: se esquecer o PIN, use <b>Reset</b> (apaga o PIN do aparelho).</div>
+</div></div></div></div>
+
+<div class="main" id="main"><div class="wrap"><div class="box">
+  <h2>Entrou ✅</h2><p>Agora você pluga as próximas telas (Dash, Mov, Agenda...).</p>
+  <div class="row"><button class="btn primary" id="btnBack">Voltar</button></div>
+</div></div></div>
 <script>
-/* ===== Helpers + Storage ===== */
-const $=id=>document.getElementById(id);
-const brl=n=>Number(n||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
-const iso=()=>new Date().toISOString().slice(0,10);
-const ym=d=>(d||new Date()).toISOString().slice(0,7);
-const pad=n=>String(n).padStart(2,"0");
-const digits=s=>(s||"").replace(/\D/g,"");
-const vib=ms=>navigator.vibrate&&navigator.vibrate(ms||12);
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const LS=(k,v)=>v===undefined?localStorage.getItem(k):localStorage.setItem(k,v);
+const vib=(ms=12)=>navigator.vibrate&&navigator.vibrate(ms);
+const now=()=>Date.now();
+const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
+const rnd=(a,b)=>a+Math.random()*(b-a);
 
-const KEY="gil_app_v1";
-const load=()=>{try{return JSON.parse(localStorage.getItem(KEY)||"null")}catch{return null}};
-const save=()=>localStorage.setItem(KEY,JSON.stringify(DB));
+const KEY_PIN="gil_pin_v1", KEY_LOCK="gil_pin_lock_v1";
+let tries=0, lockedUntil=0;
 
-let DB=load()||{
-  cfg:{pinOn:false,pinHash:"",zap:"554195008252"}, // <== número do Whats do seu pai (DDI+DDD+numero)
-  tipo:"GN",mov:[],ag:[],cli:[],orc:[],mat:[]
-};
+function pinExists(){return !!LS(KEY_PIN);}
+function setPinStatus(){ $("#pinStatus").textContent = pinExists() ? "Com PIN" : "Sem PIN"; }
+function hash4(s){
+  let h=2166136261;
+  for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}
+  return (h>>>0).toString(16);
+}
+function setLock(ms){ lockedUntil=now()+ms; LS(KEY_LOCK,String(lockedUntil)); updateNote(); }
+function loadLock(){ lockedUntil=+(LS(KEY_LOCK)||0); if(lockedUntil<now()) lockedUntil=0; }
+function lockLeft(){ return Math.max(0,lockedUntil-now()); }
 
-const APP={
-  started:false,curTab:0,curYM:ym(),
-  mount(){
-    // injeta HTML das telas (o conteúdo real fica aqui, não “some” do nada)
-    $("t0").innerHTML=UI.dash();
-    $("t1").innerHTML=UI.mov();
-    $("t2").innerHTML=UI.agenda();
-    $("t3").innerHTML=UI.clientes();
-    $("t4").innerHTML=UI.orc();
+function updateDots(){
+  const v=$("#pinInput").value.replace(/\D/g,"").slice(0,4);
+  $("#pinInput").value=v;
+  $$("#dots i").forEach((d,i)=>d.classList.toggle("on",i<v.length));
+}
+function updateNote(msg,cls){
+  const n=$("#note");
+  if(msg){ n.textContent=msg; n.className="note "+(cls||""); return; }
+  const left=lockLeft();
+  if(left>0){ n.textContent=`Bloqueado por ${Math.ceil(left/1000)}s (muitas tentativas).`; n.className="note lock"; }
+  else{ n.textContent= pinExists()? "Digite seu PIN para entrar." : "Sem PIN: crie um PIN primeiro."; n.className="note"; }
+}
+function clearPinInput(){ $("#pinInput").value=""; updateDots(); }
 
-    // defaults
-    if($("mData")) $("mData").value=iso();
-    if($("aData")) $("aData").value=iso();
-    if($("aHora")) $("aHora").value="08:00";
-    this.setTipo(DB.tipo,true);
-  },
-  start(){
-    vib(18);
-    $("splash").className="tab";
-    $("app").className="tab on";
-    this.started=true;
-    this.mount();
-    FX.start();
-    if(DB.cfg.pinOn) PIN.open(); else this.render();
-  },
-  tab(i){
-    if(!this.started) return this.start();
-    this.curTab=i;
-    ["t0","t1","t2","t3","t4"].forEach((t,idx)=>$(t).className="tab"+(idx===i?" on":""));
-    ["n0","n1","n2","n3","n4"].forEach(n=>$(n).classList.remove("on"));
-    $("n"+i).classList.add("on");
-    vib(10); this.render(); ANIM.page();
-  },
-  fechamento(){
-    // trava tudo com uma “virada” de mês (só um resumo, sem apagar dados)
-    const m=this.curYM;
-    const s=this.sum(m);
-    alert(`Fechamento ${m}\nGN: ${brl(s.gn)}\nSD: ${brl(s.sd)}\nSaldo: ${brl(s.gn-s.sd)}`);
+function doSetPin(){
+  if(lockLeft()>0) return bump($("#pinArea"),"lock");
+  const v=$("#pinInput").value;
+  if(v.length!==4) return bump($("#pinArea"),"bad","PIN precisa ter 4 dígitos.");
+  LS(KEY_PIN,hash4(v)); tries=0; clearPinInput();
+  setPinStatus(); updateNote("PIN salvo ✅","");
+  sparkAtCenter($("#btnSetPin"));
+}
+function doUnlock(){
+  if(lockLeft()>0) return bump($("#pinArea"),"lock");
+  if(!pinExists()) return bump($("#pinArea"),"bad","Crie um PIN primeiro.");
+  const v=$("#pinInput").value;
+  if(v.length!==4) return bump($("#pinArea"),"bad","Digite o PIN de 4 dígitos.");
+  const ok = hash4(v) === LS(KEY_PIN);
+  if(!ok){
+    tries++; clearPinInput(); vib(20);
+    if(tries>=5){tries=0; setLock(30000); bump($("#pinArea"),"bad","Errou 5x. Bloqueado 30s.");}
+    else bump($("#pinArea"),"bad",`PIN incorreto (${tries}/5).`);
+    return;
   }
-};
-</script>
-<!-- ===================== PARTE 7/20 ===================== -->
-<script>
-/* ===== PIN (offline) ===== */
-const PIN={
-  buf:"",mode:"check", // check / set1 / set2
-  open(){ this.buf=""; this.mode=DB.cfg.pinHash?"check":"set1"; this.draw(); $("pinOverlay").classList.add("on"); },
-  close(){ $("pinOverlay").classList.remove("on"); this.buf=""; },
-  forgot(){
-    if(!confirm("Zerar PIN? Isso remove a proteção.")) return;
-    DB.cfg.pinOn=false; DB.cfg.pinHash=""; save(); this.close(); APP.render();
-  },
-  tap(k){
-    if(k==="del") this.buf=this.buf.slice(0,-1);
-    else if(k==="ok") return this.ok();
-    else if(this.buf.length<4) this.buf+=k;
-    vib(8); this.draw();
-    if(this.buf.length===4) setTimeout(()=>this.ok(),120);
-  },
-  ok(){
-    if(this.buf.length<4) return;
-    const h=this.hash(this.buf);
-    if(this.mode==="check"){
-      if(h===DB.cfg.pinHash){ this.close(); APP.render(); return; }
-      this.buf=""; $("pinHint").textContent="PIN incorreto. Tenta de novo."; this.draw(); vib(40);
-    }else if(this.mode==="set1"){
-      this.tmp=h; this.buf=""; this.mode="set2";
-      $("pinHint").textContent="Confirme o PIN (4 dígitos)."; this.draw();
-    }else{
-      if(h!==this.tmp){ this.buf=""; this.mode="set1"; $("pinHint").textContent="Não bateu. Digite um PIN novo."; this.draw(); return; }
-      DB.cfg.pinOn=true; DB.cfg.pinHash=h; save();
-      $("pinHint").textContent="PIN ativado ✅"; this.close(); APP.render();
-    }
-  },
-  draw(){
-    // dots
-    $("pinDots").innerHTML=Array.from({length:4},(_,i)=>`<div class="pinDot ${i<this.buf.length?"on":""}"></div>`).join("");
-    // keypad
-    const keys=["1","2","3","4","5","6","7","8","9","del","0","ok"];
-    $("pinKeys").innerHTML=keys.map(k=>`<button class="key" onclick="PIN.tap('${k}')">${k==="del"?"⌫":k==="ok"?"OK":k}</button>`).join("");
-    if(!DB.cfg.pinHash) $("pinHint").textContent=this.mode==="set2"?"Confirme o PIN (4 dígitos).":"Crie um PIN (4 dígitos).";
-  },
-  hash(s){ // hash simples (só pra não guardar o PIN puro)
-    let x=2166136261; for(let i=0;i<s.length;i++){ x^=s.charCodeAt(i); x+=(x<<1)+(x<<4)+(x<<7)+(x<<8)+(x<<24); }
-    return (x>>>0).toString(16);
-  }
-};
-</script>
-<!-- ===================== PARTE 8/20 ===================== -->
-<script>
-/* ===== Movimentações ===== */
-APP.setTipo=(t,silent)=>{
-  DB.tipo=t; if(!silent) vib(12);
-  if($("bGN")) $("bGN").className="btn "+(t==="GN"?"":"ghost");
-  if($("bSD")) $("bSD").className="btn "+(t==="SD"?"":"ghost");
-  save();
-};
-APP.quickAdd=v=>{ const el=$("mVal"); el.value=+(el.value||0)+v; vib(8); };
+  tries=0; clearPinInput(); enterApp();
+}
+function doReset(){
+  if(!confirm("Reset vai apagar o PIN deste aparelho. Continuar?")) return;
+  localStorage.removeItem(KEY_PIN); localStorage.removeItem(KEY_LOCK);
+  tries=0; lockedUntil=0; setPinStatus(); updateNote("PIN removido.","");
+  sparkAtCenter($("#btnReset")); vib(14);
+}
+function enterApp(){
+  vib(14); sparkAtCenter($("#btnStart"));
+  $("#card").classList.add("fadeOut");
+  setTimeout(()=>$("#main").classList.add("on"),420);
+}
+function backHome(){
+  $("#main").classList.remove("on");
+  $("#card").classList.remove("fadeOut");
+  sparkAtCenter($("#btnBack")); vib(10);
+}
+  function setBtnPointerFx(btn,e){
+  const r=btn.getBoundingClientRect();
+  const cx=(e.touches?e.touches[0].clientX:e.clientX), cy=(e.touches?e.touches[0].clientY:e.clientY);
+  const x=(cx-r.left)/r.width*100, y=(cy-r.top)/r.height*100;
+  btn.style.setProperty("--mx",x.toFixed(1)+"%"); btn.style.setProperty("--my",y.toFixed(1)+"%");
+}
+function popBtn(btn){
+  btn.classList.add("pop","touch");
+  setTimeout(()=>btn.classList.remove("pop"),190);
+  setTimeout(()=>btn.classList.remove("touch"),260);
+}
+function sparkAtCenter(el){
+  const r=el.getBoundingClientRect();
+  burst(r.left+r.width/2,r.top+r.height/2,18,"mix"); // menor
+}
+function bump(el,cls,msg){
+  el.classList.remove("shake"); void el.offsetWidth; el.classList.add("shake");
+  updateNote(msg,cls||"");
+  burst(window.innerWidth/2,window.innerHeight/2-10,16,"neon"); // menor
+}
+function assemble(){
+  ["#btnStart","#btnReset","#btnSound","#btnSetPin","#btnUnlock"]
+  .forEach((sel,i)=>setTimeout(()=>$(sel).classList.add("on"),120+i*95));
+}
 
-APP.clearMov=()=>{
-  ["mVal","mCli","mCat","mObs"].forEach(id=>$(id).value="");
-  $("mData").value=iso();
-};
-
-APP.addMov=()=>{
-  const data=$("mData").value||iso();
-  const val=+($("mVal").value||0);
-  if(!val||val<=0) return alert("Valor inválido");
-  const m=data.slice(0,7);
-  DB.mov.push({
-    id:Date.now()+"",m,data,val,tipo:DB.tipo,
-    cli:($("mCli").value||"").trim(),
-    cat:($("mCat").value||"").trim(),
-    obs:($("mObs").value||"").trim()
+function wireButtons(){
+  $$(".btn").forEach(b=>{
+    b.addEventListener("mousemove",e=>{setBtnPointerFx(b,e);});
+    b.addEventListener("touchmove",e=>setBtnPointerFx(b,e),{passive:true});
+    b.addEventListener("mouseenter",()=>{popBtn(b); const r=b.getBoundingClientRect(); burst(r.left+r.width/2,r.top+r.height/2,8,"spark");});
+    b.addEventListener("touchstart",e=>{setBtnPointerFx(b,e);popBtn(b); burstTouch(e,false)}, {passive:true});
+    b.addEventListener("click",()=>{popBtn(b);clickTick();});
   });
-  save(); APP.curYM=m; APP.clearMov(); APP.render(); APP.tab(0);
-};
+  $("#btnStart").onclick=()=>{ if(pinExists()) doUnlock(); else bump($("#pinArea"),"bad","Crie um PIN primeiro."); };
+  $("#btnReset").onclick=doReset;
+  $("#btnSetPin").onclick=doSetPin;
+  $("#btnUnlock").onclick=doUnlock;
+  $("#btnBack").onclick=backHome;
+  $("#pinInput").addEventListener("input",updateDots);
+  $("#pinInput").addEventListener("keydown",(e)=>{ if(e.key==="Enter") doUnlock(); });
+}
 
-APP.delMov=id=>{
-  if(!confirm("Remover lançamento?")) return;
-  DB.mov=DB.mov.filter(x=>x.id!==id); save(); APP.render();
-};
+function wireParallax(){
+  const shell=$("#shell"), card=$("#card");
+  let tx=0,ty=0,ax=0,ay=0;
+  const apply=()=>{
+    ax+=(tx-ax)*.12; ay+=(ty-ay)*.12;
+    card.style.transform=`rotateX(${(-ay*9).toFixed(2)}deg) rotateY(${(ax*9).toFixed(2)}deg)`;
+    requestAnimationFrame(apply);
+  }; apply();
+  const set=(x,y)=>{
+    const r=shell.getBoundingClientRect();
+    tx=clamp((x-(r.left+r.width/2))/r.width,-.6,.6);
+    ty=clamp((y-(r.top+r.height/2))/r.height,-.6,.6);
+  };
+  addEventListener("mousemove",e=>set(e.clientX,e.clientY));
+  addEventListener("touchmove",e=>{ if(e.touches[0]) set(e.touches[0].clientX,e.touches[0].clientY); },{passive:true});
+}
 
-APP.copyMov=id=>{
-  const x=DB.mov.find(a=>a.id===id); if(!x) return;
-  const txt=`${x.tipo} • ${x.data} • ${brl(x.val)}${x.cli?` • ${x.cli}`:""}${x.cat?` • ${x.cat}`:""}${x.obs?` • ${x.obs}`:""}`;
-  navigator.clipboard?.writeText(txt);
-  alert("Copiado ✅ Agora cola no WhatsApp.");
-};
-</script>
-<!-- ===================== PARTE 9/20 ===================== -->
-<script>
-/* ===== Clientes ===== */
-APP.clearCli=()=>["cNome","cTel","cEnd"].forEach(id=>$(id).value="");
-APP.addCli=()=>{
-  const nome=($("cNome").value||"").trim(); if(!nome) return alert("Nome obrigatório");
-  const tel=digits($("cTel").value), end=($("cEnd").value||"").trim();
-  const ex=DB.cli.find(c=>c.nome.toLowerCase()===nome.toLowerCase());
-  if(ex){ ex.tel=tel; ex.end=end; } else DB.cli.push({id:Date.now()+"",nome,tel,end});
-  save(); APP.clearCli(); APP.render();
-};
-APP.delCli=id=>{
-  if(!confirm("Remover cliente?")) return;
-  DB.cli=DB.cli.filter(c=>c.id!==id); save(); APP.render();
-};
+/* som + pulso BEM fraco */
+let audioOn=false, AC=null, master=null, o1=null,o2=null,lfo=null, filt=null;
+function audioInit(){
+  if(AC) return;
+  AC=new (window.AudioContext||window.webkitAudioContext)();
+  master=AC.createGain(); master.gain.value=.0; master.connect(AC.destination);
+  filt=AC.createBiquadFilter(); filt.type="lowpass"; filt.frequency.value=460; filt.connect(master);
+  o1=AC.createOscillator(); o1.type="sine"; o1.frequency.value=110;
+  o2=AC.createOscillator(); o2.type="triangle"; o2.frequency.value=220;
+  const g1=AC.createGain(); g1.gain.value=.18; const g2=AC.createGain(); g2.gain.value=.10;
+  o1.connect(g1); o2.connect(g2); g1.connect(filt); g2.connect(filt);
+  lfo=AC.createOscillator(); lfo.type="sine"; lfo.frequency.value=.06;
+  const lg=AC.createGain(); lg.gain.value=90; lfo.connect(lg); lg.connect(filt.frequency);
+  o1.start(); o2.start(); lfo.start();
+}
+function setAudio(on){
+  audioInit(); audioOn=on;
+  $("#btnSound").textContent="Som: "+(audioOn?"ON":"OFF");
+  const t=AC.currentTime;
+  master.gain.cancelScheduledValues(t);
+  master.gain.linearRampToValueAtTime(audioOn?.12:0,t+.25); // bem menor
+}
+function clickTick(){
+  if(!audioOn){vib(8);return;}
+  const t=AC.currentTime, osc=AC.createOscillator(), g=AC.createGain();
+  osc.type="square"; osc.frequency.value=780;
+  g.gain.setValueAtTime(.0001,t);
+  g.gain.exponentialRampToValueAtTime(.05,t+.01);
+  g.gain.exponentialRampToValueAtTime(.0001,t+.07);
+  osc.connect(g); g.connect(master); osc.start(t); osc.stop(t+.08); vib(6);
+}
+  const bg=$("#bg"), fx=$("#fx");
+const bctx=bg.getContext("2d"), fctx=fx.getContext("2d");
+let W=0,H=0,stars=[],bursts=[],bills=[];
+let pulse=0;
 
-/* ===== Agenda ===== */
-APP.clearAg=()=>{
-  ["aCli","aTel","aDesc"].forEach(id=>$(id).value="");
-  $("aData").value=iso(); $("aHora").value="08:00";
-};
-APP.notifPerm=async()=>{
-  if(!("Notification" in window)) return alert("Navegador sem suporte a notificação.");
-  const p=await Notification.requestPermission();
-  alert(p==="granted"?"Notificações ativadas ✅":"Permissão negada.");
-};
-APP.addAg=()=>{
-  const cli=($("aCli").value||"").trim();
-  const desc=($("aDesc").value||"").trim();
-  const data=$("aData").value||iso();
-  const hora=$("aHora").value||"08:00";
-  if(!cli||!desc) return alert("Cliente e serviço obrigatórios");
-  DB.ag.push({id:Date.now()+"",cli,desc,data,hora,tel:digits($("aTel").value),done:0});
-  save(); APP.clearAg(); APP.render(); APP._tickAg(true); vib(18);
-};
-APP.delAg=id=>{
-  if(!confirm("Remover serviço?")) return;
-  DB.ag=DB.ag.filter(s=>s.id!==id); save(); APP.render();
-};
-APP._tickAg=(fast)=>{
-  if(!("Notification" in window) || Notification.permission!=="granted") return;
-  setTimeout(()=>APP._checkAg(), fast?600:2500);
-};
-APP._checkAg=()=>{
-  const now=Date.now();
-  DB.ag.forEach(s=>{
-    if(s.done) return;
-    const dt=new Date(`${s.data}T${s.hora}:00`).getTime();
-    const left=dt-now;
-    if(left<=3600000 && left>0){
-      s.done=1; save();
-      new Notification("Serralheria do Gil",{
-        body:`Serviço: ${s.cli}\n${s.desc}\nFalta: ~${Math.ceil(left/60000)} min`
-      });
-    }
+function resize(){
+  W=bg.width=fx.width=innerWidth*devicePixelRatio;
+  H=bg.height=fx.height=innerHeight*devicePixelRatio;
+}
+addEventListener("resize",resize,{passive:true}); resize();
+
+function mkStars(n=230){
+  stars=[...Array(n)].map(()=>({
+    x:Math.random()*W,y:Math.random()*H,
+    r:rnd(.9,4.2)*devicePixelRatio,
+    vx:rnd(-.16,.16)*devicePixelRatio, vy:rnd(.10,.28)*devicePixelRatio,
+    a:rnd(.06,.30),
+    g:Math.random()<.88,
+  }));
+}
+mkStars();
+
+function burst(x,y,n=18,mode="mix"){
+  x*=devicePixelRatio; y*=devicePixelRatio;
+  const neon=(mode==="neon"), spark=(mode==="spark");
+  const arr=[...Array(n)].map(()=> {
+    const sp = neon? rnd(2.2,4.8) : spark? rnd(1.8,4.2) : rnd(2.0,4.6);
+    const ang = rnd(0,Math.PI*2);
+    const vx = Math.cos(ang)*sp*devicePixelRatio;
+    const vy = Math.sin(ang)*sp*devicePixelRatio - rnd(0,2.0)*devicePixelRatio;
+    const life = neon? rnd(26,56) : rnd(22,52);
+    const r = neon? rnd(1.1,2.5) : rnd(1.0,2.2);
+    let c;
+    if(neon) c = Math.random()<.7 ? `rgba(70,255,150,${rnd(.30,.75)})` : `rgba(120,200,255,${rnd(.18,.55)})`;
+    else if(spark) c = Math.random()<.8 ? `rgba(255,255,255,${rnd(.16,.45)})` : `rgba(70,255,150,${rnd(.16,.55)})`;
+    else c = Math.random()<.7 ? `rgba(70,255,150,${rnd(.18,.65)})` : `rgba(255,255,255,${rnd(.12,.42)})`;
+    return {x,y,vx,vy,life,r:r*devicePixelRatio,c,glow:neon?1:0};
   });
-};
-</script>
-<!-- ===================== PARTE 10/20 ===================== -->
-<script>
-/* ===== Sumários + Render ===== */
-APP.sum=m=>{
-  let gn=0,sd=0,mat=0;
-  DB.mov.forEach(x=>{ if(x.m!==m) return; (x.tipo==="GN"?gn:sd)+=x.val; });
-  DB.mat.forEach(x=>{ if(x.m!==m) return; mat+=x.val; });
-  return {gn,sd,mat};
-};
+  bursts.push(arr);
+}
+function burstTouch(e,heavy=false){
+  const t=e.touches&&e.touches[0]; if(!t) return;
+  burst(t.clientX,t.clientY, heavy?22:16, heavy?"neon":"mix");
+}
 
-APP.render=()=>{
-  if(!APP.started) return;
-  const m=APP.curYM, s=APP.sum(m), today=iso();
-  const st=APP.sum(today.slice(0,7));
-  const h=DB.mov.filter(x=>x.data===today);
-  let hgn=0,hsd=0; h.forEach(x=>x.tipo==="GN"?hgn+=x.val:hsd+=x.val);
-
-  $("labMes").textContent=m;
-  $("kHoje").textContent=brl(hgn-hsd);
-  $("kHoje2").textContent=`GN: ${brl(hgn)} • SD: ${brl(hsd)}`;
-  $("kMes").textContent=brl(s.gn-s.sd-s.mat);
-  $("kMes2").textContent=`GN: ${brl(s.gn)} • SD: ${brl(s.sd)} • Materiais: ${brl(s.mat)}`;
-
-  RENDER.movList(m);
-  RENDER.cliList();
-  RENDER.agList();
-  RENDER.orcList();
-  CHART.bars("chBars",s.gn,s.sd);
-  CHART.radar("chRadar",m);
-
-  // previsão simples (offline)
-  $("prev").textContent=brl(RENDER.prev(m));
-  $("topCli").textContent=RENDER.topCli(m) || "Sem dados";
-  APP._tickAg(false);
-};
-
-const RENDER={
-  prev(m){
-    // pega últimos 4 meses GN e projeta tendência
-    const months=[0,1,2,3].map(i=>{
-      const d=new Date(m+"-01"); d.setMonth(d.getMonth()-i);
-      const mm=d.toISOString().slice(0,7); return APP.sum(mm).gn;
-    }).reverse();
-    const a=months[0]||0,b=months[months.length-1]||0;
-    const trend=(b-a)/(months.length-1||1);
-    return Math.max(0,(b+trend));
-  },
-  topCli(m){
-    const map={};
-    DB.mov.forEach(x=>{
-      if(x.m!==m||!x.cli) return;
-      const k=x.cli.trim(); map[k]=(map[k]||0)+(x.tipo==="GN"?x.val:-x.val);
-    });
-    const arr=Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,3);
-    return arr.length?arr.map(([n,v])=>`${n}: ${brl(v)}`).join(" • "):"";
-  }
-};
-
-const CHART={
-  bars(id,gn,sd){
-    const c=$(id); if(!c) return; const g=c.getContext("2d");
-    const W=c.width,H=c.height; g.clearRect(0,0,W,H);
-    const max=Math.max(gn,sd,1), pad=48, bw=180, gap=90;
-    const x1=W/2-bw-gap/2, x2=W/2+gap/2;
-    const y0=H-pad, h1=(gn/max)*(H-2*pad), h2=(sd/max)*(H-2*pad);
-    const draw=(t)=>{
-      g.clearRect(0,0,W,H);
-      // grid
-      g.globalAlpha=.25; g.strokeStyle="#2b4135"; g.lineWidth=2;
-      for(let i=0;i<5;i++){ const y=pad+(i*(H-2*pad)/4); g.beginPath(); g.moveTo(40,y); g.lineTo(W-40,y); g.stroke(); }
-      g.globalAlpha=1;
-      // bars
-      const a=Math.min(1,t);
-      bar(x1,y0,bw,h1*a,"#52ff8a","GN");
-      bar(x2,y0,bw,h2*a,"#ff5a6b","SD");
-      // labels
-      g.fillStyle="#eaffef"; g.font="bold 34px system-ui";
-      g.textAlign="center"; g.fillText("GN vs SD",W/2,42);
-      $("barsTip").textContent=`GN ${brl(gn)} • SD ${brl(sd)} • Saldo ${brl(gn-sd)}`;
-      if(a<1) requestAnimationFrame(()=>draw(t+0.05));
-    };
-    const bar=(x,y,bw,bh,col,lab)=>{
-      g.fillStyle="rgba(0,0,0,.25)"; rr(x,y-(H-2*pad),bw,(H-2*pad),18);
-      g.fillStyle=col; rr(x,y-bh,bw,bh,18);
-      g.fillStyle="#08110c"; g.font="900 26px system-ui"; g.textAlign="center";
-      g.fillText(lab,x+bw/2,y-bh+34);
-      g.fillStyle="#eaffef"; g.font="800 18px system-ui";
-      g.fillText(brl(lab==="GN"?gn:sd),x+bw/2,y+26);
-    };
-    const rr=(x,y,w,h,r)=>{ g.beginPath(); g.roundRect(x,y,w,h,r); g.fill(); };
-    draw(0);
-  },
-  radar(id,m){
-    const c=$(id); if(!c) return; const g=c.getContext("2d");
-    const W=c.width,H=c.height; g.clearRect(0,0,W,H);
-    const cx=W/2, cy=H/2+10, R=Math.min(W,H)*0.32;
-    // categorias do mês (GN e SD)
-    const cat={}, catS={};
-    DB.mov.forEach(x=>{
-      if(x.m!==m||!x.cat) return;
-      const k=x.cat.trim(); (x.tipo==="GN"?cat:catS)[k]=(x.tipo==="GN"?cat:catS)[k]||0;
-      (x.tipo==="GN"?cat:catS)[k]+=x.val;
-    });
-    const keys=[...new Set([...Object.keys(cat),...Object.keys(catS)])].slice(0,6);
-    if(!keys.length){ g.fillStyle="#93a79a"; g.font="800 22px system-ui"; g.textAlign="center";
-      g.fillText("Sem categorias ainda",cx,cy); return; }
-    const vals=keys.map(k=>(cat[k]||0)-(catS[k]||0));
-    const max=Math.max(...vals.map(v=>Math.abs(v)),1);
-    // base grid
-    g.globalAlpha=.25; g.strokeStyle="#2b4135"; g.lineWidth=2;
-    for(let r=1;r<=4;r++){ g.beginPath(); for(let i=0;i<keys.length;i++){
-      const a=(Math.PI*2/keys.length)*i- Math.PI/2;
-      const rr=R*(r/4); const x=cx+Math.cos(a)*rr, y=cy+Math.sin(a)*rr;
-      i?g.lineTo(x,y):g.moveTo(x,y);
-    } g.closePath(); g.stroke(); }
-    g.globalAlpha=1;
-    // polygon anim
-    let t=0;
-    const draw=()=>{
-      g.clearRect(0,0,W,H);
-      // regrid
-      g.globalAlpha=.22; g.strokeStyle="#2b4135"; g.lineWidth=2;
-      for(let r=1;r<=4;r++){ g.beginPath(); for(let i=0;i<keys.length;i++){
-        const a=(Math.PI*2/keys.length)*i- Math.PI/2;
-        const rr=R*(r/4); const x=cx+Math.cos(a)*rr, y=cy+Math.sin(a)*rr;
-        i?g.lineTo(x,y):g.moveTo(x,y);
-      } g.closePath(); g.stroke(); }
-      g.globalAlpha=1;
-      // poly
-      g.beginPath();
-      for(let i=0;i<keys.length;i++){
-        const a=(Math.PI*2/keys.length)*i- Math.PI/2;
-        const rr=R*((Math.abs(vals[i])/max)*Math.min(1,t))* (vals[i]>=0?1:1);
-        const x=cx+Math.cos(a)*rr, y=cy+Math.sin(a)*rr;
-        i?g.lineTo(x,y):g.moveTo(x,y);
-      }
-      g.closePath();
-      g.fillStyle="rgba(82,255,138,.18)"; g.fill();
-      g.strokeStyle="rgba(82,255,138,.55)"; g.lineWidth=3; g.stroke();
-      // labels
-      g.fillStyle="#eaffef"; g.font="800 18px system-ui"; g.textAlign="center";
-      for(let i=0;i<keys.length;i++){
-        const a=(Math.PI*2/keys.length)*i- Math.PI/2;
-        const x=cx+Math.cos(a)*(R+42), y=cy+Math.sin(a)*(R+42);
-        g.fillText(keys[i].slice(0,10),x,y);
-      }
-      if(t<1){ t+=0.06; requestAnimationFrame(draw); }
-    };
-    draw();
-  }
-};
-</script>
-<!-- ===================== PARTE 11/20 ===================== -->
-<script>
-/* ===== UI (telas) ===== */
-const UI={
-  dash:()=>`
-  <div class="row">
-    <div class="card kpi"><div class="t">Saldo hoje</div><div class="v" id="kHoje">R$ 0,00</div><div class="small" id="kHoje2">GN: R$ 0,00 • SD: R$ 0,00</div></div>
-    <div class="card kpi"><div class="t">Saldo do mês</div><div class="v" id="kMes">R$ 0,00</div><div class="small" id="kMes2">GN: R$ 0,00 • SD: R$ 0,00 • Materiais: R$ 0,00</div></div>
-  </div>
-
-  <div class="card" style="margin-top:10px">
-    <div class="row" style="justify-content:space-between;align-items:center">
-      <div>
-        <div style="font-weight:950">GN vs SD (mês)</div>
-        <div class="small">Gráfico animado crescendo (sem donut feio).</div>
-      </div>
-      <div class="pill" id="labMes">----</div>
-    </div>
-    <div style="margin-top:10px"><canvas id="chBars" width="900" height="320"></canvas></div>
-    <div class="small" id="barsTip" style="margin-top:8px;min-height:16px"></div>
-  </div>
-
-  <div class="row" style="margin-top:10px">
-    <div class="card kpi"><div class="t">Previsão de faturamento (offline)</div><div class="v" id="prev">R$ 0,00</div><div class="small">Tendência simples por meses.</div></div>
-    <div class="card kpi"><div class="t">Top clientes (mês)</div><div class="v" style="font-size:16px;margin-top:10px" id="topCli">Sem dados</div><div class="small">Adicione cliente no lançamento.</div></div>
-  </div>
-
-  <div class="card" style="margin-top:10px">
-    <div style="font-weight:950">Radar (categorias do mês)</div>
-    <div class="small">Mostra o “peso” das categorias (até 6).</div>
-    <div style="margin-top:10px"><canvas id="chRadar" width="900" height="320"></canvas></div>
-  </div>
-  `,
-
-  mov:()=>`
-  <div class="card">
-    <div class="grid2">
-      <div>
-        <div class="small">Tipo</div>
-        <div class="row">
-          <button class="btn ghost" id="bGN" onclick="APP.setTipo('GN')">GN (Ganhos)</button>
-          <button class="btn ghost" id="bSD" onclick="APP.setTipo('SD')">SD (Saídas)</button>
-        </div>
-      </div>
-      <div><div class="small">Data</div><input class="in" id="mData" type="date"></div>
-    </div>
-    <div class="grid2" style="margin-top:10px">
-      <div><div class="small">Valor (R$)</div><input class="in" id="mVal" type="number" step="0.01" placeholder="Ex: 250"></div>
-      <div><div class="small">Cliente (opcional)</div><input class="in" id="mCli" placeholder="Ex: João / Empresa X"></div>
-    </div>
-    <div class="grid2" style="margin-top:10px">
-      <div><div class="small">Categoria (opcional)</div><input class="in" id="mCat" placeholder="Ex: Portão / Solda / Gasolina"></div>
-      <div><div class="small">Obs (opcional)</div><input class="in" id="mObs" placeholder="Ex: sinal, restante..."></div>
-    </div>
-    <div class="row" style="margin-top:10px">
-      <button class="btn" onclick="APP.addMov()">Salvar</button>
-      <button class="btn ghost" onclick="APP.clearMov()">Limpar</button>
-      <button class="btn ghost" onclick="APP.tab(0)">Ver no Dash</button>
-    </div>
-    <div class="sep"></div>
-    <div class="small">Atalhos:</div>
-    <div class="row">
-      <button class="btn ghost" onclick="APP.quickAdd(50)">+50</button>
-      <button class="btn ghost" onclick="APP.quickAdd(100)">+100</button>
-      <button class="btn ghost" onclick="APP.quickAdd(200)">+200</button>
-      <button class="btn ghost" onclick="APP.quickAdd(500)">+500</button>
-    </div>
-  </div>
-
-  <div class="card" style="margin-top:10px">
-    <div style="font-weight:950">Histórico (mês)</div>
-    <div class="small">Copiar ou remover cada item.</div>
-    <div class="list" id="movList"></div>
-  </div>
-  `,
-
-  agenda:()=>`
-  <div class="card">
-    <div class="grid2">
-      <div><div class="small">Cliente</div><input class="in" id="aCli" placeholder="Nome do cliente"></div>
-      <div><div class="small">Telefone (opcional)</div><input class="in" id="aTel" inputmode="tel" placeholder="(41) 9...."></div>
-    </div>
-    <div class="grid2" style="margin-top:10px">
-      <div><div class="small">Data</div><input class="in" id="aData" type="date"></div>
-      <div><div class="small">Hora</div><input class="in" id="aHora" type="time"></div>
-    </div>
-    <div style="margin-top:10px"><div class="small">Descrição</div><input class="in" id="aDesc" placeholder="Ex: Ajuste, solda, portão..."></div>
-    <div class="row" style="margin-top:10px">
-      <button class="btn" onclick="APP.addAg()">Salvar</button>
-      <button class="btn ghost" onclick="APP.clearAg()">Limpar</button>
-      <button class="btn ghost" onclick="APP.notifPerm()">Notificações</button>
-    </div>
-    <div class="small" style="margin-top:8px">Lembrete 1h antes funciona com a página aberta.</div>
-  </div>
-
-  <div class="card" style="margin-top:10px">
-    <div style="font-weight:950">Próximos serviços</div>
-    <div class="list" id="agList"></div>
-  </div>
-  `,
-
-  clientes:()=>`
-  <div class="card">
-    <div class="grid2">
-      <div><div class="small">Nome</div><input class="in" id="cNome" placeholder="Cliente"></div>
-      <div><div class="small">Telefone</div><input class="in" id="cTel" inputmode="tel" placeholder="(41) 9...."></div>
-    </div>
-    <div style="margin-top:10px"><div class="small">Endereço (opcional)</div><input class="in" id="cEnd" placeholder="Rua, bairro..."></div>
-    <div class="row" style="margin-top:10px">
-      <button class="btn" onclick="APP.addCli()">Salvar</button>
-      <button class="btn ghost" onclick="APP.clearCli()">Limpar</button>
-      <button class="btn ghost" onclick="PIN.open()">PIN</button>
-    </div>
-    <div class="small" style="margin-top:8px">PIN protege o app (offline).</div>
-  </div>
-
-  <div class="card" style="margin-top:10px">
-    <div style="font-weight:950">Clientes</div>
-    <div class="list" id="cliList"></div>
-  </div>
-  `,
-
-  orc:()=>`
-  <div class="card">
-    <div class="grid2">
-      <div><div class="small">Cliente</div><input class="in" id="oCli" placeholder="Nome do cliente"></div>
-      <div><div class="small">Telefone (opcional)</div><input class="in" id="oTel" inputmode="tel" placeholder="(41) 9...."></div>
-    </div>
-    <div class="grid2" style="margin-top:10px">
-      <div><div class="small">Preço (R$)</div><input class="in" id="oVal" type="number" step="0.01" placeholder="Ex: 1200"></div>
-      <div><div class="small">Prazo</div><input class="in" id="oPrazo" placeholder="Ex: 3 dias / 1 semana"></div>
-    </div>
-    <div style="margin-top:10px"><div class="small">Descrição</div><input class="in" id="oDesc" placeholder="Ex: Portão + pintura..."></div>
-    <div class="row" style="margin-top:10px">
-      <button class="btn" onclick="APP.addOrc()">Salvar</button>
-      <button class="btn ghost" onclick="APP.clearOrc()">Limpar</button>
-      <button class="btn ghost" onclick="APP.zapOrc()">Enviar no WhatsApp</button>
-    </div>
-    <div class="small" style="margin-top:8px">WhatsApp abre com mensagem pronta. Você só envia.</div>
-  </div>
-
-  <div class="card" style="margin-top:10px">
-    <div style="font-weight:950">Orçamentos salvos</div>
-    <div class="list" id="orcList"></div>
-  </div>
-  `
-};
- </script>
- <!-- ===================== PARTE 12/20 ===================== -->
-<script>
-/* ===== Render listas ===== */
-RENDER.movList=m=>{
-  const box=$("movList"); if(!box) return;
-  const arr=DB.mov.filter(x=>x.m===m).slice().sort((a,b)=>b.data.localeCompare(a.data)||b.id.localeCompare(a.id));
-  if(!arr.length){ box.innerHTML=`<div class="small">Sem lançamentos neste mês.</div>`; return; }
-  box.innerHTML=arr.map(x=>`
-    <div class="it">
-      <div style="min-width:0">
-        <div style="font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
-          <span class="${x.tipo==="GN"?"pos":"neg"}">${x.tipo}</span> • ${brl(x.val)}
-          ${x.cli?`<span class="tag">${x.cli}</span>`:""}
-        </div>
-        <div class="small">${x.data}${x.cat?` • ${x.cat}`:""}${x.obs?` • ${x.obs}`:""}</div>
-      </div>
-      <div class="row" style="gap:8px;flex-wrap:nowrap">
-        <button class="btn ghost" style="padding:10px 10px" onclick="APP.copyMov('${x.id}')">Copiar</button>
-        <button class="btn danger" style="padding:10px 10px" onclick="APP.delMov('${x.id}')">X</button>
-      </div>
-    </div>
-  `).join("");
-};
-
-RENDER.cliList=()=>{
-  const box=$("cliList"); if(!box) return;
-  const arr=DB.cli.slice().sort((a,b)=>a.nome.localeCompare(b.nome));
-  if(!arr.length){ box.innerHTML=`<div class="small">Sem clientes ainda.</div>`; return; }
-  box.innerHTML=arr.map(c=>`
-    <div class="it">
-      <div style="min-width:0">
-        <div style="font-weight:900">${c.nome}</div>
-        <div class="small">${c.tel?`📞 ${c.tel}`:"Sem telefone"}${c.end?` • 📍 ${c.end}`:""}</div>
-      </div>
-      <button class="btn danger" style="padding:10px 12px" onclick="APP.delCli('${c.id}')">Remover</button>
-    </div>
-  `).join("");
-};
-
-RENDER.agList=()=>{
-  const box=$("agList"); if(!box) return;
-  const arr=DB.ag.slice().sort((a,b)=>(a.data+a.hora).localeCompare(b.data+b.hora));
-  if(!arr.length){ box.innerHTML=`<div class="small">Sem serviços agendados.</div>`; return; }
-  box.innerHTML=arr.map(s=>`
-    <div class="it">
-      <div style="min-width:0">
-        <div style="font-weight:900">${s.cli} <span class="tag">${s.data} ${s.hora}</span></div>
-        <div class="small">${s.desc}${s.tel?` • 📞 ${s.tel}`:""}</div>
-      </div>
-      <button class="btn danger" style="padding:10px 12px" onclick="APP.delAg('${s.id}')">Remover</button>
-    </div>
-  `).join("");
-};
-
-RENDER.orcList=()=>{
-  const box=$("orcList"); if(!box) return;
-  const arr=DB.orc.slice().sort((a,b)=>b.at-a.at);
-  if(!arr.length){ box.innerHTML=`<div class="small">Sem orçamentos ainda.</div>`; return; }
-  box.innerHTML=arr.map(o=>`
-    <div class="it">
-      <div style="min-width:0">
-        <div style="font-weight:900">${o.cli} <span class="tag">${brl(o.val)}</span></div>
-        <div class="small">${o.desc}${o.prazo?` • ⏱ ${o.prazo}`:""}${o.tel?` • 📞 ${o.tel}`:""}</div>
-      </div>
-      <div class="row" style="gap:8px;flex-wrap:nowrap">
-        <button class="btn ghost" style="padding:10px 10px" onclick="APP.zapOrc('${o.id}')">Zap</button>
-        <button class="btn danger" style="padding:10px 10px" onclick="APP.delOrc('${o.id}')">X</button>
-      </div>
-    </div>
-  `).join("");
-};
-</script>
-<!-- ===================== PARTE 13/20 ===================== -->
-<script>
-/* ===== Orçamentos ===== */
-APP.clearOrc=()=>["oCli","oTel","oVal","oPrazo","oDesc"].forEach(id=>$(id).value="");
-
-APP.addOrc=()=>{
-  const cli=($("oCli").value||"").trim();
-  const val=+($("oVal").value||0);
-  const desc=($("oDesc").value||"").trim();
-  if(!cli||!val||val<=0||!desc) return alert("Cliente, preço e descrição obrigatórios");
-  DB.orc.push({
-    id:Date.now()+"",
-    cli, tel:digits($("oTel").value),
-    val, prazo:($("oPrazo").value||"").trim(),
-    desc, at:Date.now()
+function spawnBill(){
+  bills.push({
+    x:rnd(W*.10,W*.95), y:-60*devicePixelRatio,
+    vy:rnd(1.6,3.2)*devicePixelRatio, vx:rnd(-.26,.26)*devicePixelRatio,
+    rot:rnd(0,Math.PI*2), vr:rnd(-.045,.045),
+    s:rnd(20,34)*devicePixelRatio, life:rnd(260,520),
+    boom:Math.random()<.35
   });
-  save(); APP.clearOrc(); APP.render(); vib(18);
-};
+}
+setInterval(()=>{ if(Math.random()<.60) spawnBill(); }, 980); // menos frequente
 
-APP.delOrc=id=>{
-  if(!confirm("Remover orçamento?")) return;
-  DB.orc=DB.orc.filter(o=>o.id!==id); save(); APP.render();
-};
+function draw(){
+  // pulso: MUITO sutil (remove “batidão”)
+  const t = (AC && audioOn) ? AC.currentTime : now()/1000;
+  const base = (AC && audioOn) ? 0.18 : 0.12;
+  pulse = base + Math.sin(t*(AC && audioOn ? 1.1 : .85)) * (AC && audioOn ? .06 : .04);
+  pulse = clamp(pulse,0,1);
+  document.documentElement.style.setProperty("--pulse", pulse.toFixed(3));
 
-// se receber id -> usa orçamento salvo; se não -> usa campos atuais
-APP.zapOrc=(id)=>{
-  let cli, val, prazo, desc, tel;
-  if(id){
-    const o=DB.orc.find(x=>x.id===id); if(!o) return;
-    ({cli,val,prazo,desc,tel}=o);
-  }else{
-    cli=($("oCli").value||"").trim();
-    val=+($("oVal").value||0);
-    prazo=($("oPrazo").value||"").trim();
-    desc=($("oDesc").value||"").trim();
-    tel=digits($("oTel").value);
-    if(!cli||!val||!desc) return alert("Preencha cliente, valor e descrição.");
-  }
+  bctx.clearRect(0,0,W,H);
 
-  // prioridade: tel do orçamento; se vazio, abre no número do pai (cfg.zap); se também vazio, abre WhatsApp sem número
-  const alvo = tel || DB.cfg.zap || "";
+  // haze mais escura
+  bctx.save();
+  bctx.globalAlpha = 0.06 + pulse*0.03;
+  bctx.fillStyle = "#45ff86";
+  bctx.beginPath(); bctx.arc(W*0.18,H*0.25,(200+pulse*50)*devicePixelRatio,0,Math.PI*2); bctx.fill();
+  bctx.globalAlpha = 0.04 + pulse*0.02;
+  bctx.fillStyle = "#ff4c62";
+  bctx.beginPath(); bctx.arc(W*0.88,H*0.18,(180+pulse*40)*devicePixelRatio,0,Math.PI*2); bctx.fill();
+  bctx.restore();
 
-  const msg=
-`*Orçamento - Serralheria do Gil*
-Cliente: ${cli}
-Serviço: ${desc}
-Valor: ${brl(val)}
-Prazo: ${prazo||"a combinar"}
+  // stars
+  stars.forEach(p=>{
+    p.x+=p.vx; p.y+=p.vy;
+    if(p.y>H+60) p.y=-60;
+    if(p.x>W+60) p.x=-60;
+    if(p.x<-60) p.x=W+60;
+    const a = p.a + pulse*0.03;
+    bctx.fillStyle = p.g ? `rgba(70,255,150,${a})` : `rgba(255,76,98,${a*0.55})`;
+    bctx.beginPath(); bctx.arc(p.x,p.y,p.r,0,Math.PI*2); bctx.fill();
+  });
 
-Se aprovar, me confirma por aqui.`;
+  // bills (menos agressivo)
+  bills=bills.filter(b=>b.life-->0 && b.y<H+140*devicePixelRatio);
+  bills.forEach(b=>{
+    b.x+=b.vx; b.y+=b.vy; b.rot+=b.vr;
+    if(b.boom && b.life%100===0) burst(b.x/devicePixelRatio,b.y/devicePixelRatio,8,"mix");
+    bctx.save();
+    bctx.translate(b.x,b.y); bctx.rotate(b.rot);
+    bctx.font=`${b.s}px system-ui`; bctx.globalAlpha=.85;
+    bctx.fillText("💸",0,0);
+    bctx.restore();
+  });
 
-  APP.openZap(alvo,msg);
-};
-
-APP.openZap=(tel,msg)=>{
-  const base = tel ? `https://wa.me/${tel}` : `https://wa.me/`;
-  const url = `${base}?text=${encodeURIComponent(msg)}`;
-  window.open(url,"_blank");
-};
-</script>
-<!-- ===================== PARTE 14/20 ===================== -->
-<script>
-/* ===== FX (partículas) ===== */
-const FX={
-  c:null,g:null,w:0,h:0,p:[],on:false,
-  start(){
-    this.c=$("fx"); if(!this.c) return;
-    this.g=this.c.getContext("2d");
-    this.resize(); this.seed();
-    if(this.on) return; this.on=true;
-    window.addEventListener("resize",()=>this.resize());
-    requestAnimationFrame(()=>this.tick());
-  },
-  resize(){
-    this.w=this.c.width=innerWidth*devicePixelRatio;
-    this.h=this.c.height=innerHeight*devicePixelRatio;
-  },
-  seed(){
-    const n=Math.min(140,Math.floor((innerWidth*innerHeight)/9000));
-    this.p=Array.from({length:n},()=>this.mk());
-  },
-  mk(){
-    const s=devicePixelRatio||1;
-    return {
-      x:Math.random()*this.w, y:Math.random()*this.h,
-      r:(Math.random()*2.4+0.9)*s,
-      vy:(Math.random()*0.55+0.15)*s,
-      vx:(Math.random()*0.25-0.125)*s,
-      a:Math.random()*0.65+0.15,
-      t:Math.random()*999
-    };
-  },
-  tick(){
-    const g=this.g,w=this.w,h=this.h;
-    g.clearRect(0,0,w,h);
-    // glow
-    g.globalCompositeOperation="lighter";
-    for(const p of this.p){
-      p.t+=0.02; p.x+=p.vx; p.y+=p.vy*(1.1+Math.sin(p.t)*0.2);
-      if(p.y>h+40) { p.y=-40; p.x=Math.random()*w; }
-      if(p.x<-40) p.x=w+40; if(p.x>w+40) p.x=-40;
-
-      const grad=g.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*6);
-      grad.addColorStop(0,`rgba(82,255,138,${p.a*0.28})`);
-      grad.addColorStop(1,`rgba(0,0,0,0)`);
-      g.fillStyle=grad; g.beginPath(); g.arc(p.x,p.y,p.r*6,0,Math.PI*2); g.fill();
-
-      g.fillStyle=`rgba(180,255,205,${p.a})`;
-      g.beginPath(); g.arc(p.x,p.y,p.r,0,Math.PI*2); g.fill();
-    }
-    g.globalCompositeOperation="source-over";
-    requestAnimationFrame(()=>this.tick());
-  }
-};
-</script>
-<!-- ===================== PARTE 15/20 ===================== -->
-<script>
-/* ===== Anim + binds ===== */
-const ANIM={
-  page(){
-    const t=["t0","t1","t2","t3","t4"][APP.curTab];
-    const el=$(t); if(!el) return;
-    el.classList.remove("pop"); void el.offsetWidth; el.classList.add("pop");
-    // stagger nos cards
-    [...el.querySelectorAll(".card")].forEach((c,i)=>{
-      c.style.animationDelay=(i*35)+"ms";
-      c.classList.remove("stg"); void c.offsetWidth; c.classList.add("stg");
-    });
-  }
-};
-
-// classes de animação (inject leve)
-(()=>{
-  const css=document.createElement("style");
-  css.textContent=`
-  .pop{animation:pop .18s ease both}
-  .stg{animation:stg .32s ease both}
-  @keyframes stg{from{opacity:0;transform:translateY(14px) scale(.99)}to{opacity:1;transform:none}}
-  `;
-  document.head.appendChild(css);
-})();
-
-// binds p/ onclick do HTML (evita “cliquei e não fez nada”)
-window.startApp=()=>APP.start();
-window.tab=i=>APP.tab(i);
-window.fechamento=()=>APP.fechamento();
-
-// boot: se app já começou antes, volta direto (opcional)
-window.addEventListener("load",()=>{
-  // mantém FX leve já no splash também
-  FX.start();
-});
-</script>
-<!-- ===================== FIM PARTE 15/20 ===================== -->
- <!-- ===================== PARTE 16/20 ===================== -->
-<script>
-/* ===== PIN (offline) =====
-- Guarda hash simples no localStorage (não é “banco real”, é trava de bolso)
-- Fluxo: definir PIN -> travar/destravar
-*/
-const PIN={
-  open(){
-    const has=!!DB.cfg.pin;
-    const t=has?"Desbloquear / Trocar PIN":"Criar PIN";
-    const html=`
-      <div class="card">
-        <div style="font-weight:950;font-size:18px">${t}</div>
-        <div class="small">PIN é local (offline). Não recupera se esquecer.</div>
-        <div class="sep"></div>
-        <div class="grid2">
-          <div>
-            <div class="small">${has?"PIN atual":"Novo PIN"}</div>
-            <input class="in" id="p1" inputmode="numeric" maxlength="8" placeholder="4 a 8 dígitos">
-          </div>
-          <div>
-            <div class="small">${has?"Novo PIN (opcional)":"Confirmar PIN"}</div>
-            <input class="in" id="p2" inputmode="numeric" maxlength="8" placeholder="${has?"novo (opcional)":"repita"}">
-          </div>
-        </div>
-        <div class="row" style="margin-top:10px">
-          <button class="btn" onclick="PIN.ok()">OK</button>
-          <button class="btn ghost" onclick="PIN.close()">Fechar</button>
-          ${has?`<button class="btn danger" onclick="PIN.clear()">Remover PIN</button>`:""}
-        </div>
-        <div class="small" style="margin-top:8px">Dica: use algo que seu pai lembre.</div>
-      </div>`;
-    MODAL.show(html);
-  },
-  close(){MODAL.hide()},
-  hash(s){ // hash curtinho só pra não ficar “texto puro”
-    s=String(s||""); let h=2166136261;
-    for(let i=0;i<s.length;i++){h^=s.charCodeAt(i); h=Math.imul(h,16777619);}
-    return (h>>>0).toString(16);
-  },
-  ok(){
-    const a=digits($("p1").value), b=digits($("p2").value);
-    if(a.length<4||a.length>8) return alert("PIN precisa ter 4 a 8 dígitos.");
-    const has=!!DB.cfg.pin;
-
-    // se não tem PIN ainda: criar
-    if(!has){
-      if(a!==b) return alert("Confirmação diferente.");
-      DB.cfg.pin=this.hash(a); DB.cfg.lock=0; save(); this.close(); alert("PIN criado ✅");
-      return;
-    }
-
-    // se tem PIN: validar atual
-    if(this.hash(a)!==DB.cfg.pin) return alert("PIN atual incorreto.");
-
-    // trocar pin (b opcional)
-    if(b){
-      if(b.length<4||b.length>8) return alert("Novo PIN inválido.");
-      DB.cfg.pin=this.hash(b);
-      save(); this.close(); alert("PIN atualizado ✅"); return;
-    }
-
-    // só desbloquear
-    DB.cfg.lock=0; save(); this.close(); alert("Desbloqueado ✅"); APP.render();
-  },
-  clear(){
-    if(!confirm("Remover PIN?")) return;
-    DB.cfg.pin=""; DB.cfg.lock=0; save(); this.close(); alert("PIN removido.");
-  },
-  require(){
-    if(!DB.cfg.pin) return false;
-    if(DB.cfg.lock) { this.lockScreen(); return true; }
-    return false;
-  },
-  lockNow(){
-    if(!DB.cfg.pin) return alert("Crie um PIN primeiro.");
-    DB.cfg.lock=1; save(); this.lockScreen();
-  },
-  lockScreen(){
-    MODAL.show(`
-      <div class="card">
-        <div style="font-weight:950;font-size:18px">🔒 PIN</div>
-        <div class="small">Digite para desbloquear.</div>
-        <div class="sep"></div>
-        <input class="in" id="pl" inputmode="numeric" maxlength="8" placeholder="PIN">
-        <div class="row" style="margin-top:10px">
-          <button class="btn" onclick="PIN.unlock()">Entrar</button>
-        </div>
-      </div>`);
-    setTimeout(()=>{$("pl")?.focus?.()},60);
-  },
-  unlock(){
-    const p=digits($("pl").value);
-    if(this.hash(p)!==DB.cfg.pin) return alert("PIN errado.");
-    DB.cfg.lock=0; save(); MODAL.hide(); APP.render();
-  }
-};
-</script>
-<!-- ===================== PARTE 17/20 ===================== -->
-<script>
-/* ===== Config =====
-- Aqui fica o número do WhatsApp alvo (pai)
-- Formato: só dígitos com DDI + DDD + número (ex: 5541999999999)
-*/
-UI.cfg=()=>`
-  <div class="card">
-    <div style="font-weight:950">Config</div>
-    <div class="small">Tudo offline. O número do WhatsApp é usado ao “Enviar”.</div>
-    <div class="sep"></div>
-
-    <div class="small">WhatsApp alvo (pai)</div>
-    <input class="in" id="zNum" inputmode="numeric" placeholder="Ex: 5541999999999">
-    <div class="small" style="margin-top:8px">Dica: sem espaços, sem +, só números.</div>
-
-    <div class="row" style="margin-top:10px">
-      <button class="btn" onclick="CFG.save()">Salvar</button>
-      <button class="btn ghost" onclick="PIN.open()">PIN</button>
-      <button class="btn ghost" onclick="PIN.lockNow()">Travar agora</button>
-    </div>
-
-    <div class="sep"></div>
-    <div style="font-weight:950">Backup</div>
-    <div class="small">Exporta e importa tudo (clientes, agenda, lançamentos...).</div>
-    <div class="row" style="margin-top:10px">
-      <button class="btn ghost" onclick="BK.export()">Exportar</button>
-      <button class="btn ghost" onclick="BK.import()">Importar</button>
-      <button class="btn danger" onclick="BK.wipe()">Apagar tudo</button>
-    </div>
-
-    <div class="sep"></div>
-    <div class="small">Versão: <b>v20</b> • Salvo no celular via LocalStorage.</div>
-  </div>
-`;
-
-const CFG={
-  save(){
-    const n=digits($("zNum").value);
-    DB.cfg.zap=n||"";
-    save(); alert("Config salva ✅");
-  },
-  load(){
-    // se você QUISER deixar o número já preenchido, descomenta e troca:
-    // if(!DB.cfg.zap) DB.cfg.zap="554195008252";
-    $("zNum") && ($("zNum").value=DB.cfg.zap||"");
-  }
-};
-</script>
-<!-- ===================== PARTE 18/20 ===================== -->
-<script>
-/* ===== Backup ===== */
-const BK={
-  dl(name,txt,type){
-    const a=document.createElement("a");
-    a.href=URL.createObjectURL(new Blob([txt],{type:type||"text/plain"}));
-    a.download=name; document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(()=>URL.revokeObjectURL(a.href),4000);
-  },
-  export(){
-    const pack={v:20,at:Date.now(),db:DB};
-    const txt=JSON.stringify(pack);
-    const name="serralheria_do_gil_backup_"+iso()+".json";
-    this.dl(name,txt,"application/json");
-  },
-  import(){
-    const inp=document.createElement("input");
-    inp.type="file"; inp.accept=".json,application/json";
-    inp.onchange=async()=>{
-      const f=inp.files?.[0]; if(!f) return;
-      const txt=await f.text();
-      try{
-        const pack=JSON.parse(txt);
-        if(!pack.db) throw 0;
-        DB=pack.db;
-        // sane defaults
-        DB.cfg=DB.cfg||{};
-        DB.mov=DB.mov||[]; DB.ag=DB.ag||[]; DB.cli=DB.cli||[]; DB.orc=DB.orc||[];
-        DB.mat=DB.mat||[]; DB.tipo=DB.tipo||"GN";
-        save(); alert("Importado ✅"); APP.render();
-      }catch(e){ alert("Arquivo inválido."); }
-    };
-    inp.click();
-  },
-  wipe(){
-    if(!confirm("Apagar TUDO do app?")) return;
-    DB={mov:[],ag:[],cli:[],orc:[],mat:[],tipo:"GN",cfg:{zap:"",pin:"",lock:0,started:0}};
-    save(); alert("Limpo."); APP.render();
-  }
-};
-</script>
-<!-- ===================== PARTE 19/20 ===================== -->
-<script>
-/* ===== Materiais ===== */
-UI.mat=()=>`
-  <div class="card">
-    <div class="grid2">
-      <div><div class="small">Material</div><input class="in" id="mtn" placeholder="Ex: tubo, eletrodo, tinta"></div>
-      <div><div class="small">Custo (R$)</div><input class="in" id="mtv" type="number" step="0.01" placeholder="Ex: 80"></div>
-    </div>
-    <div class="grid2" style="margin-top:10px">
-      <div><div class="small">Data</div><input class="in" id="mtd" type="date"></div>
-      <div><div class="small">Cliente (opcional)</div><input class="in" id="mtc" placeholder="Nome do cliente"></div>
-    </div>
-    <div class="row" style="margin-top:10px">
-      <button class="btn" onclick="APP.addMat()">Salvar</button>
-      <button class="btn ghost" onclick="APP.clearMat()">Limpar</button>
-    </div>
-    <div class="small" style="margin-top:8px">Materiais contam como custo do mês.</div>
-  </div>
-
-  <div class="card" style="margin-top:10px">
-    <div style="font-weight:950">Materiais (mês)</div>
-    <div class="list" id="matList"></div>
-  </div>
-`;
-
-APP.clearMat=()=>{["mtn","mtv","mtc"].forEach(i=>$(i).value=""); $("mtd").value=iso();};
-
-APP.addMat=()=>{
-  const nome=($("mtn").value||"").trim();
-  const val=+($("mtv").value||0);
-  const data=$("mtd").value||iso();
-  if(!nome||!val||val<=0) return alert("Material e custo obrigatórios.");
-  DB.mat.push({id:Date.now()+"",nome,val,data,cli:($("mtc").value||"").trim(),m:data.slice(0,7)});
-  save(); APP.clearMat(); APP.render(); vib(18);
-};
-
-APP.delMat=id=>{
-  if(!confirm("Remover material?")) return;
-  DB.mat=DB.mat.filter(x=>x.id!==id); save(); APP.render();
-};
-
-RENDER.matList=m=>{
-  const box=$("matList"); if(!box) return;
-  const arr=DB.mat.filter(x=>x.m===m).slice().sort((a,b)=>b.data.localeCompare(a.data));
-  if(!arr.length){ box.innerHTML=`<div class="small">Sem materiais neste mês.</div>`; return; }
-  box.innerHTML=arr.map(x=>`
-    <div class="it">
-      <div style="min-width:0">
-        <div style="font-weight:900">${x.nome} <span class="tag">${brl(x.val)}</span> ${x.cli?`<span class="tag">${x.cli}</span>`:""}</div>
-        <div class="small">${x.data}</div>
-      </div>
-      <button class="btn danger" style="padding:10px 12px" onclick="APP.delMat('${x.id}')">Remover</button>
-    </div>
-  `).join("");
-};
-</script>
-<!-- ===================== PARTE 20/20 ===================== -->
-<script>
-/* ===== Charts (barras + radar) ===== */
-const CH={
-  bars(c,gn,sd){
-    if(!c) return; const g=c.getContext("2d");
-    const W=c.width,H=c.height;
-    const pad=40, bw=90, gap=90;
-    const max=Math.max(1,gn,sd);
-    let t0=performance.now();
-
-    const draw=(p)=>{
-      g.clearRect(0,0,W,H);
-      // base
-      g.fillStyle="rgba(255,255,255,.05)";
-      g.fillRect(pad, H-pad, W-2*pad, 1);
-
-      const hGN=(H-2*pad)*(gn/max)*p;
-      const hSD=(H-2*pad)*(sd/max)*p;
-
-      const x1=W/2-gap, x2=W/2+gap-bw;
-      // glow
-      g.globalCompositeOperation="lighter";
-      g.fillStyle="rgba(82,255,138,.18)";
-      g.fillRect(x1-6, H-pad-hGN-6, bw+12, hGN+12);
-      g.fillStyle="rgba(255,90,107,.16)";
-      g.fillRect(x2-6, H-pad-hSD-6, bw+12, hSD+12);
-      g.globalCompositeOperation="source-over";
-
-      // bars
-      g.fillStyle="rgba(82,255,138,.88)";
-      g.fillRect(x1, H-pad-hGN, bw, hGN);
-      g.fillStyle="rgba(255,90,107,.85)";
-      g.fillRect(x2, H-pad-hSD, bw, hSD);
-
-      // labels
-      g.fillStyle="rgba(255,255,255,.88)";
-      g.font="800 30px system-ui";
-      g.textAlign="center";
-      g.fillText("GN", x1+bw/2, H-pad-hGN-14);
-      g.fillText("SD", x2+bw/2, H-pad-hSD-14);
-
-      g.font="700 22px system-ui";
-      g.fillStyle="rgba(255,255,255,.72)";
-      g.fillText(brl(gn), x1+bw/2, H-pad+30);
-      g.fillText(brl(sd), x2+bw/2, H-pad+30);
-    };
-
-    const tick=()=>{
-      const p=Math.min(1,(performance.now()-t0)/520);
-      const e=1-Math.pow(1-p,3);
-      draw(e);
-      if(p<1) requestAnimationFrame(tick);
-    };
-    tick();
-  },
-
-  radar(c,items){
-    if(!c) return; const g=c.getContext("2d");
-    const W=c.width,H=c.height, cx=W/2, cy=H/2+10;
-    const r=Math.min(W,H)*0.32;
-    const n=Math.max(3,items.length);
-    const max=Math.max(1,...items.map(x=>x.v));
-
-    g.clearRect(0,0,W,H);
-    g.strokeStyle="rgba(255,255,255,.10)";
-    for(let k=1;k<=4;k++){
-      g.beginPath();
-      for(let i=0;i<n;i++){
-        const a=-Math.PI/2 + i*(2*Math.PI/n);
-        const rr=r*(k/4);
-        const x=cx+Math.cos(a)*rr, y=cy+Math.sin(a)*rr;
-        i?g.lineTo(x,y):g.moveTo(x,y);
+  // particles
+  fctx.clearRect(0,0,W,H);
+  bursts=bursts.filter(g=>g.some(p=>p.life>0));
+  bursts.forEach(g=>{
+    g.forEach(p=>{
+      if(p.life--<=0) return;
+      p.x+=p.vx; p.y+=p.vy; p.vy+=.065*devicePixelRatio;
+      if(p.glow){
+        fctx.save(); fctx.globalAlpha=.40; fctx.fillStyle=p.c;
+        fctx.beginPath(); fctx.arc(p.x,p.y,p.r*2.2,0,Math.PI*2); fctx.fill();
+        fctx.restore();
       }
-      g.closePath(); g.stroke();
-    }
-
-    // polygon
-    g.beginPath();
-    items.forEach((it,i)=>{
-      const a=-Math.PI/2 + i*(2*Math.PI/n);
-      const rr=r*(it.v/max);
-      const x=cx+Math.cos(a)*rr, y=cy+Math.sin(a)*rr;
-      i?g.lineTo(x,y):g.moveTo(x,y);
+      fctx.fillStyle=p.c;
+      fctx.beginPath(); fctx.arc(p.x,p.y,p.r,0,Math.PI*2); fctx.fill();
     });
-    g.closePath();
-    g.fillStyle="rgba(82,255,138,.14)"; g.fill();
-    g.strokeStyle="rgba(82,255,138,.65)"; g.stroke();
+  });
 
-    // labels
-    g.fillStyle="rgba(255,255,255,.70)";
-    g.font="700 18px system-ui"; g.textAlign="center";
-    items.forEach((it,i)=>{
-      const a=-Math.PI/2 + i*(2*Math.PI/n);
-      const x=cx+Math.cos(a)*(r+28), y=cy+Math.sin(a)*(r+28);
-      g.fillText(it.k, x, y);
-    });
-  }
-};
+  requestAnimationFrame(draw);
+}
+draw();
 
-/* ===== Render geral final ===== */
-APP.render=()=>{
-  if(PIN.require()) return; // se travado, abre lockscreen
-
-  const root=$("root"); if(!root) return;
-  // tela atual
-  const screens=[UI.dash,UI.mov,UI.agenda,UI.clientes,UI.orc,UI.mat,UI.cfg];
-  root.innerHTML=screens[APP.curTab]();
-
-  // preencher defaults
-  if(APP.curTab===1){ $("mData").value=iso(); APP.setTipo(DB.tipo||"GN"); }
-  if(APP.curTab===2){ $("aData").value=iso(); $("aHora").value="08:00"; }
-  if(APP.curTab===5){ APP.clearMat(); }
-  if(APP.curTab===6){ CFG.load(); }
-
-  // mês atual
-  const m=APP.month(); $("labMes") && ($("labMes").textContent=m);
-
-  // lists
-  RENDER.movList(m);
-  RENDER.agList();
-  RENDER.cliList();
-  RENDER.orcList();
-  RENDER.matList(m);
-
-  // KPIs + charts
-  const sums=APP.sum(m);
-  $("kHoje") && ($("kHoje").textContent=brl(sums.hoje.t));
-  $("kHoje2") && ($("kHoje2").textContent=`GN: ${brl(sums.hoje.gn)} • SD: ${brl(sums.hoje.sd)}`);
-  $("kMes") && ($("kMes").textContent=brl(sums.mes.t));
-  $("kMes2") && ($("kMes2").textContent=`GN: ${brl(sums.mes.gn)} • SD: ${brl(sums.mes.sd)} • Materiais: ${brl(sums.mes.mat)}`);
-  $("prev") && ($("prev").textContent=brl(APP.forecast()));
-
-  const top=APP.topClients(m);
-  $("topCli") && ($("topCli").textContent=top||"Sem dados");
-
-  // charts só no dash
-  if(APP.curTab===0){
-    CH.bars($("chBars"),sums.mes.gn,sums.mes.sd+sums.mes.mat);
-    const cats=APP.topCats(m);
-    CH.radar($("chRadar"),cats.length?cats:[{k:"Sem",v:1},{k:"Dados",v:1},{k:"Ainda",v:1}]);
-  }
-
-  ANIM.page();
-};
-
-/* ===== Nav: adiciona Materiais + Config ===== */
-APP.nav=()=>{
-  const nav=$("nav");
-  nav.innerHTML=`
-  <div class="bar">
-    <div class="nb ${APP.curTab===0?"on":""}" onclick="APP.tab(0)"><i>📊</i>Dash</div>
-    <div class="nb ${APP.curTab===1?"on":""}" onclick="APP.tab(1)"><i>💰</i>Mov</div>
-    <div class="nb ${APP.curTab===2?"on":""}" onclick="APP.tab(2)"><i>📅</i>Agenda</div>
-    <div class="nb ${APP.curTab===3?"on":""}" onclick="APP.tab(3)"><i>👤</i>Clientes</div>
-    <div class="nb ${APP.curTab===4?"on":""}" onclick="APP.tab(4)"><i>🧾</i>Orç</div>
-  </div>
-  <div class="bar" style="margin-top:8px;grid-template-columns:repeat(2,1fr)">
-    <div class="nb ${APP.curTab===5?"on":""}" onclick="APP.tab(5)"><i>🧱</i>Mat</div>
-    <div class="nb ${APP.curTab===6?"on":""}" onclick="APP.tab(6)"><i>⚙️</i>Config</div>
-  </div>`;
-};
-
-window.addEventListener("load",()=>{
-  FX.start();
-  APP.nav();
-  APP.render();
-  APP.loopAgenda(); // lembretes
-});
-</script>
-<!-- ===================== FIM 20/20 ===================== -->
+function boot(){
+  loadLock(); setPinStatus(); updateDots(); updateNote();
+  wireButtons(); wireParallax(); assemble();
+  $("#btnSound").onclick=()=>{
+    if(!AC) audioInit();
+    if(AC.state==="suspended") AC.resume();
+    setAudio(!audioOn);
+    sparkAtCenter($("#btnSound"));
+    burst(innerWidth*0.5, innerHeight*0.28, 18, audioOn?"neon":"mix"); // menor
+  };
+}
+boot();
+</script></body></html>
