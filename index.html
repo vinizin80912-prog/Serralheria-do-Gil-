@@ -1,453 +1,1088 @@
-<!doctype html><html lang="pt-br"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Serralheria do Gil</title>
-<meta name="theme-color" content="#050806">
-<style>
-:root{
---bg:#040705;--b:rgba(120,210,160,.10);--txt:#eafff0;--mut:rgba(233,255,241,.58);
---g:#45ff86;--r:#ff4c62;--y:#ffd166;--shadow:0 24px 80px rgba(0,0,0,.72);--blur:18px;--rad:26px;
---ig:linear-gradient(145deg,rgba(255,255,255,.92),rgba(215,255,235,.72));
---pulse:0; /* pulso bem sutil */
-}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%}
-body{
-margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
-background:
-radial-gradient(1200px 800px at 20% 10%,rgba(55,255,140,.06),transparent 58%),
-radial-gradient(900px 900px at 90% 30%,rgba(255,80,120,.06),transparent 60%),
-radial-gradient(1100px 900px at 50% 90%,rgba(120,180,255,.035),transparent 62%),
-var(--bg);
-color:var(--txt);overflow:hidden;
-}
-#bg,#fx{position:fixed;inset:0;z-index:0;pointer-events:none}
-#bg{filter:saturate(1.03) contrast(1.08) brightness(.94)}
-#fx{z-index:2}
-.stage{position:relative;z-index:3;height:100%;display:grid;place-items:center;padding:22px}
-.shell{width:min(920px,92vw);perspective:900px}
-.card{
-position:relative;border-radius:var(--rad);border:1px solid var(--b);
-background:linear-gradient(180deg,rgba(12,18,14,.74),rgba(6,9,7,.58));
-box-shadow:var(--shadow);backdrop-filter:blur(var(--blur));overflow:hidden;transform-style:preserve-3d;
-}
-.card:before{
-content:"";position:absolute;inset:-2px;opacity:.45;pointer-events:none;
-background:
-radial-gradient(820px 260px at 18% 22%,rgba(70,255,150,.15),transparent 65%),
-radial-gradient(740px 280px at 92% 10%,rgba(255,76,98,.10),transparent 62%),
-radial-gradient(700px 320px at 50% 110%,rgba(255,255,255,.05),transparent 58%);
-filter:brightness(calc(1 + var(--pulse)*.12));
-}
-.inner{position:relative;padding:22px 22px 18px}
-.top{display:flex;gap:14px;align-items:center}
-.logo{
-width:54px;height:54px;border-radius:18px;display:grid;place-items:center;
-background:linear-gradient(145deg,rgba(12,22,16,.92),rgba(6,9,7,.62));
-border:1px solid var(--b);box-shadow:0 20px 60px rgba(0,0,0,.6);
-transform:translateZ(30px);
-}
-.h1{font-weight:950;letter-spacing:.2px;font-size:34px;line-height:1;margin:0;transform:translateZ(28px)}
-.sub{color:var(--mut);margin-top:6px;font-size:13px;transform:translateZ(18px)}
-.pill{
-margin-left:auto;align-self:flex-start;padding:9px 12px;border-radius:999px;
-border:1px solid var(--b);background:rgba(6,9,7,.55);color:rgba(233,255,241,.74);
-font-weight:850;font-size:12px;transform:translateZ(26px);
-}
-.hr{height:1px;background:rgba(120,210,160,.10);margin:14px 0}
-.center{padding:10px 0 6px;text-align:center;transform:translateZ(18px)}
-.center .q{color:rgba(233,255,241,.90);font-size:16px}
-.center .p{color:var(--mut);font-size:13px;margin-top:2px}
-.row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-  .btn{position:relative;user-select:none;cursor:pointer;border:0;border-radius:18px;
-padding:14px 22px;font-weight:950;letter-spacing:.2px;
-transition:transform .18s, filter .18s, box-shadow .18s, background .18s;
-transform:translateZ(18px);
-}
-.btn.primary{
-background:var(--ig);color:#06100a;
-box-shadow:0 18px 70px rgba(0,0,0,.50), 0 0 0 1px rgba(255,255,255,.16) inset;
-}
-.btn.ghost{
-background:rgba(255,255,255,.045);color:rgba(233,255,241,.90);
-border:1px solid rgba(120,210,160,.12);
-box-shadow:0 16px 55px rgba(0,0,0,.40), 0 0 0 1px rgba(255,255,255,.05) inset;
-}
-.btn:before{
-content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;
-background:
-radial-gradient(140px 70px at var(--mx,50%) var(--my,50%),rgba(255,255,255,.34),transparent 64%),
-radial-gradient(220px 120px at var(--mx,50%) var(--my,50%),rgba(70,255,150,.12),transparent 72%);
-transition:opacity .16s;
-}
-.btn:after{
-content:"";position:absolute;inset:-2px;border-radius:inherit;pointer-events:none;opacity:.0;
-background:conic-gradient(from 180deg,rgba(70,255,150,.0),rgba(70,255,150,.20),rgba(255,76,98,.14),rgba(70,255,150,.0));
-filter:blur(10px);transition:opacity .18s;
-}
-.btn:hover:before,.btn.touch:before{opacity:1}
-.btn.pop{transform:translateZ(26px) scale(1.04);filter:brightness(1.06)}
-.btn.pop:after{opacity:.45}
-.btn:active{transform:translateZ(22px) scale(.99)}
-.btn.assem{opacity:0;transform:translate3d(var(--sx,0),var(--sy,26px),18px) scale(.94);filter:blur(4px)}
-.btn.assem.on{opacity:1;transform:translate3d(0,0,18px) scale(1);filter:blur(0);
-transition:transform .55s cubic-bezier(.2,.9,.2,1),opacity .45s,filter .45s}
-
-.small{color:var(--mut);font-size:12px;line-height:1.35;margin-top:10px;text-align:center;transform:translateZ(14px)}
-.pinbox{margin:14px auto 6px;width:min(520px,92%);transform:translateZ(16px)}
-.pin{
-width:100%;max-width:520px;border-radius:18px;border:1px solid rgba(120,210,160,.12);
-background:rgba(6,9,7,.55);color:var(--txt);outline:none;padding:14px 16px;
-font-size:18px;letter-spacing:10px;text-align:center;
-box-shadow:0 22px 90px rgba(0,0,0,.42) inset, 0 0 0 1px rgba(255,255,255,.05) inset;
-}
-.pin::placeholder{letter-spacing:1px;color:rgba(233,255,241,.30)}
-.dots{display:flex;gap:6px;justify-content:center;margin-top:10px;opacity:.85}
-.dots i{width:10px;height:10px;border-radius:999px;background:rgba(233,255,241,.12);border:1px solid rgba(120,210,160,.10)}
-.dots i.on{background:rgba(70,255,150,.82);box-shadow:0 0 0 7px rgba(70,255,150,.08)}
-.actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
-.note{display:flex;gap:10px;align-items:center;justify-content:center;color:rgba(233,255,241,.56);font-size:12px;margin-top:8px}
-.bad{color:#ffd6dc}.lock{color:#ffd166}
-.shake{animation:shake .38s linear}
-@keyframes shake{0%,100%{transform:translateZ(16px)}20%{transform:translateZ(16px) translateX(-10px)}40%{transform:translateZ(16px) translateX(9px)}60%{transform:translateZ(16px) translateX(-6px)}80%{transform:translateZ(16px) translateX(4px)}}
-.fadeOut{animation:fadeOut .45s ease forwards}
-@keyframes fadeOut{to{opacity:0;transform:translateY(14px) scale(.98)}}
-.main{position:fixed;inset:0;z-index:5;display:none}
-.main.on{display:block}
-.main .wrap{position:absolute;inset:0;display:grid;place-items:center;padding:22px}
-.main .box{width:min(920px,92vw);border-radius:var(--rad);border:1px solid var(--b);
-background:rgba(6,9,7,.65);backdrop-filter:blur(18px);box-shadow:var(--shadow);padding:22px;text-align:center}
-.main h2{margin:0;font-size:26px;font-weight:950}
-.main p{margin:8px 0 0;color:var(--mut)}
-.main .row{margin-top:16px}
-</style></head><body>
-<canvas id="bg"></canvas><canvas id="fx"></canvas>
-
-<div class="stage"><div class="shell" id="shell"><div class="card" id="card"><div class="inner">
-  <div class="top">
-    <div class="logo">🔧</div>
-    <div><div class="h1">Serralheria do Gil</div><div class="sub">Controle offline • PIN • Tudo salvo no celular</div></div>
-    <div class="pill" id="pinStatus">Sem PIN</div>
-  </div>
-  <div class="hr"></div>
-  <div class="center"><div class="q">Gostaria de fazer dinheiro?</div><div class="p">Clique no botão abaixo.</div></div>
-
-  <div class="row" id="heroBtns">
-    <button class="btn primary assem" id="btnStart" style="--sx:-40px;--sy:18px">Iniciar</button>
-    <button class="btn ghost assem" id="btnReset" style="--sx:50px;--sy:22px">Reset</button>
-    <button class="btn ghost assem" id="btnSound" style="--sx:0px;--sy:40px">Som: OFF</button>
-  </div>
-
-  <div class="pinbox" id="pinArea">
-    <input class="pin" id="pinInput" inputmode="numeric" maxlength="4" placeholder="PIN (4 dígitos)">
-    <div class="dots" id="dots"><i></i><i></i><i></i><i></i></div>
-    <div class="actions">
-      <button class="btn ghost assem" id="btnSetPin" style="--sx:-30px;--sy:26px">Criar/Alterar PIN</button>
-      <button class="btn ghost assem" id="btnUnlock" style="--sx:30px;--sy:26px">Desbloquear</button>
-    </div>
-    <div class="note" id="note">Digite seu PIN para entrar.</div>
-  </div>
-
-  <div class="small" id="smallTip">Dica: se esquecer o PIN, use <b>Reset</b> (apaga o PIN do aparelho).</div>
-</div></div></div></div>
-
-<div class="main" id="main"><div class="wrap"><div class="box">
-  <h2>Entrou ✅</h2><p>Agora você pluga as próximas telas (Dash, Mov, Agenda...).</p>
-  <div class="row"><button class="btn primary" id="btnBack">Voltar</button></div>
-</div></div></div>
-<script>
-const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-const LS=(k,v)=>v===undefined?localStorage.getItem(k):localStorage.setItem(k,v);
-const vib=(ms=12)=>navigator.vibrate&&navigator.vibrate(ms);
-const now=()=>Date.now();
-const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
-const rnd=(a,b)=>a+Math.random()*(b-a);
-
-const KEY_PIN="gil_pin_v1", KEY_LOCK="gil_pin_lock_v1";
-let tries=0, lockedUntil=0;
-
-function pinExists(){return !!LS(KEY_PIN);}
-function setPinStatus(){ $("#pinStatus").textContent = pinExists() ? "Com PIN" : "Sem PIN"; }
-function hash4(s){
-  let h=2166136261;
-  for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}
-  return (h>>>0).toString(16);
-}
-function setLock(ms){ lockedUntil=now()+ms; LS(KEY_LOCK,String(lockedUntil)); updateNote(); }
-function loadLock(){ lockedUntil=+(LS(KEY_LOCK)||0); if(lockedUntil<now()) lockedUntil=0; }
-function lockLeft(){ return Math.max(0,lockedUntil-now()); }
-
-function updateDots(){
-  const v=$("#pinInput").value.replace(/\D/g,"").slice(0,4);
-  $("#pinInput").value=v;
-  $$("#dots i").forEach((d,i)=>d.classList.toggle("on",i<v.length));
-}
-function updateNote(msg,cls){
-  const n=$("#note");
-  if(msg){ n.textContent=msg; n.className="note "+(cls||""); return; }
-  const left=lockLeft();
-  if(left>0){ n.textContent=`Bloqueado por ${Math.ceil(left/1000)}s (muitas tentativas).`; n.className="note lock"; }
-  else{ n.textContent= pinExists()? "Digite seu PIN para entrar." : "Sem PIN: crie um PIN primeiro."; n.className="note"; }
-}
-function clearPinInput(){ $("#pinInput").value=""; updateDots(); }
-
-function doSetPin(){
-  if(lockLeft()>0) return bump($("#pinArea"),"lock");
-  const v=$("#pinInput").value;
-  if(v.length!==4) return bump($("#pinArea"),"bad","PIN precisa ter 4 dígitos.");
-  LS(KEY_PIN,hash4(v)); tries=0; clearPinInput();
-  setPinStatus(); updateNote("PIN salvo ✅","");
-  sparkAtCenter($("#btnSetPin"));
-}
-function doUnlock(){
-  if(lockLeft()>0) return bump($("#pinArea"),"lock");
-  if(!pinExists()) return bump($("#pinArea"),"bad","Crie um PIN primeiro.");
-  const v=$("#pinInput").value;
-  if(v.length!==4) return bump($("#pinArea"),"bad","Digite o PIN de 4 dígitos.");
-  const ok = hash4(v) === LS(KEY_PIN);
-  if(!ok){
-    tries++; clearPinInput(); vib(20);
-    if(tries>=5){tries=0; setLock(30000); bump($("#pinArea"),"bad","Errou 5x. Bloqueado 30s.");}
-    else bump($("#pinArea"),"bad",`PIN incorreto (${tries}/5).`);
-    return;
-  }
-  tries=0; clearPinInput(); enterApp();
-}
-function doReset(){
-  if(!confirm("Reset vai apagar o PIN deste aparelho. Continuar?")) return;
-  localStorage.removeItem(KEY_PIN); localStorage.removeItem(KEY_LOCK);
-  tries=0; lockedUntil=0; setPinStatus(); updateNote("PIN removido.","");
-  sparkAtCenter($("#btnReset")); vib(14);
-}
-function enterApp(){
-  vib(14); sparkAtCenter($("#btnStart"));
-  $("#card").classList.add("fadeOut");
-  setTimeout(()=>$("#main").classList.add("on"),420);
-}
-function backHome(){
-  $("#main").classList.remove("on");
-  $("#card").classList.remove("fadeOut");
-  sparkAtCenter($("#btnBack")); vib(10);
-}
-  function setBtnPointerFx(btn,e){
-  const r=btn.getBoundingClientRect();
-  const cx=(e.touches?e.touches[0].clientX:e.clientX), cy=(e.touches?e.touches[0].clientY:e.clientY);
-  const x=(cx-r.left)/r.width*100, y=(cy-r.top)/r.height*100;
-  btn.style.setProperty("--mx",x.toFixed(1)+"%"); btn.style.setProperty("--my",y.toFixed(1)+"%");
-}
-function popBtn(btn){
-  btn.classList.add("pop","touch");
-  setTimeout(()=>btn.classList.remove("pop"),190);
-  setTimeout(()=>btn.classList.remove("touch"),260);
-}
-function sparkAtCenter(el){
-  const r=el.getBoundingClientRect();
-  burst(r.left+r.width/2,r.top+r.height/2,18,"mix"); // menor
-}
-function bump(el,cls,msg){
-  el.classList.remove("shake"); void el.offsetWidth; el.classList.add("shake");
-  updateNote(msg,cls||"");
-  burst(window.innerWidth/2,window.innerHeight/2-10,16,"neon"); // menor
-}
-function assemble(){
-  ["#btnStart","#btnReset","#btnSound","#btnSetPin","#btnUnlock"]
-  .forEach((sel,i)=>setTimeout(()=>$(sel).classList.add("on"),120+i*95));
-}
-
-function wireButtons(){
-  $$(".btn").forEach(b=>{
-    b.addEventListener("mousemove",e=>{setBtnPointerFx(b,e);});
-    b.addEventListener("touchmove",e=>setBtnPointerFx(b,e),{passive:true});
-    b.addEventListener("mouseenter",()=>{popBtn(b); const r=b.getBoundingClientRect(); burst(r.left+r.width/2,r.top+r.height/2,8,"spark");});
-    b.addEventListener("touchstart",e=>{setBtnPointerFx(b,e);popBtn(b); burstTouch(e,false)}, {passive:true});
-    b.addEventListener("click",()=>{popBtn(b);clickTick();});
-  });
-  $("#btnStart").onclick=()=>{ if(pinExists()) doUnlock(); else bump($("#pinArea"),"bad","Crie um PIN primeiro."); };
-  $("#btnReset").onclick=doReset;
-  $("#btnSetPin").onclick=doSetPin;
-  $("#btnUnlock").onclick=doUnlock;
-  $("#btnBack").onclick=backHome;
-  $("#pinInput").addEventListener("input",updateDots);
-  $("#pinInput").addEventListener("keydown",(e)=>{ if(e.key==="Enter") doUnlock(); });
-}
-
-function wireParallax(){
-  const shell=$("#shell"), card=$("#card");
-  let tx=0,ty=0,ax=0,ay=0;
-  const apply=()=>{
-    ax+=(tx-ax)*.12; ay+=(ty-ay)*.12;
-    card.style.transform=`rotateX(${(-ay*9).toFixed(2)}deg) rotateY(${(ax*9).toFixed(2)}deg)`;
-    requestAnimationFrame(apply);
-  }; apply();
-  const set=(x,y)=>{
-    const r=shell.getBoundingClientRect();
-    tx=clamp((x-(r.left+r.width/2))/r.width,-.6,.6);
-    ty=clamp((y-(r.top+r.height/2))/r.height,-.6,.6);
-  };
-  addEventListener("mousemove",e=>set(e.clientX,e.clientY));
-  addEventListener("touchmove",e=>{ if(e.touches[0]) set(e.touches[0].clientX,e.touches[0].clientY); },{passive:true});
-}
-
-/* som + pulso BEM fraco */
-let audioOn=false, AC=null, master=null, o1=null,o2=null,lfo=null, filt=null;
-function audioInit(){
-  if(AC) return;
-  AC=new (window.AudioContext||window.webkitAudioContext)();
-  master=AC.createGain(); master.gain.value=.0; master.connect(AC.destination);
-  filt=AC.createBiquadFilter(); filt.type="lowpass"; filt.frequency.value=460; filt.connect(master);
-  o1=AC.createOscillator(); o1.type="sine"; o1.frequency.value=110;
-  o2=AC.createOscillator(); o2.type="triangle"; o2.frequency.value=220;
-  const g1=AC.createGain(); g1.gain.value=.18; const g2=AC.createGain(); g2.gain.value=.10;
-  o1.connect(g1); o2.connect(g2); g1.connect(filt); g2.connect(filt);
-  lfo=AC.createOscillator(); lfo.type="sine"; lfo.frequency.value=.06;
-  const lg=AC.createGain(); lg.gain.value=90; lfo.connect(lg); lg.connect(filt.frequency);
-  o1.start(); o2.start(); lfo.start();
-}
-function setAudio(on){
-  audioInit(); audioOn=on;
-  $("#btnSound").textContent="Som: "+(audioOn?"ON":"OFF");
-  const t=AC.currentTime;
-  master.gain.cancelScheduledValues(t);
-  master.gain.linearRampToValueAtTime(audioOn?.12:0,t+.25); // bem menor
-}
-function clickTick(){
-  if(!audioOn){vib(8);return;}
-  const t=AC.currentTime, osc=AC.createOscillator(), g=AC.createGain();
-  osc.type="square"; osc.frequency.value=780;
-  g.gain.setValueAtTime(.0001,t);
-  g.gain.exponentialRampToValueAtTime(.05,t+.01);
-  g.gain.exponentialRampToValueAtTime(.0001,t+.07);
-  osc.connect(g); g.connect(master); osc.start(t); osc.stop(t+.08); vib(6);
-}
-  const bg=$("#bg"), fx=$("#fx");
-const bctx=bg.getContext("2d"), fctx=fx.getContext("2d");
-let W=0,H=0,stars=[],bursts=[],bills=[];
-let pulse=0;
-
-function resize(){
-  W=bg.width=fx.width=innerWidth*devicePixelRatio;
-  H=bg.height=fx.height=innerHeight*devicePixelRatio;
-}
-addEventListener("resize",resize,{passive:true}); resize();
-
-function mkStars(n=230){
-  stars=[...Array(n)].map(()=>({
-    x:Math.random()*W,y:Math.random()*H,
-    r:rnd(.9,4.2)*devicePixelRatio,
-    vx:rnd(-.16,.16)*devicePixelRatio, vy:rnd(.10,.28)*devicePixelRatio,
-    a:rnd(.06,.30),
-    g:Math.random()<.88,
-  }));
-}
-mkStars();
-
-function burst(x,y,n=18,mode="mix"){
-  x*=devicePixelRatio; y*=devicePixelRatio;
-  const neon=(mode==="neon"), spark=(mode==="spark");
-  const arr=[...Array(n)].map(()=> {
-    const sp = neon? rnd(2.2,4.8) : spark? rnd(1.8,4.2) : rnd(2.0,4.6);
-    const ang = rnd(0,Math.PI*2);
-    const vx = Math.cos(ang)*sp*devicePixelRatio;
-    const vy = Math.sin(ang)*sp*devicePixelRatio - rnd(0,2.0)*devicePixelRatio;
-    const life = neon? rnd(26,56) : rnd(22,52);
-    const r = neon? rnd(1.1,2.5) : rnd(1.0,2.2);
-    let c;
-    if(neon) c = Math.random()<.7 ? `rgba(70,255,150,${rnd(.30,.75)})` : `rgba(120,200,255,${rnd(.18,.55)})`;
-    else if(spark) c = Math.random()<.8 ? `rgba(255,255,255,${rnd(.16,.45)})` : `rgba(70,255,150,${rnd(.16,.55)})`;
-    else c = Math.random()<.7 ? `rgba(70,255,150,${rnd(.18,.65)})` : `rgba(255,255,255,${rnd(.12,.42)})`;
-    return {x,y,vx,vy,life,r:r*devicePixelRatio,c,glow:neon?1:0};
-  });
-  bursts.push(arr);
-}
-function burstTouch(e,heavy=false){
-  const t=e.touches&&e.touches[0]; if(!t) return;
-  burst(t.clientX,t.clientY, heavy?22:16, heavy?"neon":"mix");
-}
-
-function spawnBill(){
-  bills.push({
-    x:rnd(W*.10,W*.95), y:-60*devicePixelRatio,
-    vy:rnd(1.6,3.2)*devicePixelRatio, vx:rnd(-.26,.26)*devicePixelRatio,
-    rot:rnd(0,Math.PI*2), vr:rnd(-.045,.045),
-    s:rnd(20,34)*devicePixelRatio, life:rnd(260,520),
-    boom:Math.random()<.35
-  });
-}
-setInterval(()=>{ if(Math.random()<.60) spawnBill(); }, 980); // menos frequente
-
-function draw(){
-  // pulso: MUITO sutil (remove “batidão”)
-  const t = (AC && audioOn) ? AC.currentTime : now()/1000;
-  const base = (AC && audioOn) ? 0.18 : 0.12;
-  pulse = base + Math.sin(t*(AC && audioOn ? 1.1 : .85)) * (AC && audioOn ? .06 : .04);
-  pulse = clamp(pulse,0,1);
-  document.documentElement.style.setProperty("--pulse", pulse.toFixed(3));
-
-  bctx.clearRect(0,0,W,H);
-
-  // haze mais escura
-  bctx.save();
-  bctx.globalAlpha = 0.06 + pulse*0.03;
-  bctx.fillStyle = "#45ff86";
-  bctx.beginPath(); bctx.arc(W*0.18,H*0.25,(200+pulse*50)*devicePixelRatio,0,Math.PI*2); bctx.fill();
-  bctx.globalAlpha = 0.04 + pulse*0.02;
-  bctx.fillStyle = "#ff4c62";
-  bctx.beginPath(); bctx.arc(W*0.88,H*0.18,(180+pulse*40)*devicePixelRatio,0,Math.PI*2); bctx.fill();
-  bctx.restore();
-
-  // stars
-  stars.forEach(p=>{
-    p.x+=p.vx; p.y+=p.vy;
-    if(p.y>H+60) p.y=-60;
-    if(p.x>W+60) p.x=-60;
-    if(p.x<-60) p.x=W+60;
-    const a = p.a + pulse*0.03;
-    bctx.fillStyle = p.g ? `rgba(70,255,150,${a})` : `rgba(255,76,98,${a*0.55})`;
-    bctx.beginPath(); bctx.arc(p.x,p.y,p.r,0,Math.PI*2); bctx.fill();
-  });
-
-  // bills (menos agressivo)
-  bills=bills.filter(b=>b.life-->0 && b.y<H+140*devicePixelRatio);
-  bills.forEach(b=>{
-    b.x+=b.vx; b.y+=b.vy; b.rot+=b.vr;
-    if(b.boom && b.life%100===0) burst(b.x/devicePixelRatio,b.y/devicePixelRatio,8,"mix");
-    bctx.save();
-    bctx.translate(b.x,b.y); bctx.rotate(b.rot);
-    bctx.font=`${b.s}px system-ui`; bctx.globalAlpha=.85;
-    bctx.fillText("💸",0,0);
-    bctx.restore();
-  });
-
-  // particles
-  fctx.clearRect(0,0,W,H);
-  bursts=bursts.filter(g=>g.some(p=>p.life>0));
-  bursts.forEach(g=>{
-    g.forEach(p=>{
-      if(p.life--<=0) return;
-      p.x+=p.vx; p.y+=p.vy; p.vy+=.065*devicePixelRatio;
-      if(p.glow){
-        fctx.save(); fctx.globalAlpha=.40; fctx.fillStyle=p.c;
-        fctx.beginPath(); fctx.arc(p.x,p.y,p.r*2.2,0,Math.PI*2); fctx.fill();
-        fctx.restore();
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Serralheria do Gil - Portões, Grades e Estruturas Metálicas</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- React -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  
+  <!-- Babel -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <!-- Framer Motion -->
+  <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            orange: {
+              DEFAULT: '#D97706',
+              light: '#F59E0B',
+              dark: '#B45309',
+            },
+            steel: {
+              DEFAULT: '#4B5563',
+              light: '#9CA3AF',
+              dark: '#1F2937',
+            },
+            dark: '#0F0F0F',
+          },
+          fontFamily: {
+            display: ['Oswald', 'sans-serif'],
+            body: ['Roboto', 'sans-serif'],
+          },
+        }
       }
-      fctx.fillStyle=p.c;
-      fctx.beginPath(); fctx.arc(p.x,p.y,p.r,0,Math.PI*2); fctx.fill();
-    });
-  });
-
-  requestAnimationFrame(draw);
-}
-draw();
-
-function boot(){
-  loadLock(); setPinStatus(); updateDots(); updateNote();
-  wireButtons(); wireParallax(); assemble();
-  $("#btnSound").onclick=()=>{
-    if(!AC) audioInit();
-    if(AC.state==="suspended") AC.resume();
-    setAudio(!audioOn);
-    sparkAtCenter($("#btnSound"));
-    burst(innerWidth*0.5, innerHeight*0.28, 18, audioOn?"neon":"mix"); // menor
-  };
-}
-boot();
-</script></body></html>
+    }
+  </script>
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #0F0F0F;
+      color: #F3F4F6;
+      overflow-x: hidden;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Oswald', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #1F2937;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #D97706, #B45309);
+      border-radius: 5px;
+    }
+    
+    .text-gradient {
+      background: linear-gradient(135deg, #F59E0B 0%, #D97706 50%, #B45309 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .card-steel {
+      background: linear-gradient(135deg, #1F2937 0%, #111827 100%);
+      border: 1px solid rgba(217, 119, 6, 0.2);
+      border-radius: 16px;
+      transition: all 0.3s ease;
+    }
+    
+    .card-steel:hover {
+      border-color: rgba(217, 119, 6, 0.5);
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(217, 119, 6, 0.1);
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #D97706 0%, #B45309 100%);
+      color: white;
+      padding: 14px 32px;
+      border-radius: 8px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(217, 119, 6, 0.4);
+    }
+    
+    .btn-outline {
+      background: transparent;
+      color: #D97706;
+      padding: 14px 32px;
+      border-radius: 8px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border: 2px solid #D97706;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-outline:hover {
+      background: rgba(217, 119, 6, 0.1);
+      transform: translateY(-2px);
+    }
+    
+    .input-field {
+      width: 100%;
+      padding: 14px 18px;
+      background: #1F2937;
+      border: 1px solid #374151;
+      border-radius: 8px;
+      color: #F3F4F6;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+    
+    .input-field:focus {
+      outline: none;
+      border-color: #D97706;
+      box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.2);
+    }
+    
+    .input-field::placeholder {
+      color: #6B7280;
+    }
+    
+    .spark {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #F59E0B;
+      border-radius: 50%;
+      pointer-events: none;
+      animation: spark-fly 1s ease-out forwards;
+    }
+    
+    @keyframes spark-fly {
+      0% { transform: translate(0, 0) scale(1); opacity: 1; }
+      100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+    }
+    
+    .glow-text {
+      text-shadow: 0 0 20px rgba(217, 119, 6, 0.5);
+    }
+    
+    .metal-texture {
+      background: linear-gradient(135deg, #374151 0%, #1F2937 50%, #111827 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .metal-texture::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 2px,
+        rgba(255,255,255,0.02) 2px,
+        rgba(255,255,255,0.02) 4px
+      );
+      pointer-events: none;
+    }
+    
+    .whatsapp-float {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      background: #25D366;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+      z-index: 1000;
+      transition: all 0.3s ease;
+      animation: pulse-whatsapp 2s infinite;
+    }
+    
+    .whatsapp-float:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 30px rgba(37, 211, 102, 0.6);
+    }
+    
+    @keyframes pulse-whatsapp {
+      0%, 100% { box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); }
+      50% { box-shadow: 0 4px 30px rgba(37, 211, 102, 0.7); }
+    }
+    
+    .grid-pattern {
+      background-image: 
+        linear-gradient(rgba(217, 119, 6, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(217, 119, 6, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+    const { motion, AnimatePresence, useScroll, useTransform } = window.Motion;
+    
+    // ===== ÍCONES SVG =====
+    const Icons = {
+      Menu: ({ className }) => (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      ),
+      X: ({ className }) => (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      ),
+      Phone: ({ className }) => (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+        </svg>
+      ),
+      MapPin: ({ className }) => (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+        </svg>
+      ),
+      Clock: ({ className }) => (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+        </svg>
+      ),
+      Mail: ({ className }) => (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+        </svg>
+      ),
+      Check: ({ className }) => (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      ),
+      ChevronRight: ({ className }) => (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      ),
+      Shield: ({ className }) => (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      ),
+      Tool: ({ className }) => (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+        </svg>
+      ),
+      Home: ({ className }) => (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+      ),
+      Award: ({ className }) => (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>
+        </svg>
+      ),
+      WhatsApp: ({ className }) => (
+        <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+      ),
+      Flame: ({ className }) => (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
+        </svg>
+      ),
+      Image: ({ className }) => (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+        </svg>
+      ),
+    };
+    
+    // ===== DADOS =====
+    const servicos = [
+      {
+        id: 1,
+        titulo: 'Portões',
+        descricao: 'Portões basculantes, deslizantes e pivotantes em ferro ou alumínio, com acabamento de alta qualidade.',
+        icone: Icons.Home,
+      },
+      {
+        id: 2,
+        titulo: 'Grades de Proteção',
+        descricao: 'Grades para janelas, portas e muros. Segurança máxima para sua residência ou comércio.',
+        icone: Icons.Shield,
+      },
+      {
+        id: 3,
+        titulo: 'Estruturas Metálicas',
+        descricao: 'Mezaninos, coberturas, galpões e estruturas sob medida para qualquer projeto.',
+        icone: Icons.Tool,
+      },
+      {
+        id: 4,
+        titulo: 'Solda Especializada',
+        descricao: 'Serviços de solda MIG, TIG e eletrodo em diversos materiais e espessuras.',
+        icone: Icons.Flame,
+      },
+      {
+        id: 5,
+        titulo: 'Corrimãos e Guarda-corpos',
+        descricao: 'Escadas, plataformas e mezaninos com design moderno e segurança certificada.',
+        icone: Icons.Award,
+      },
+      {
+        id: 6,
+        titulo: 'Reformas e Manutenção',
+        descricao: 'Recuperação de estruturas enferrujadas, troca de peças e pintura eletrostática.',
+        icone: Icons.Tool,
+      },
+    ];
+    
+    const portfolio = [
+      { id: 1, titulo: 'Portão Social em Ferro', categoria: 'Portões' },
+      { id: 2, titulo: 'Grade de Proteção', categoria: 'Grades' },
+      { id: 3, titulo: 'Cobertura Metálica', categoria: 'Estruturas' },
+      { id: 4, titulo: 'Corrimão Inox', categoria: 'Acabamentos' },
+      { id: 5, titulo: 'Portão Deslizante', categoria: 'Portões' },
+      { id: 6, titulo: 'Mezanino Industrial', categoria: 'Estruturas' },
+    ];
+    
+    const diferenciais = [
+      { titulo: '20+ Anos de Experiência', desc: 'Tradição e qualidade comprovadas no mercado.' },
+      { titulo: 'Orçamento Grátis', desc: 'Visita técnica e orçamento sem compromisso.' },
+      { titulo: 'Garantia de 1 Ano', desc: 'Todos os serviços com garantia e nota fiscal.' },
+      { titulo: 'Atendimento 24h', desc: 'Emergências e reparos urgentes.' },
+    ];
+    
+    // ===== COMPONENTES =====
+    
+    const Header = ({ activeSection, scrollToSection }) => {
+      const [menuOpen, setMenuOpen] = useState(false);
+      const [scrolled, setScrolled] = useState(false);
+      
+      useEffect(() => {
+        const handleScroll = () => setScrolled(window.scrollY > 50);
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+      }, []);
+      
+      const navItems = [
+        { id: 'inicio', label: 'Início' },
+        { id: 'servicos', label: 'Serviços' },
+        { id: 'portfolio', label: 'Portfólio' },
+        { id: 'sobre', label: 'Sobre' },
+        { id: 'contato', label: 'Contato' },
+      ];
+      
+      return (
+        <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-dark/95 backdrop-blur-md shadow-lg' : 'bg-transparent'}`}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between h-20">
+              {/* Logo */}
+              <div className="flex items-center gap-3 cursor-pointer" onClick={() => scrollToSection('inicio')}>
+                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-orange-500 to-orange-700 flex items-center justify-center">
+                  <Icons.Tool className="w-7 h-7 text-white" />
+                </div>
+                <div>
+                  <h1 className="text-2xl font-display font-bold text-white leading-none">SERRALHERIA</h1>
+                  <span className="text-orange-500 font-display text-sm tracking-widest">DO GIL</span>
+                </div>
+              </div>
+              
+              {/* Desktop Nav */}
+              <nav className="hidden md:flex items-center gap-8">
+                {navItems.map(item => (
+                  <button
+                    key={item.id}
+                    onClick={() => scrollToSection(item.id)}
+                    className={`text-sm font-medium uppercase tracking-wider transition-colors ${activeSection === item.id ? 'text-orange-500' : 'text-gray-300 hover:text-orange-400'}`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+                <button onClick={() => scrollToSection('contato')} className="btn-primary text-sm">
+                  Orçamento
+                </button>
+              </nav>
+              
+              {/* Mobile Menu Button */}
+              <button className="md:hidden p-2 text-white" onClick={() => setMenuOpen(!menuOpen)}>
+                {menuOpen ? <Icons.X className="w-8 h-8" /> : <Icons.Menu className="w-8 h-8" />}
+              </button>
+            </div>
+          </div>
+          
+          {/* Mobile Menu */}
+          <AnimatePresence>
+            {menuOpen && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="md:hidden bg-dark border-t border-gray-800"
+              >
+                <nav className="flex flex-col p-4 space-y-4">
+                  {navItems.map(item => (
+                    <button
+                      key={item.id}
+                      onClick={() => { scrollToSection(item.id); setMenuOpen(false); }}
+                      className="text-left text-lg font-medium text-gray-300 hover:text-orange-500 py-2"
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                </nav>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </header>
+      );
+    };
+    
+    const Hero = ({ scrollToSection }) => {
+      return (
+        <section id="inicio" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+          {/* Background Effects */}
+          <div className="absolute inset-0 bg-gradient-to-b from-dark via-dark to-gray-900" />
+          <div className="absolute inset-0 grid-pattern opacity-50" />
+          
+          {/* Sparks Animation */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {[...Array(20)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute w-1 h-1 bg-orange-500 rounded-full"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                }}
+                animate={{
+                  y: [0, -100],
+                  opacity: [1, 0],
+                  scale: [1, 0],
+                }}
+                transition={{
+                  duration: 2 + Math.random() * 2,
+                  repeat: Infinity,
+                  delay: Math.random() * 2,
+                }}
+              />
+            ))}
+          </div>
+          
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <span className="inline-block px-4 py-2 bg-orange-500/10 border border-orange-500/30 rounded-full text-orange-400 text-sm font-medium mb-6">
+                🔥 Especialistas em Metalurgia
+              </span>
+              
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-bold text-white mb-6 leading-tight">
+                SOLUÇÕES EM <span className="text-gradient glow-text">AÇO</span>
+                <br />
+                PARA SUA OBRA
+              </h1>
+              
+              <p className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto mb-10">
+                Portões, grades, estruturas metálicas e solda especializada.
+                <br className="hidden md:block" />
+                Qualidade e segurança há mais de 20 anos.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onClick={() => scrollToSection('contato')} className="btn-primary text-lg">
+                  <Icons.Phone className="w-5 h-5" />
+                  Solicitar Orçamento
+                </button>
+                <button onClick={() => scrollToSection('portfolio')} className="btn-outline text-lg">
+                  Ver Trabalhos
+                  <Icons.ChevronRight className="w-5 h-5" />
+                </button>
+              </div>
+              
+              {/* Stats */}
+              <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+                {[
+                  { num: '500+', label: 'Obras Realizadas' },
+                  { num: '20', label: 'Anos de Experiência' },
+                  { num: '100%', label: 'Satisfação' },
+                  { num: '24h', label: 'Atendimento' },
+                ].map((stat, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5 + i * 0.1 }}
+                    className="text-center"
+                  >
+                    <div className="text-3xl md:text-4xl font-display font-bold text-orange-500">{stat.num}</div>
+                    <div className="text-gray-500 text-sm mt-1">{stat.label}</div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+          
+          {/* Scroll Indicator */}
+          <motion.div
+            className="absolute bottom-10 left-1/2 -translate-x-1/2"
+            animate={{ y: [0, 10, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+          >
+            <div className="w-6 h-10 border-2 border-orange-500/50 rounded-full flex justify-center pt-2">
+              <div className="w-1.5 h-3 bg-orange-500 rounded-full" />
+            </div>
+          </motion.div>
+        </section>
+      );
+    };
+    
+    const Servicos = () => {
+      return (
+        <section id="servicos" className="py-24 bg-gray-900 relative">
+          <div className="absolute inset-0 metal-texture opacity-30" />
+          
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-display font-bold text-white mb-4">NOSSOS SERVIÇOS</h2>
+              <div className="w-24 h-1 bg-gradient-to-r from-orange-500 to-orange-700 mx-auto mb-6" />
+              <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+                Oferecemos soluções completas em serralheria, desde o projeto até a instalação final.
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {servicos.map((servico, index) => (
+                <motion.div
+                  key={servico.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  className="card-steel p-8 group cursor-pointer"
+                >
+                  <div className="w-16 h-16 rounded-xl bg-orange-500/10 flex items-center justify-center mb-6 group-hover:bg-orange-500/20 transition-colors">
+                    <servico.icone className="w-8 h-8 text-orange-500" />
+                  </div>
+                  <h3 className="text-2xl font-display font-bold text-white mb-4 group-hover:text-orange-400 transition-colors">
+                    {servico.titulo}
+                  </h3>
+                  <p className="text-gray-400 leading-relaxed">
+                    {servico.descricao}
+                  </p>
+                  <div className="mt-6 flex items-center text-orange-500 font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                    Saiba mais <Icons.ChevronRight className="w-4 h-4 ml-1" />
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+    };
+    
+    const Portfolio = () => {
+      const [selectedImage, setSelectedImage] = useState(null);
+      
+      return (
+        <section id="portfolio" className="py-24 bg-dark relative">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-display font-bold text-white mb-4">PORTFÓLIO</h2>
+              <div className="w-24 h-1 bg-gradient-to-r from-orange-500 to-orange-700 mx-auto mb-6" />
+              <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+                Alguns dos nossos trabalhos realizados. Cada projeto é único e feito sob medida.
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {portfolio.map((item, index) => (
+                <motion.div
+                  key={item.id}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  className="group relative aspect-square bg-gray-800 rounded-xl overflow-hidden cursor-pointer"
+                  onClick={() => setSelectedImage(item)}
+                >
+                  {/* Placeholder para imagem */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
+                    <Icons.Image className="w-16 h-16 text-gray-600" />
+                  </div>
+                  
+                  {/* Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  
+                  {/* Content */}
+                  <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                    <span className="text-orange-400 text-sm font-medium uppercase tracking-wider">{item.categoria}</span>
+                    <h3 className="text-xl font-display font-bold text-white mt-1">{item.titulo}</h3>
+                  </div>
+                  
+                  {/* Border Effect */}
+                  <div className="absolute inset-0 border-2 border-orange-500/0 group-hover:border-orange-500/50 rounded-xl transition-colors duration-300" />
+                </motion.div>
+              ))}
+            </div>
+            
+            {/* Lightbox */}
+            <AnimatePresence>
+              {selectedImage && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-4"
+                  onClick={() => setSelectedImage(null)}
+                >
+                  <button className="absolute top-6 right-6 p-2 text-white hover:text-orange-500">
+                    <Icons.X className="w-8 h-8" />
+                  </button>
+                  <div className="max-w-4xl w-full aspect-video bg-gray-800 rounded-xl flex items-center justify-center" onClick={e => e.stopPropagation()}>
+                    <div className="text-center">
+                      <Icons.Image className="w-24 h-24 text-gray-600 mx-auto mb-4" />
+                      <h3 className="text-2xl font-display font-bold text-white">{selectedImage.titulo}</h3>
+                      <p className="text-orange-500">{selectedImage.categoria}</p>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </section>
+      );
+    };
+    
+    const Sobre = () => {
+      return (
+        <section id="sobre" className="py-24 bg-gray-900 relative overflow-hidden">
+          <div className="absolute inset-0 metal-texture opacity-20" />
+          
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+              {/* Image Side */}
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                className="relative"
+              >
+                <div className="aspect-[4/3] bg-gradient-to-br from-gray-700 to-gray-900 rounded-2xl flex items-center justify-center relative overflow-hidden">
+                  <Icons.Tool className="w-32 h-32 text-gray-600" />
+                  <div className="absolute inset-0 bg-gradient-to-tr from-orange-500/20 to-transparent" />
+                </div>
+                
+                {/* Experience Badge */}
+                <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-orange-600 rounded-2xl flex flex-col items-center justify-center shadow-2xl">
+                  <span className="text-4xl font-display font-bold text-white">20</span>
+                  <span className="text-white/80 text-sm uppercase tracking-wider">Anos</span>
+                </div>
+              </motion.div>
+              
+              {/* Content Side */}
+              <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+              >
+                <h2 className="text-4xl md:text-5xl font-display font-bold text-white mb-6">
+                  CONHEÇA A <span className="text-gradient">SERRALHERIA DO GIL</span>
+                </h2>
+                
+                <div className="space-y-4 text-gray-400 text-lg leading-relaxed mb-8">
+                  <p>
+                    Fundada há mais de duas décadas, a Serralheria do Gil se consolidou como referência 
+                    em trabalhos metálicos na região. Nossa missão é oferecer soluções seguras, 
+                    duráveis e com design moderno para residências e comércios.
+                  </p>
+                  <p>
+                    Utilizamos materiais de primeira qualidade e técnicas atualizadas para garantir 
+                    a satisfação total dos nossos clientes. Do projeto à instalação, cuidamos de cada 
+                    detalhe com profissionalismo e dedicação.
+                  </p>
+                </div>
+                
+                {/* Diferenciais */}
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {diferenciais.map((item, i) => (
+                    <div key={i} className="flex items-start gap-3 p-4 bg-dark/50 rounded-lg border border-gray-800">
+                      <Icons.Check className="w-6 h-6 text-orange-500 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <h4 className="text-white font-bold">{item.titulo}</h4>
+                        <p className="text-gray-500 text-sm">{item.desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+      );
+    };
+    
+    const Contato = ({ showToast }) => {
+      const [formData, setFormData] = useState({ nome: '', telefone: '', email: '', servico: '', mensagem: '' });
+      const [enviando, setEnviando] = useState(false);
+      
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        setEnviando(true);
+        
+        // Simulação de envio
+        setTimeout(() => {
+          setEnviando(false);
+          showToast('Mensagem enviada com sucesso! Entraremos em contato em breve.');
+          setFormData({ nome: '', telefone: '', email: '', servico: '', mensagem: '' });
+        }, 1500);
+      };
+      
+      return (
+        <section id="contato" className="py-24 bg-dark relative">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-display font-bold text-white mb-4">ENTRE EM CONTATO</h2>
+              <div className="w-24 h-1 bg-gradient-to-r from-orange-500 to-orange-700 mx-auto mb-6" />
+              <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+                Solicite um orçamento gratuito. Atendemos toda a região com rapidez e qualidade.
+              </p>
+            </div>
+            
+            <div className="grid lg:grid-cols-2 gap-12">
+              {/* Form */}
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                className="card-steel p-8"
+              >
+                <h3 className="text-2xl font-display font-bold text-white mb-6">Solicite um Orçamento</h3>
+                
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div className="grid sm:grid-cols-2 gap-5">
+                    <div>
+                      <label className="block text-gray-400 text-sm mb-2">Nome</label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.nome}
+                        onChange={e => setFormData({...formData, nome: e.target.value})}
+                        className="input-field"
+                        placeholder="Seu nome"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-gray-400 text-sm mb-2">Telefone</label>
+                      <input
+                        type="tel"
+                        required
+                        value={formData.telefone}
+                        onChange={e => setFormData({...formData, telefone: e.target.value})}
+                        className="input-field"
+                        placeholder="(11) 99999-9999"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-gray-400 text-sm mb-2">E-mail</label>
+                    <input
+                      type="email"
+                      value={formData.email}
+                      onChange={e => setFormData({...formData, email: e.target.value})}
+                      className="input-field"
+                      placeholder="seu@email.com"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-gray-400 text-sm mb-2">Tipo de Serviço</label>
+                    <select
+                      required
+                      value={formData.servico}
+                      onChange={e => setFormData({...formData, servico: e.target.value})}
+                      className="input-field"
+                    >
+                      <option value="">Selecione o serviço</option>
+                      <option value="portao">Portão</option>
+                      <option value="grade">Grade de Proteção</option>
+                      <option value="estrutura">Estrutura Metálica</option>
+                      <option value="solda">Solda</option>
+                      <option value="outro">Outro</option>
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-gray-400 text-sm mb-2">Mensagem</label>
+                    <textarea
+                      rows={4}
+                      value={formData.mensagem}
+                      onChange={e => setFormData({...formData, mensagem: e.target.value})}
+                      className="input-field resize-none"
+                      placeholder="Descreva seu projeto..."
+                    />
+                  </div>
+                  
+                  <button
+                    type="submit"
+                    disabled={enviando}
+                    className="btn-primary w-full justify-center disabled:opacity-50"
+                  >
+                    {enviando ? 'Enviando...' : 'Enviar Solicitação'}
+                  </button>
+                </form>
+              </motion.div>
+              
+              {/* Info */}
+              <motion.div
+                initial={{ opacity: 0, x: 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                className="space-y-8"
+              >
+                <div className="card-steel p-8">
+                  <h3 className="text-2xl font-display font-bold text-white mb-6">Informações de Contato</h3>
+                  
+                  <div className="space-y-6">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 rounded-lg bg-orange-500/10 flex items-center justify-center flex-shrink-0">
+                        <Icons.Phone className="w-6 h-6 text-orange-500" />
+                      </div>
+                      <div>
+                        <h4 className="text-white font-bold mb-1">Telefone / WhatsApp</h4>
+                        <p className="text-gray-400">(11) 99999-9999</p>
+                        <p className="text-gray-400">(11) 3333-3333</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 rounded-lg bg-orange-500/10 flex items-center justify-center flex-shrink-0">
+                        <Icons.MapPin className="w-6 h-6 text-orange-500" />
+                      </div>
+                      <div>
+                        <h4 className="text-white font-bold mb-1">Endereço</h4>
+                        <p className="text-gray-400">Rua da Serralheria, 123</p>
+                        <p className="text-gray-400">São Paulo - SP, 00000-000</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 rounded-lg bg-orange-500/10 flex items-center justify-center flex-shrink-0">
+                        <Icons.Clock className="w-6 h-6 text-orange-500" />
+                      </div>
+                      <div>
+                        <h4 className="text-white font-bold mb-1">Horário de Funcionamento</h4>
+                        <p className="text-gray-400">Seg - Sex: 08h às 18h</p>
+                        <p className="text-gray-400">Sábado: 08h às 12h</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 rounded-lg bg-orange-500/10 flex items-center justify-center flex-shrink-0">
+                        <Icons.Mail className="w-6 h-6 text-orange-500" />
+                      </div>
+                      <div>
+                        <h4 className="text-white font-bold mb-1">E-mail</h4>
+                        <p className="text-gray-400">contato@serralheriadogil.com.br</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Map Placeholder */}
+                <div className="aspect-video bg-gray-800 rounded-xl flex items-center justify-center border border-gray-700">
+                  <div className="text-center">
+                    <Icons.MapPin className="w-12 h-12 text-orange-500 mx-auto mb-2" />
+                    <p className="text-gray-400">Mapa da Localização</p>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+      );
+    };
+    
+    const Footer = () => {
+      return (
+        <footer className="bg-gray-900 border-t border-gray-800 py-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid md:grid-cols-4 gap-8 mb-8">
+              <div className="col-span-2">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-500 to-orange-700 flex items-center justify-center">
+                    <Icons.Tool className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-display font-bold text-white">SERRALHERIA DO GIL</h3>
+                  </div>
+                </div>
+                <p className="text-gray-500 max-w-sm">
+                  Especialistas em soluções metálicas há mais de 20 anos. 
+                  Qualidade, segurança e compromisso com o cliente.
+                </p>
+              </div>
+              
+              <div>
+                <h4 className="text-white font-bold mb-4">Links Rápidos</h4>
+                <ul className="space-y-2 text-gray-500">
+                  <li><a href="#inicio" className="hover:text-orange-500 transition-colors">Início</a></li>
+                  <li><a href="#servicos" className="hover:text-orange-500 transition-colors">Serviços</a></li>
+                  <li><a href="#portfolio" className="hover:text-orange-500 transition-colors">Portfólio</a></li>
+                  <li><a href="#contato" className="hover:text-orange-500 transition-colors">Contato</a></li>
+                </ul>
+              </div>
+              
+              <div>
+                <h4 className="text-white font-bold mb-4">Serviços</h4>
+                <ul className="space-y-2 text-gray-500">
+                  <li>Portões Automáticos</li>
+                  <li>Grades de Segurança</li>
+                  <li>Estruturas Metálicas</li>
+                  <li>Solda Especializada</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+              <p className="text-gray-600 text-sm">
+                © 2026 Serralheria do Gil. Todos os direitos reservados.
+              </p>
+              <p className="text-gray-600 text-sm">
+                Desenvolvido com 🔥 e aço
+              </p>
+            </div>
+          </div>
+        </footer>
+      );
+    };
+    
+    const WhatsAppButton = () => {
+      return (
+        <a
+          href="https://wa.me/5511999999999"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="whatsapp-float"
+          title="Fale conosco no WhatsApp"
+        >
+          <Icons.WhatsApp className="w-8 h-8 text-white" />
+        </a>
+      );
+    };
+    
+    const Toast = ({ message, type, onClose }) => {
+      useEffect(() => {
+        const timer = setTimeout(onClose, 4000);
+        return () => clearTimeout(timer);
+      }, [onClose]);
+      
+      return (
+        <motion.div
+          initial={{ opacity: 0, y: -50, x: '-50%' }}
+          animate={{ opacity: 1, y: 0, x: '-50%' }}
+          exit={{ opacity: 0, y: -50, x: '-50%' }}
+          className={`fixed top-6 left-1/2 z-[1000] px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 ${
+            type === 'success' ? 'bg-green-600' : 'bg-orange-600'
+          }`}
+        >
+          <Icons.Check className="w-6 h-6 text-white" />
+          <span className="text-white font-medium">{message}</span>
+        </motion.div>
+      );
+    };
+    
+    // ===== APP PRINCIPAL =====
+    const App = () => {
+      const [activeSection, setActiveSection] = useState('inicio');
+      const [toast, setToast] = useState(null);
+      
+      const showToast = (message, type = 'success') => {
+        setToast({ message, type });
+      };
+      
+      const scrollToSection = (id) => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+          setActiveSection(id);
+        }
+      };
+      
+      // Detectar seção ativa no scroll
+      useEffect(() => {
+        const handleScroll = () => {
+          const sections = ['inicio', 'servicos', 'portfolio', 'sobre', 'contato'];
+          const scrollPosition = window.scrollY + 100;
+          
+          for (const section of sections) {
+            const element = document.getElementById(section);
+            if (element) {
+              const { offsetTop, offsetHeight } = element;
+              if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+                setActiveSection(section);
+                break;
+              }
+            }
+          }
+        };
+        
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+      }, []);
+      
+      return (
+        <div className="min-h-screen bg-dark">
+          <AnimatePresence>
+            {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+          </AnimatePresence>
+          
+          <Header activeSection={activeSection} scrollToSection={scrollToSection} />
+          
+          <main>
+            <Hero scrollToSection={scrollToSection} />
+            <Servicos />
+            <Portfolio />
+            <Sobre />
+            <Contato showToast={showToast} />
+          </main>
+          
+          <Footer />
+          <WhatsAppButton />
+        </div>
+      );
+    };
+    
+    // Render
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
